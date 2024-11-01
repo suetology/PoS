@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using PoS.WebApi.Application.Repositories;
+using PoS.WebApi.Application.Services.Tax;
+using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Infrastructure.Persistence;
+using PoS.WebApi.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +28,16 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Registering dependencies
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddTransient<ITaxService, TaxService>();
+
+builder.Services.AddTransient<ITaxRepository, TaxRepository>();
+
+// Adding controllers
+builder.Services.AddControllers();
+
 // Building app
 var app = builder.Build();
 
@@ -36,6 +50,9 @@ if (app.Environment.IsDevelopment())
 // Adding middleware
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+
+// Mapping Controllers
+app.MapControllers();
 
 // Running app
 app.Run();

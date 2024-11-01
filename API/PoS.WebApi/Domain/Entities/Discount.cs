@@ -1,4 +1,6 @@
-﻿namespace PoS.WebApi.Domain.Entities;
+﻿using PoS.WebApi.Domain.Common;
+
+namespace PoS.WebApi.Domain.Entities;
 
 public class Discount : Entity
 {

@@ -1,4 +1,4 @@
-﻿namespace PoS.WebApi.Domain.Entities;
+﻿namespace PoS.WebApi.Domain.Common;
 
 public abstract class Entity
 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Domain.Entities;
 
 namespace PoS.WebApi.Infrastructure.Persistence.Configuration;

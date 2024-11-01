@@ -1,4 +1,6 @@
-﻿namespace PoS.WebApi.Domain.Entities;
+﻿using PoS.WebApi.Domain.Common;
+
+namespace PoS.WebApi.Domain.Entities;
 
 public class Business : Entity
 {
@@ -9,5 +11,6 @@ public class Business : Entity
     public string PhoneNumber { get; set; }
     
     public string Email { get; set; }
+    
     public ICollection<User> Employees { get; set; }
 }

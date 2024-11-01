@@ -1,4 +1,5 @@
-﻿using PoS.WebApi.Domain.Enums;
+﻿using PoS.WebApi.Domain.Common;
+using PoS.WebApi.Domain.Enums;
 
 namespace PoS.WebApi.Domain.Entities;
 
