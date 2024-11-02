@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
+using PoS.WebApi.Application.Services.ServiceCharge;
 using PoS.WebApi.Application.Services.Tax;
 using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Infrastructure.Persistence;
@@ -32,6 +33,9 @@ builder.Services.AddCors(options =>
 
 // Registering dependencies
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeRepository>();
+builder.Services.AddScoped<IServiceChargeService, ServiceChargeService>(); 
 
 builder.Services.AddTransient<ITaxService, TaxService>();
 
