@@ -5,11 +5,14 @@ using PoS.WebApi.Application.Services.ServiceCharge;
 using PoS.WebApi.Application.Services.Customer;
 using PoS.WebApi.Application.Services.Tax;
 using PoS.WebApi.Application.Services.Business;
+using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Domain.Common;
-using PoS.WebApi.Domain.Entities;
 using PoS.WebApi.Infrastructure.Persistence;
 using PoS.WebApi.Infrastructure.Repositories;
 using PoS.WebApi.Presentation.Extensions;
+using PoS.WebApi.Application.Services.NewFolder;
+using PoS.WebApi.Domain.Entities;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,18 +42,26 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeRepository>();
 builder.Services.AddScoped<IServiceChargeService, ServiceChargeService>();
+
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddTransient<ITaxService, TaxService>();
-
 builder.Services.AddTransient<ITaxRepository, TaxRepository>();
 
 builder.Services.AddTransient<IBusinessService, BusinessService>();
 builder.Services.AddTransient<IBusinessRepository, BusinessRepository>();
 
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+
 // Adding controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    });
+
 
 // Building app
 var app = builder.Build();
