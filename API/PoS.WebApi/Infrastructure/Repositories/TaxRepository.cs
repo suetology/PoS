@@ -13,15 +13,15 @@ public class TaxRepository : ITaxRepository
     {
         _dbContext = dbContext;
     }
-    
-    public async Task<Tax> Get(Guid id)
-    {
-        return await _dbContext.Taxes.FirstOrDefaultAsync(i => i.Id == id);
-    }
 
     public async Task<IEnumerable<Tax>> GetAll()
     {
         return await _dbContext.Taxes.ToListAsync();
+    }
+
+    public async Task<Tax> Get(Guid id)
+    {
+        return await _dbContext.Taxes.FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task Create(Tax tax)

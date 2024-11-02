@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Tax;
 using PoS.WebApi.Application.Services.Tax.Contracts;
-using PoS.WebApi.Domain.Entities;
 
 namespace PoS.WebApi.Presentation.Controllers;
 
@@ -14,6 +13,14 @@ public class TaxController : ControllerBase
     public TaxController(ITaxService taxService)
     {
         _taxService = taxService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllTax()
+    {
+        var taxes = await _taxService.GetAllTaxes();
+
+        return Ok(taxes);
     }
 
     [HttpGet("{taxId}", Name = nameof(GetTax))]

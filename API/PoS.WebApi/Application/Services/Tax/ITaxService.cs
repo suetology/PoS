@@ -5,6 +5,8 @@ using Domain.Entities;
 
 public interface ITaxService
 {
+    Task<IEnumerable<Tax>> GetAllTaxes();
+
     Task<Tax> GetTax(Guid taxId);
     
     Task CreateTax(TaxDto tax);

@@ -18,7 +18,11 @@ public class TaxService : ITaxService
         _taxRepository = taxRepository;
         _unitOfWork = unitOfWork;
     }
-    
+    public async Task<IEnumerable<Tax>> GetAllTaxes()
+    {
+        return await _taxRepository.GetAll();
+    }
+
     public async Task<Tax> GetTax(Guid taxId)
     {
         return await _taxRepository.Get(taxId);
