@@ -6,4 +6,6 @@ public interface IRepository<T>
     Task<T> Get(Guid id);
     
     Task Create(T entity);
+    Task<IEnumerable<T>> GetAll();
+
 }

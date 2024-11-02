@@ -19,6 +19,11 @@ public class TaxRepository : ITaxRepository
         return await _dbContext.Taxes.FirstOrDefaultAsync(i => i.Id == id);
     }
 
+    public async Task<IEnumerable<Tax>> GetAll()
+    {
+        return await _dbContext.Taxes.ToListAsync();
+    }
+
     public async Task Create(Tax tax)
     {
         await _dbContext.Taxes.AddAsync(tax);
