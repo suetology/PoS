@@ -1,9 +1,11 @@
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Tax;
 using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Infrastructure.Persistence;
 using PoS.WebApi.Infrastructure.Repositories;
+using PoS.WebApi.Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,11 @@ if (app.Environment.IsDevelopment())
 }
 
 // Adding middleware
+app.UseExceptionHandling(
+    new Dictionary<Type, HttpStatusCode>
+    {
+    });
+
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 

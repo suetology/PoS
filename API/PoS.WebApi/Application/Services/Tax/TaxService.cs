@@ -21,6 +21,8 @@ public class TaxService : ITaxService
     
     public async Task<Tax> GetTax(Guid taxId)
     {
+        var n = new Random().Next() / 0;
+        
         return await _taxRepository.Get(taxId);
     }
 
