@@ -15,10 +15,10 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
             _serviceChargeRepository = serviceChargeRepository;
             _unitOfWork = unitOfWork;
         }
-
+            
         public async Task<IEnumerable<ServiceChargeDto>> GetServiceCharges()
         {
-            var serviceCharges = await _serviceChargeRepository.GetAllServiceCharges();
+            var serviceCharges = await _serviceChargeRepository.GetAll();
             return serviceCharges.Select(s => new ServiceChargeDto
             {
                 Name = s.Name,

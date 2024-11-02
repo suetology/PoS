@@ -33,8 +33,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeRepository>();
-builder.Services.AddScoped<IServiceChargeService, ServiceChargeService>();
-
+builder.Services.AddScoped<IServiceChargeService, ServiceChargeService>(); 
 
 builder.Services.AddTransient<ITaxService, TaxService>();
 

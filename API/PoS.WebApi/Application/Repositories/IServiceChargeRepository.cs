@@ -5,11 +5,8 @@ using PoS.WebApi.Domain.Entities;
 
 namespace PoS.WebApi.Application.Repositories;
 
-public interface IServiceChargeRepository
-{
-    Task<IEnumerable<ServiceCharge>> GetAllServiceCharges();
-    Task<ServiceCharge> Get(Guid id);
-    Task Create(ServiceCharge serviceCharge);
+public interface IServiceChargeRepository : IRepository<ServiceCharge>
+{ 
 }
 
 
