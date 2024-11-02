@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Tax;
+using PoS.WebApi.Application.Services.Business;
 using PoS.WebApi.Domain.Common;
+using PoS.WebApi.Domain.Entities;
 using PoS.WebApi.Infrastructure.Persistence;
 using PoS.WebApi.Infrastructure.Repositories;
 
@@ -30,6 +32,9 @@ builder.Services.AddCors(options =>
 
 // Registering dependencies
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddTransient<IBusinessService, BusinessService>();
+builder.Services.AddTransient<IBusinessRepository, BusinessRepository>();
 
 builder.Services.AddTransient<ITaxService, TaxService>();
 
