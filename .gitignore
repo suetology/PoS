@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/API/PoS.WebApi/database.db-shm
+/API/PoS.WebApi/database.db-wal
+/.vs/VSWorkspaceState.json
+/.vs/PoS/v17/DocumentLayout.json
+/.vs/slnx.sqlite
+/.vs/PoS/v17/.wsuo
+/.vs/PoS/FileContentIndex/43bf9edc-c28c-40b2-8484-dbd930377438.vsidx
+/.vs/ProjectSettings.json
+/.vs/PoS/FileContentIndex/3fab9994-1d5a-404b-95cd-73f9c2081895.vsidx
+/.vs/PoS/config/applicationhost.config
