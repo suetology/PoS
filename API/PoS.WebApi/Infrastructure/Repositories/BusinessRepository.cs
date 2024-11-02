@@ -16,12 +16,12 @@ public class BusinessRepository : IBusinessRepository
 
     public async Task<IEnumerable<Business>> GetAll()
     {
-        return await _dbContext.Businesses.ToListAsync();
+        return await _dbContext.Businesses.Include(b => b.Employees).ToListAsync();
     }
 
     public async Task<Business> Get(Guid id)
     {
-        return await _dbContext.Businesses.FirstOrDefaultAsync(i => i.Id == id);
+        return await _dbContext.Businesses.Include(b => b.Employees).FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task Create(Business business)
