@@ -17,10 +17,10 @@ namespace PoS.WebApi.Presentation.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCustomer(Guid id)
+        [HttpGet("{customerId}")]
+        public async Task<IActionResult> GetCustomer(Guid customerId)
         {
-            var customer = await _customerService.GetCustomer(id);
+            var customer = await _customerService.GetCustomer(customerId);
             if (customer == null)
             {
                 return NotFound();
@@ -37,7 +37,7 @@ namespace PoS.WebApi.Presentation.Controllers
             }
 
             await _customerService.CreateCustomer(customerDto);
-            return CreatedAtAction(nameof(GetCustomer), new { id = customerDto.ToDomain().Id }, customerDto);
+            return CreatedAtAction(nameof(GetCustomer), new { customerId = customerDto.ToDomain().Id }, customerDto);
         }
     }
 }
