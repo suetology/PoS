@@ -13,6 +13,7 @@ using PoS.WebApi.Presentation.Extensions;
 using PoS.WebApi.Application.Services.NewFolder;
 using PoS.WebApi.Domain.Entities;
 using System.Text.Json.Serialization;
+using PoS.WebApi.Application.Services.Shift;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,13 +39,16 @@ builder.Services.AddCors(options =>
 });
 
 // Registering dependencies
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddScoped<IServiceChargeRepository, ServiceChargeRepository>();
-builder.Services.AddScoped<IServiceChargeService, ServiceChargeService>();
+builder.Services.AddTransient<IServiceChargeRepository, ServiceChargeRepository>();
+builder.Services.AddTransient<IServiceChargeService, ServiceChargeService>();
 
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+builder.Services.AddTransient<ICustomerService, CustomerService>();
+
+builder.Services.AddTransient<IShiftService, ShiftService>();
+builder.Services.AddTransient<IShiftRepository, ShiftRepository>();
 
 builder.Services.AddTransient<ITaxService, TaxService>();
 builder.Services.AddTransient<ITaxRepository, TaxRepository>();
