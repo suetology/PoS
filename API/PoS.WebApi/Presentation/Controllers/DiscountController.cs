@@ -33,7 +33,12 @@ public class DiscountController : ControllerBase
     [Route("{discountId}", Name = nameof(GetDiscount))]
     public async Task<IActionResult> GetDiscount([FromRoute] Guid discountId)
     {
+        
         var discount = await _discountService.GetDiscount(discountId);
+        if (discount == null)
+        {
+            return NotFound();
+        }
 
         return Ok(discount);
     }
