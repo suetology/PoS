@@ -15,6 +15,7 @@ using PoS.WebApi.Domain.Entities;
 using System.Text.Json.Serialization;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
+using PoS.WebApi.Application.Services.Reservation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,9 +61,14 @@ builder.Services.AddTransient<IBusinessRepository, BusinessRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 
-
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddTransient<IReservationService, ReservationService>();
+builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 
 // Adding controllers
 builder.Services.AddControllers()
