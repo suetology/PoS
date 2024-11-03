@@ -14,6 +14,7 @@ using PoS.WebApi.Application.Services.NewFolder;
 using PoS.WebApi.Domain.Entities;
 using System.Text.Json.Serialization;
 using PoS.WebApi.Application.Services.Shift;
+using PoS.WebApi.Application.Services.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,10 @@ builder.Services.AddTransient<ITaxRepository, TaxRepository>();
 
 builder.Services.AddTransient<IBusinessService, BusinessService>();
 builder.Services.AddTransient<IBusinessRepository, BusinessRepository>();
+
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
