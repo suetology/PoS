@@ -84,5 +84,8 @@ app.UseCors("AllowAll");
 // Mapping Controllers
 app.MapControllers();
 
+// Configuring Sqlite so that it is possible to push all the DB changes to the GitHub
+app.ConfigureSqliteDatabase();
+
 // Running app
 app.Run();
