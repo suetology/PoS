@@ -6,11 +6,9 @@ namespace PoS.WebApi.Presentation.Extensions;
 public static class MiddlewareExtensions
 {
     public static IApplicationBuilder UseExceptionHandling(
-        this IApplicationBuilder builder,
+        this IApplicationBuilder app,
         IDictionary<Type, HttpStatusCode> exceptionMappings)
     {
-        return builder.UseMiddleware<ExceptionHandlingMiddleware>(exceptionMappings);
+        return app.UseMiddleware<ExceptionHandlingMiddleware>(exceptionMappings);
     }
-    
-    
 }

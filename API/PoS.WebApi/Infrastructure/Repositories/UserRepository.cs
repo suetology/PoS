@@ -19,15 +19,18 @@ public class UserRepository : IUserRepository
         await _dbContext.Users.AddAsync(user);
     }
 
-    public Task<User> Get(Guid id)
+    public async Task<User> Get(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task<IEnumerable<User>> GetAll()
     {
-       
         return await _dbContext.Users.ToListAsync();
-        
+    }
+
+    public async Task<User> GetByUsername(string username)
+    {
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 }
