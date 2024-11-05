@@ -1,4 +1,4 @@
-﻿using PoS.WebApi.Domain.Entities;
+using PoS.WebApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Infrastructure.Persistence;
@@ -28,7 +28,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User> Get(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Users.FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<IEnumerable<User>> GetAllUsersByFiltering(QueryParameters parameters)

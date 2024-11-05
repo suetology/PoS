@@ -1,4 +1,4 @@
-﻿using PoS.WebApi.Application.Services.User;
+using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Domain.Entities;
 

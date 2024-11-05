@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
