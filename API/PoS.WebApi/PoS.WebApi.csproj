@@ -18,12 +18,9 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.4.8" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
-
-
     </ItemGroup>
-
-
 
 
 </Project>

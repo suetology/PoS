@@ -12,12 +12,14 @@ using PoS.WebApi.Infrastructure.Persistence;
 using PoS.WebApi.Infrastructure.Repositories;
 using PoS.WebApi.Presentation.Extensions;
 using PoS.WebApi.Application.Services.NewFolder;
+using PoS.WebApi.Domain.Entities;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using PoS.WebApi.Application.Services.Auth;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
 using PoS.WebApi.Infrastructure.Security;
+using PoS.WebApi.Application.Services.Discount;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +88,9 @@ builder.Services.AddTransient<IBusinessRepository, BusinessRepository>();
 
 builder.Services.AddTransient<IServiceRepository, ServiceRepository>();
 builder.Services.AddTransient<IServiceService, ServiceService>();
+
+builder.Services.AddTransient<IDiscountRepository, DiscountRepository>();
+builder.Services.AddTransient<IDiscountService, DiscountService>();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();

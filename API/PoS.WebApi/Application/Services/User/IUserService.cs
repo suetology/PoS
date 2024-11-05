@@ -6,5 +6,6 @@ using Domain.Entities;
 public interface IUserService
 {
     Task CreateUser(UserDto user);
-    Task<IEnumerable<User>> GetAllUsers();
+    Task<IEnumerable<User>> GetAllUsers(QueryParameters parameters);
+    Task<User> GetUser(Guid id);
 }

@@ -27,8 +27,13 @@ public class UserService : IUserService
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<IEnumerable<User>> GetAllUsers()
+    public async Task<IEnumerable<User>> GetAllUsers(QueryParameters parameters)
     {
-        return await _userRepository.GetAll();
+        return await _userRepository.GetAllUsersByFiltering(parameters);
+    }
+
+    public async Task<User> GetUser(Guid userId)
+    {
+        return await _userRepository.Get(userId);
     }
 }
