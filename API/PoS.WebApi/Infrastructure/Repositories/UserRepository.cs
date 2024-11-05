@@ -1,4 +1,4 @@
-﻿using PoS.WebApi.Domain.Entities;
+using PoS.WebApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Infrastructure.Persistence;
@@ -21,14 +21,14 @@ public class UserRepository : IUserRepository
         await _dbContext.Users.AddAsync(user);
     }
 
-    public async Task<User> Get(Guid id)
-    {
-        return await _dbContext.Users.FirstOrDefaultAsync(i => i.Id == id);
-    }
-
     public async Task<IEnumerable<User>> GetAll()
     {
         return await _dbContext.Users.ToListAsync();
+    }
+
+    public async Task<User> Get(Guid id)
+    {
+        return await _dbContext.Users.FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<IEnumerable<User>> GetAllUsersByFiltering(QueryParameters parameters)
@@ -64,5 +64,10 @@ public class UserRepository : IUserRepository
                     .ToListAsync();
 
         return pagedUsers; ;
+    }
+
+    public async Task<User> GetByUsername(string username)
+    {
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 }

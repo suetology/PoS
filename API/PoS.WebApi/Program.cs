@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Authentication;
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.ServiceCharge;
@@ -13,8 +14,11 @@ using PoS.WebApi.Presentation.Extensions;
 using PoS.WebApi.Application.Services.NewFolder;
 using PoS.WebApi.Domain.Entities;
 using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Models;
+using PoS.WebApi.Application.Services.Auth;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
+using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Application.Services.Discount;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +31,31 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 // Swagger setup
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+    
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 // CORS
 builder.Services.AddCors(options => 
@@ -64,19 +92,21 @@ builder.Services.AddTransient<IServiceService, ServiceService>();
 builder.Services.AddTransient<IDiscountRepository, DiscountRepository>();
 builder.Services.AddTransient<IDiscountService, DiscountService>();
 
-
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IJwtProvider, JwtProvider>();
 
 // Adding controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-        
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+builder.ConfigureAuthentication();
 
 // Building app
 var app = builder.Build();
@@ -91,9 +121,10 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandling(
     new Dictionary<Type, HttpStatusCode>
     {
+        { typeof(InvalidCredentialException), HttpStatusCode.Unauthorized }
     });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 // Mapping Controllers
@@ -101,6 +132,10 @@ app.MapControllers();
 
 // Configuring Sqlite so that it is possible to push all the DB changes to the GitHub
 app.ConfigureSqliteDatabase();
+
+// Configuring auth
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Running app
 app.Run();

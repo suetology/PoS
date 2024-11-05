@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
 
@@ -15,7 +16,8 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost("/auth/register")]
+    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
+    [HttpPost(Name = nameof(CreateUser))]
     [Tags("User Management")]
     public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
     {
@@ -24,6 +26,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "SuperAdmin,BusinessOwner,Employee")]
     [HttpGet]
     [Tags("User Management")]
     public async Task<IActionResult> GetAllUsers([FromQuery] QueryParameters parameters)
@@ -38,6 +41,7 @@ public class UserController : ControllerBase
         return Ok(allUsers);
     }
 
+    [Authorize(Roles = "SuperAdmin,BusinessOwner,Employee")]
     [HttpGet]
     [Tags("User Management")]
     [Route("{userId}", Name = nameof(GetUser))]
