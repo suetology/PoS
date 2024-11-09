@@ -29,9 +29,9 @@ public class Order : Entity
     
     public User Employee { get; set; }
     
-    public Guid ServiceChargeId { get; set; }
+    public Guid? ServiceChargeId { get; set; }
     
-    public ServiceCharge ServiceCharge { get; set; }
+    public ServiceCharge? ServiceCharge { get; set; }
     
     public decimal ServiceChargeAmount { get; set; } // ar tikrai reik jei yra ServiceCharge cia?
     
@@ -39,7 +39,7 @@ public class Order : Entity
     
     public Discount? Discount { get; set; }
     
-    public decimal? DiscountAmount { get; set; } // vel gi ar reik jei Discount yra?
+    public decimal DiscountAmount { get; set; } // vel gi ar reik jei Discount yra?
     
     public Reservation? Reservation { get; set; }
 }
