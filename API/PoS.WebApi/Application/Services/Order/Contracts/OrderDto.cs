@@ -24,9 +24,9 @@ public class OrderDto {
 
     public decimal PaidAmount { get; set; }
 
-    public DateTime OrderCreated { get; }
+    public DateTime OrderCreated { get; set; }
 
-    public DateTime OrderClosed { get; }
+    public DateTime OrderClosed { get; set; }
 
     public Order ToDomain()
     {
