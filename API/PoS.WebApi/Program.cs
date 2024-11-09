@@ -20,6 +20,7 @@ using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
 using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Application.Services.Discount;
+using PoS.WebApi.Application.Services.Order;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,6 +95,9 @@ builder.Services.AddTransient<IDiscountService, DiscountService>();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddTransient<IOrderService, PoS.WebApi.Application.Services.Order.OrderService>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtProvider, JwtProvider>();
