@@ -63,7 +63,7 @@ public class UserRepository : IUserRepository
                     .Take(parameters.PageSize)
                     .ToListAsync();
 
-        return pagedUsers; ;
+        return pagedUsers;
     }
 
     public async Task<User> GetByUsername(string username)
