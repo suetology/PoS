@@ -8,4 +8,5 @@ public interface IItemGroupRepository : IRepository<ItemGroup>
 {
     Task Update(ItemGroup itemGroup);
     Task<IEnumerable<ItemGroup>> GetAllGroupsByFiltering(QueryParameters parameters);
+    Task<bool> ExistsAsync(Guid groupId);
 }

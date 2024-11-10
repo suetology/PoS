@@ -1,11 +1,11 @@
 ﻿namespace PoS.WebApi.Application.Services.Discount;
 
 using PoS.WebApi.Application.Services.Discount.Contracts;
-using Domain.Entities;
 
 public interface IDiscountService
 {
     Task CreateDiscount(DiscountDto discount);
-    Task<IEnumerable<Discount>> GetAllDiscounts(QueryParameters parameters);
-    Task<Discount> GetDiscount(Guid id);
+    Task<IEnumerable<DiscountWithGroupsDto>> GetAllDiscounts(QueryParameters parameters);
+    Task<DiscountWithGroupsDto> GetDiscount(Guid id);
+    Task DeleteDiscountById(Guid id);
 }

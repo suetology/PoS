@@ -52,4 +52,9 @@ public class ItemGroupRepository : IItemGroupRepository
     {
         _dbContext.ItemGroups.Update(entity);
     }
+
+    public async Task<bool> ExistsAsync(Guid groupId)
+    {
+        return await _dbContext.ItemGroups.AnyAsync(ig => ig.Id == groupId);
+    }
 }

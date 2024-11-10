@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Discount;
+using PoS.WebApi.Application.Services.Discount.Contracts;
 using PoS.WebApi.Domain.Entities;
 using PoS.WebApi.Infrastructure.Persistence;
 
@@ -18,19 +19,38 @@ namespace PoS.WebApi.Infrastructure.Repositories
             await _dbContext.Discounts.AddAsync(discount);
         }
 
-        public async Task<Discount> Get(Guid id)
+        public async Task<DiscountWithGroupsDto> GetDto(Guid id)
         {
-            return await _dbContext.Discounts.FirstOrDefaultAsync(i => i.Id == id);
+            var discount = await _dbContext.Discounts
+            .Include(d => d.GroupDiscounts)
+                .ThenInclude(gd => gd.ItemGroup)
+            .Where(d => d.Id == id)
+            .Select(d => new DiscountWithGroupsDto
+            {
+                DiscountId = d.Id,
+                DiscountName = d.Name,
+                Value = d.Value,
+                IsPercentage = d.IsPercentage,
+                AmountAvailable = d.AmountAvailable,
+                ValidFrom = d.ValidFrom,
+                ValidTo = d.ValidTo,
+                ItemGroups = d.GroupDiscounts.Select(gd => new ItemGroupDto
+                {
+                    ItemGroupId = gd.ItemGroupId,
+                    ItemGroupName = gd.ItemGroup.Name
+                }).ToList()
+            })
+            .FirstOrDefaultAsync();
+
+             return discount;
         }
 
-        public async Task<IEnumerable<Discount>> GetAll()
+        public async Task<IEnumerable<DiscountWithGroupsDto>> GetAll(QueryParameters parameters)
         {
-            return await _dbContext.Discounts.ToListAsync();
-        }
-
-        public async Task<IEnumerable<Discount>> GetDiscountsByFiltering(QueryParameters parameters)
-        {
-            var discountsQuery = _dbContext.Discounts.AsQueryable();
+            var discountsQuery = _dbContext.Discounts
+                .Include(d => d.GroupDiscounts)
+                    .ThenInclude(gd => gd.ItemGroup)
+                .AsQueryable();
 
             // Apply filters
             if (!string.IsNullOrEmpty(parameters.Name))
@@ -53,13 +73,50 @@ namespace PoS.WebApi.Infrastructure.Repositories
                 discountsQuery = discountsQuery.Where(d => d.ValidTo <= parameters.ValidTo.Value);
             }
 
-            
-            var pagedDiscounts = await discountsQuery
-                    .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                    .Take(parameters.PageSize)
-                    .ToListAsync();
+            // Apply pagination
+            discountsQuery = discountsQuery
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize);
 
-            return pagedDiscounts;
+            // Project into DTO
+            var discountsWithGroups = await discountsQuery
+                .Select(d => new DiscountWithGroupsDto
+                {
+                    DiscountId = d.Id,
+                    DiscountName = d.Name,
+                    Value = d.Value,
+                    IsPercentage = d.IsPercentage,
+                    AmountAvailable = d.AmountAvailable,
+                    ValidFrom = d.ValidFrom,
+                    ValidTo = d.ValidTo,
+                    ItemGroups = d.GroupDiscounts.Select(gd => new ItemGroupDto
+                    {
+                        ItemGroupId = gd.ItemGroupId,
+                        ItemGroupName = gd.ItemGroup.Name
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return discountsWithGroups;
+        }
+
+        public async Task Delete(Guid discountId)
+        {
+            var discount = await _dbContext.Discounts.FindAsync(discountId);
+            if (discount != null)
+            {
+                _dbContext.Discounts.Remove(discount);
+            }
+        }
+
+        public async Task<Discount> Get(Guid id)
+        {
+            return await _dbContext.Discounts.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Discount>> GetAll()
+        {
+            return await _dbContext.Discounts.Include(d => d.GroupDiscounts).ToListAsync();
         }
     }
 }
