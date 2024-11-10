@@ -22,12 +22,12 @@ public class ItemGroupRepository : IItemGroupRepository
 
     public async Task<ItemGroup> Get(Guid id)
     {
-        return await _dbContext.ItemGroups.FirstOrDefaultAsync(i => i.Id == id);
+        return await _dbContext.ItemGroups.Include(b => b.Items).FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<IEnumerable<ItemGroup>> GetAll()
     {
-        return await _dbContext.ItemGroups.ToListAsync();
+        return await _dbContext.ItemGroups.Include(b => b.Items).ToListAsync();
     }
 
     public async Task<IEnumerable<ItemGroup>> GetAllGroupsByFiltering(QueryParameters parameters)
