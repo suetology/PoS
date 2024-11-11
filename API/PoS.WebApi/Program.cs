@@ -18,6 +18,7 @@ using Microsoft.OpenApi.Models;
 using PoS.WebApi.Application.Services.Auth;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
+using PoS.WebApi.Application.Services.ItemDiscount;
 using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Application.Services.Discount;
 using PoS.WebApi.Application.Services.ItemGroup;
@@ -106,6 +107,9 @@ builder.Services.AddTransient<IGroupDiscountService, GroupDiscountService>();
 
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<IItemService, ItemService>();
+
+builder.Services.AddTransient<IItemDiscountRepository, ItemDiscountRepository>();
+builder.Services.AddTransient<IItemDiscountService, ItemDiscountService>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtProvider, JwtProvider>();

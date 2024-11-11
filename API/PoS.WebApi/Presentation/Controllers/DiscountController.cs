@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Discount;
 using PoS.WebApi.Application.Services.Discount.Contracts;
 using PoS.WebApi.Application.Services.GroupDiscount;
+using PoS.WebApi.Application.Services.ItemDiscount;
 
 namespace PoS.WebApi.Presentation.Controllers;
 [ApiController]
@@ -12,11 +13,13 @@ public class DiscountController : ControllerBase
 {
     private readonly IDiscountService _discountService;
     private readonly IGroupDiscountService _groupDiscountService;
+    private readonly IItemDiscountService _itemDiscountService;
 
-    public DiscountController(IDiscountService discountService, IGroupDiscountService groupDiscountService)
+    public DiscountController(IDiscountService discountService, IGroupDiscountService groupDiscountService, IItemDiscountService itemDiscountService)
     {
         _discountService = discountService;
         _groupDiscountService = groupDiscountService;
+        _itemDiscountService = itemDiscountService;
     }
 
     [Authorize(Roles = "SuperAdmin,BusinessOwner")]
@@ -82,6 +85,31 @@ public class DiscountController : ControllerBase
     {
         var groupDiscounts = await _groupDiscountService.GetAllGroups();
         return Ok(groupDiscounts);
+    }
+
+    // SINGLE ITEM DISCOUNT
+
+    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
+    [HttpPost("{discountId}/assign-item/{itemId}")]
+    public async Task<IActionResult> AssignDiscountToItem([FromRoute] Guid discountId, [FromRoute] Guid itemId)
+    {
+        await _itemDiscountService.AssignDiscountToItemAsync(discountId, itemId);
+        return NoContent();
+    }
+
+    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
+    [HttpDelete("{discountId}/remove-item/{itemId}")]
+    public async Task<IActionResult> RemoveDiscountFromItem([FromRoute] Guid discountId, [FromRoute] Guid itemId)
+    {
+        await _itemDiscountService.RemoveDiscountFromItemAsync(discountId, itemId);
+        return NoContent();
+    }
+
+    [HttpGet("itemDiscount")]
+    public async Task<IActionResult> GetAllItemDiscounts()
+    {
+        var itemDiscounts = await _itemDiscountService.GetAllItemDiscounts();
+        return Ok(itemDiscounts);
     }
 }
 
