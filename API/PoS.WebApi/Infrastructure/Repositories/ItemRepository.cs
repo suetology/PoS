@@ -22,16 +22,30 @@ public class ItemRepository : IItemRepository
 
     public async Task<Item> Get(Guid id)
     {
-        return await _dbContext.Items.Include(b => b.ItemGroup).Include(b => b.ItemDiscounts).FirstOrDefaultAsync(i => i.Id == id);
+        return await _dbContext.Items
+            .Include(i => i.ItemTaxes)
+                .ThenInclude(it => it.Tax)
+            .Include(i => i.ItemGroup)
+            .Include(i => i.ItemDiscounts)
+            .FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<IEnumerable<Item>> GetAll()
     {
-        return await _dbContext.Items.Include(b => b.ItemGroup).ToListAsync();
+        return await _dbContext.Items
+            .Include(i => i.ItemTaxes)
+                .ThenInclude(it => it.Tax)
+            .Include(i => i.ItemGroup)
+            .ToListAsync();
     }
+
     public async Task<IEnumerable<Item>> GetAllItemsByFiltering(QueryParameters parameters)
     {
-        var allItems = _dbContext.Items.Include(b => b.ItemGroup).AsQueryable();
+        var allItems = _dbContext.Items
+            .Include(i => i.ItemTaxes)
+                .ThenInclude(it => it.Tax)
+            .Include(i => i.ItemGroup)
+            .AsQueryable();
 
         // Filtering by search
         if (!string.IsNullOrEmpty(parameters.Search))
@@ -47,5 +61,4 @@ public class ItemRepository : IItemRepository
 
         return await allItems.ToListAsync();
     }
-
 }

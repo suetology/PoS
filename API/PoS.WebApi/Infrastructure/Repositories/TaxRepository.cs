@@ -28,4 +28,11 @@ public class TaxRepository : ITaxRepository
     {
         await _dbContext.Taxes.AddAsync(tax);
     }
+
+    public async Task<IEnumerable<Tax>> GetTaxesByIds(List<Guid> taxIds)
+    {
+        return await _dbContext.Taxes
+            .Where(t => taxIds.Contains(t.Id))
+            .ToListAsync();
+    }
 }

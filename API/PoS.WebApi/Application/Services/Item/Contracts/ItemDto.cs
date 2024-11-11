@@ -9,7 +9,7 @@ public class ItemDto
     public int Stock { get; set; }
     public Guid? ItemGroupId { get; set; }
 
-    //public ICollection<ItemTax>? ItemTaxes { get; set; }
+    public List<Guid> TaxIds { get; set; } = new List<Guid>();
 
     public Item ToDomain()
     {
@@ -21,7 +21,6 @@ public class ItemDto
             Stock = Stock,
             ItemGroupId = ItemGroupId,
             Image = new byte[0]
-            //ItemTaxes = ItemTaxes
         };
     }
 }
