@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Business;
 using PoS.WebApi.Application.Services.Business.Contracts;
 
@@ -15,6 +16,7 @@ public class BusinessController : ControllerBase
         _businessService = businessService;
     }
 
+    [Authorize(Roles = "SuperAdmin")]
     [HttpGet]
     public async Task<IActionResult> GetAllBusinesses()
     {
@@ -23,6 +25,7 @@ public class BusinessController : ControllerBase
         return Ok(allBusinesses);
     }
 
+    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
     [HttpGet("{businessId}", Name = nameof(GetBusiness))]
     public async Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
     {
@@ -31,6 +34,7 @@ public class BusinessController : ControllerBase
         return Ok(business);
     }
 
+    [Authorize(Roles = "SuperAdmin")]
     [HttpPost(Name = nameof(CreateBusiness))]
     public async Task<IActionResult> CreateBusiness([FromBody] BusinessDto businessDto)
     {
@@ -39,6 +43,7 @@ public class BusinessController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
     [HttpPatch("{businessId}", Name = nameof(UpdateBusiness))]
     public async Task<IActionResult> UpdateBusiness([FromRoute] Guid businessId, [FromBody] BusinessDto businessDto)
     {
