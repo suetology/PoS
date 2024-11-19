@@ -18,6 +18,7 @@ using Microsoft.OpenApi.Models;
 using PoS.WebApi.Application.Services.Auth;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
+using PoS.WebApi.Application.Services.Reservation;
 using PoS.WebApi.Application.Services.ItemDiscount;
 using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Application.Services.Discount;
@@ -113,6 +114,12 @@ builder.Services.AddTransient<IItemDiscountService, ItemDiscountService>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtProvider, JwtProvider>();
+
+builder.Services.AddTransient<IReservationService, ReservationService>();
+builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 
 // Adding controllers
 builder.Services.AddControllers()

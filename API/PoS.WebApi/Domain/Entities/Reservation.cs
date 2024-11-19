@@ -24,4 +24,12 @@ public class Reservation : Entity
     public Guid OrderId { get; set; }
     
     public Order Order { get; set; }
+    
+    public Guid ServiceId { get; set; }
+    
+    public Service Service { get; set; }
+    
+    public ICollection<ServiceCharge> ServiceCharges { get; set; }
+    
+    public ICollection<OrderService> OrderServices { get; set; }
 }
