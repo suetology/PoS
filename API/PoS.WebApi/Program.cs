@@ -22,6 +22,7 @@ using PoS.WebApi.Application.Services.Reservation;
 using PoS.WebApi.Application.Services.ItemDiscount;
 using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Application.Services.Discount;
+using PoS.WebApi.Application.Services.Order;
 using PoS.WebApi.Application.Services.ItemGroup;
 using PoS.WebApi.Application.Services.Item;
 using PoS.WebApi.Application.Services.GroupDiscount;
@@ -99,6 +100,9 @@ builder.Services.AddTransient<IDiscountService, DiscountService>();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddTransient<IOrderService, PoS.WebApi.Application.Services.Order.OrderService>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 builder.Services.AddTransient<IItemGroupService, ItemGroupService>();
 builder.Services.AddTransient<IItemGroupRepository, ItemGroupRepository>();
