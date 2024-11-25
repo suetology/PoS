@@ -26,39 +26,7 @@ public class OrderQueryParameters
 
     public OrderSortableFields OrderBy { get; set; } = OrderSortableFields.OrderId;
 
-    public void SetSortableField(string field) 
-    {
-        try {
-            OrderBy = Enum.TryParse(field, true, out OrderSortableFields sortableField) switch {
-                true => sortableField,
-                false => OrderSortableFields.OrderId
-            };
-        }
-        catch (ArgumentException) {
-            OrderBy = OrderSortableFields.OrderId;
-        }
-        catch (InvalidOperationException) {
-            OrderBy = OrderSortableFields.OrderId;
-        }
-    }
-
     public SortOrder SortOrder { get; set; } = SortOrder.Descending;
-
-    public void SetSortOrder(string order) 
-    {
-        try {
-            SortOrder = Enum.TryParse(order, true, out SortOrder sortOrder) switch {
-                true => sortOrder,
-                false => SortOrder.Descending
-            };
-        }
-        catch (ArgumentException) {
-            SortOrder = SortOrder.Descending;
-        }
-        catch (InvalidOperationException) {
-            SortOrder = SortOrder.Descending;
-        }
-    }
 
     public int Page { get; set; } = 1;
 
