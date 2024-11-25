@@ -28,6 +28,14 @@ namespace PoS.WebApi.Presentation.Controllers
             return Ok(customer);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var customers = await _customerService.GetAll();
+
+            return Ok(customers);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromBody] CustomerDto customerDto)
         {

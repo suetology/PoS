@@ -14,6 +14,8 @@ public class DiscountDto
 
     public DateTime ValidTo { get; set; }
 
+    public List<Guid>? ItemGroupIds { get; set; } = new List<Guid>();
+
     public Discount ToDomain()
         {
         return new Discount()

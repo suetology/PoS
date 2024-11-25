@@ -298,12 +298,17 @@ namespace PoS.WebApi.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ReservationId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ReservationId");
 
                     b.HasIndex("ServiceId");
 
@@ -389,6 +394,9 @@ namespace PoS.WebApi.Migrations
                     b.Property<DateTime>("ReservationTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
@@ -400,6 +408,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasIndex("OrderId")
                         .IsUnique();
+
+                    b.HasIndex("ServiceId");
 
                     b.ToTable("Reservations");
                 });
@@ -459,10 +469,15 @@ namespace PoS.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ReservationId")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReservationId");
 
                     b.ToTable("ServiceCharges");
                 });
@@ -691,6 +706,10 @@ namespace PoS.WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PoS.WebApi.Domain.Entities.Reservation", null)
+                        .WithMany("OrderServices")
+                        .HasForeignKey("ReservationId");
+
                     b.HasOne("PoS.WebApi.Domain.Entities.Service", "Service")
                         .WithMany()
                         .HasForeignKey("ServiceId")
@@ -744,11 +763,19 @@ namespace PoS.WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PoS.WebApi.Domain.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
 
                     b.Navigation("Employee");
 
                     b.Navigation("Order");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Service", b =>
@@ -760,6 +787,13 @@ namespace PoS.WebApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.ServiceCharge", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Reservation", null)
+                        .WithMany("ServiceCharges")
+                        .HasForeignKey("ReservationId");
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Shift", b =>
@@ -826,6 +860,13 @@ namespace PoS.WebApi.Migrations
                     b.Navigation("Refund");
 
                     b.Navigation("Reservation");
+                });
+
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.Reservation", b =>
+                {
+                    b.Navigation("OrderServices");
+
+                    b.Navigation("ServiceCharges");
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.User", b =>
