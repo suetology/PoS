@@ -2,5 +2,7 @@
 
 public class RefreshAccessTokenResponse
 {
+    public string RefreshToken { get; set; }
+    
     public string AccessToken { get; set; }
 }

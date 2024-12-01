@@ -6,6 +6,5 @@ using PoS.WebApi.Application.Services.Item;
 
 public interface IItemRepository : IRepository<Item>
 {
-    //void Update(Item item);
     Task<IEnumerable<Item>> GetAllItemsByFiltering(QueryParameters parameters);
 }

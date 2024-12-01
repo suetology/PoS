@@ -7,5 +7,9 @@ public interface IJwtProvider
 {
     Task<string> GenerateAccessToken(IEnumerable<Claim> claims);
 
-    Task<RefreshToken> GenerateRefreshToken(User user);
+    Task<string> GenerateRefreshToken(string accessToken);
+
+    Task<(string, string)> RefreshAccessToken(string refreshToken);
+    
+    Task RevokeTokens(string refreshToken);
 }

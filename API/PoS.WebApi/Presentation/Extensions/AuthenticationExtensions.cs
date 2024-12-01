@@ -1,7 +1,9 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Infrastructure.Security.Configuration;
 
 namespace PoS.WebApi.Presentation.Extensions;
@@ -33,6 +35,19 @@ public static class AuthenticationExtensions
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new RsaSecurityKey(publicKey)
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        var tokenId = context.Principal?.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+
+                        if (JwtProvider.RevokedAccessTokenIds.Contains(tokenId))
+                        {
+                            context.Fail("Token has been revoked");
+                        }
+                    }
                 };
             });
 

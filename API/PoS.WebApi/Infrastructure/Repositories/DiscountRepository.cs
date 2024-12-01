@@ -118,4 +118,9 @@ public class DiscountRepository : IDiscountRepository
     {
         return await _dbContext.Discounts.Include(d => d.GroupDiscounts).ToListAsync();
     }
+
+    public Task Update(Discount entity)
+    {
+        throw new NotImplementedException();
+    }
 }

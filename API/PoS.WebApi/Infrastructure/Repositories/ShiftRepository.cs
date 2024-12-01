@@ -17,6 +17,10 @@ namespace PoS.WebApi.Infrastructure.Repositories
         public async Task<Shift> Get(Guid id) => await _dbContext.Shifts.FindAsync(id);
 
         public async Task<IEnumerable<Shift>> GetAll() => await _dbContext.Shifts.ToListAsync();
+        public Task Update(Shift entity)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task Create(Shift shift) => await _dbContext.Shifts.AddAsync(shift);
 

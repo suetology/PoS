@@ -118,7 +118,8 @@ builder.Services.AddTransient<IItemDiscountService, ItemDiscountService>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtProvider, JwtProvider>();
-
+builder.Services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+    
 builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
 

@@ -8,5 +8,7 @@ public class JwtConfiguration
     
     public string PrivateKey { get; set; }
     
-    public AccessToken AccessToken { get; set; }
+    public AccessTokenConfiguration AccessToken { get; set; }
+    
+    public RefreshTokenConfiguration RefreshToken { get; set; }
 }

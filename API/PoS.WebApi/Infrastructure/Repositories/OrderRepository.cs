@@ -32,6 +32,11 @@ public class OrderRepository : IOrderRepository
         return await _dbContext.Orders.ToListAsync();
     }
 
+    public Task Update(Order entity)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<Order>> GetAllFiltered(OrderQueryParameters parameters)
     {
         var query = _dbContext.Orders.AsQueryable();
