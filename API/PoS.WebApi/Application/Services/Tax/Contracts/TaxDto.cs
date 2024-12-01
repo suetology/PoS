@@ -5,6 +5,8 @@ using Domain.Enums;
 
 public class TaxDto
 {
+    public Guid Id { get; set; }
+    
     public string Name { get; set; }
     
     public TaxType Type { get; set; }

@@ -24,6 +24,7 @@ public class TaxService : ITaxService
         var taxesDtos = taxes
             .Select(t => new TaxDto
             {
+                Id = t.Id,
                 Name = t.Name,
                 Type = t.Type,
                 Value = t.Value,
@@ -44,6 +45,7 @@ public class TaxService : ITaxService
         {
             Tax = new TaxDto
             {
+                Id = tax.Id,
                 Name = tax.Name,
                 Type = tax.Type,
                 Value = tax.Value,

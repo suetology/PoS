@@ -127,7 +127,6 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
