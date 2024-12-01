@@ -16,7 +16,7 @@ public class Discount : Entity
     
     public DateTime ValidTo { get; set; }
     
-    public ICollection<ItemDiscount> ItemDiscounts { get; set; } // abejoju ar reik
+    public ICollection<ItemGroup> ItemGroups { get; set; } = new List<ItemGroup>();
     
-    public ICollection<GroupDiscount> GroupDiscounts { get; set; } // irgi abejoju ar reik
+    public ICollection<Item> Items { get; set; } = new List<Item>();
 }

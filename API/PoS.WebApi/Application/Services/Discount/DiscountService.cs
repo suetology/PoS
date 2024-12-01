@@ -12,15 +12,11 @@ public class DiscountService : IDiscountService
 {
     private readonly IDiscountRepository _discountRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IGroupDiscountRepository _groupDiscountRepository;
-    private readonly IItemGroupRepository _itemGroupRepository;
 
-    public DiscountService(IDiscountRepository discountRepository, IUnitOfWork unitOfWork, IItemGroupRepository itemGroupRepository, IGroupDiscountRepository groupDiscountRepository)
+    public DiscountService(IDiscountRepository discountRepository, IUnitOfWork unitOfWork)
     {
         _discountRepository = discountRepository;
         _unitOfWork = unitOfWork;
-        _groupDiscountRepository = groupDiscountRepository;
-        _itemGroupRepository = itemGroupRepository;
     }
 
     public async Task CreateDiscount(DiscountDto discountDto)

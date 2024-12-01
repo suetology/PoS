@@ -17,13 +17,11 @@ using PoS.WebApi.Application.Services.Auth;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
 using PoS.WebApi.Application.Services.Reservation;
-using PoS.WebApi.Application.Services.ItemDiscount;
 using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Application.Services.Discount;
 using PoS.WebApi.Application.Services.Order;
 using PoS.WebApi.Application.Services.ItemGroup;
 using PoS.WebApi.Application.Services.Item;
-using PoS.WebApi.Application.Services.GroupDiscount;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,14 +103,8 @@ builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IItemGroupService, ItemGroupService>();
 builder.Services.AddTransient<IItemGroupRepository, ItemGroupRepository>();
 
-builder.Services.AddTransient<IGroupDiscountRepository, GroupDiscountRepository>();
-builder.Services.AddTransient<IGroupDiscountService, GroupDiscountService>();
-
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<IItemService, ItemService>();
-
-builder.Services.AddTransient<IItemDiscountRepository, ItemDiscountRepository>();
-builder.Services.AddTransient<IItemDiscountService, ItemDiscountService>();
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtProvider, JwtProvider>();

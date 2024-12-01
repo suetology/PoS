@@ -8,11 +8,8 @@ public class DatabaseContext : DbContext
     public DbSet<Business> Businesses { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Discount> Discounts { get; set; }
-    public DbSet<GroupDiscount> GroupDiscounts { get; set; }
     public DbSet<Item> Items { get; set; }
-    public DbSet<ItemDiscount> ItemDiscounts { get; set; }
     public DbSet<ItemGroup> ItemGroups { get; set; }
-    public DbSet<ItemTax> ItemTaxes { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<OrderService> OrderServices { get; set; }

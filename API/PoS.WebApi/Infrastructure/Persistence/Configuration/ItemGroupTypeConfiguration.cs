@@ -14,10 +14,8 @@ public class ItemGroupTypeConfiguration : BaseEntityTypeConfiguration<ItemGroup>
             .WithOne(i => i.ItemGroup)
             .HasForeignKey(i => i.ItemGroupId)
             .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasMany(i => i.GroupDiscounts)
-            .WithOne(g => g.ItemGroup)
-            .HasForeignKey(g => g.ItemGroupId)
-            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(i => i.Discounts)
+            .WithMany(d => d.ItemGroups);
     }
 }

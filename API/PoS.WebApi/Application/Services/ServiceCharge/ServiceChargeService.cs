@@ -16,21 +16,34 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
             _unitOfWork = unitOfWork;
         }
             
-        public async Task<IEnumerable<ServiceChargeDto>> GetServiceCharges()
+        public async Task<GetAllServiceChargesResponse> GetServiceCharges()
         {
             var serviceCharges = await _serviceChargeRepository.GetAll();
-            return serviceCharges.Select(s => new ServiceChargeDto
+            var serviceChargesDtos = serviceCharges
+                .Select(s => new ServiceChargeDto
+                {
+                    Name = s.Name,
+                    Description = s.Description,
+                    Value = s.Value,
+                    IsPercentage = s.IsPercentage
+                });
+
+            return new GetAllServiceChargesResponse
             {
-                Name = s.Name,
-                Description = s.Description,
-                Value = s.Value,
-                IsPercentage = s.IsPercentage
-            });
+                ServiceCharges = serviceChargesDtos
+            };
         }
 
-        public async Task CreateServiceCharge(ServiceChargeDto serviceChargeDto)
+        public async Task CreateServiceCharge(CreateServiceChargeRequest request)
         {
-            var serviceCharge = serviceChargeDto.ToDomain();
+            var serviceCharge = new Domain.Entities.ServiceCharge
+            {
+                Name = request.Name,
+                Description = request.Description,
+                Value = request.Value,
+                IsPercentage = request.IsPercentage
+            };
+            
             await _serviceChargeRepository.Create(serviceCharge);
             await _unitOfWork.SaveChanges();
         }

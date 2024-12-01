@@ -25,15 +25,5 @@ public class DiscountTypeConfiguration : BaseEntityTypeConfiguration<Discount>
         
         builder.Property(d => d.ValidTo)
             .IsRequired();
-        
-        builder.HasMany(d => d.ItemDiscounts)
-            .WithOne(i => i.Discount)
-            .HasForeignKey(i => i.DiscountId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasMany(d => d.GroupDiscounts)
-            .WithOne(i => i.Discount)
-            .HasForeignKey(i => i.DiscountId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

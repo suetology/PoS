@@ -22,9 +22,8 @@ public class DiscountRepository : IDiscountRepository
     public async Task<DiscountWithGroupsDto> GetDto(Guid id)
     {
         var discount = await _dbContext.Discounts
-        .Include(d => d.GroupDiscounts)
-            .ThenInclude(gd => gd.ItemGroup)
         .Where(d => d.Id == id)
+        .Include(d => d.ItemGroups)
         .Select(d => new DiscountWithGroupsDto
         {
             DiscountId = d.Id,
@@ -34,11 +33,7 @@ public class DiscountRepository : IDiscountRepository
             AmountAvailable = d.AmountAvailable,
             ValidFrom = d.ValidFrom,
             ValidTo = d.ValidTo,
-            ItemGroups = d.GroupDiscounts.Select(gd => new ItemGroupDto
-            {
-                ItemGroupId = gd.ItemGroupId,
-                ItemGroupName = gd.ItemGroup.Name
-            }).ToList()
+            //ItemGroups = d.ItemGroups.Select(i => new ItemGroupDto)
         })
         .FirstOrDefaultAsync();
 
@@ -48,8 +43,7 @@ public class DiscountRepository : IDiscountRepository
     public async Task<IEnumerable<DiscountWithGroupsDto>> GetAll(QueryParameters parameters)
     {
         var discountsQuery = _dbContext.Discounts
-            .Include(d => d.GroupDiscounts)
-                .ThenInclude(gd => gd.ItemGroup)
+            .Include(d => d.ItemGroups)
             .AsQueryable();
 
         // Apply filters
@@ -89,11 +83,7 @@ public class DiscountRepository : IDiscountRepository
                 AmountAvailable = d.AmountAvailable,
                 ValidFrom = d.ValidFrom,
                 ValidTo = d.ValidTo,
-                ItemGroups = d.GroupDiscounts.Select(gd => new ItemGroupDto
-                {
-                    ItemGroupId = gd.ItemGroupId,
-                    ItemGroupName = gd.ItemGroup.Name
-                }).ToList()
+                //ItemGroups = 
             })
             .ToListAsync();
 
@@ -116,7 +106,7 @@ public class DiscountRepository : IDiscountRepository
 
     public async Task<IEnumerable<Discount>> GetAll()
     {
-        return await _dbContext.Discounts.Include(d => d.GroupDiscounts).ToListAsync();
+        return await _dbContext.Discounts.Include(d => d.ItemGroups).ToListAsync();
     }
 
     public Task Update(Discount entity)

@@ -17,53 +17,77 @@ using PoS.WebApi.Domain.Common;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Service> GetService(Guid serviceId)
-        {
-            return await _serviceRepository.Get(serviceId);
+        public async Task<GetServiceResponse> GetService(Guid serviceId)
+        { 
+            var service = await _serviceRepository.Get(serviceId);
+
+            return new GetServiceResponse
+            {
+                Service = new ServiceDto
+                {
+                    Name = service.Name,
+                    Description = service.Description,
+                    Price = service.Price,
+                    Duration = service.Duration,
+                    IsActive = service.IsActive,
+                    EmployeeId = service.EmployeeId
+                }
+            };
         }
 
-        public async Task<IEnumerable<ServiceDto>> GetServices(string sort, string order, int page, int pageSize)
+        public async Task<GetServicesResponse> GetServices(string sort, string order, int page, int pageSize)
         {
             var services = await _serviceRepository.GetServices(sort, order, page, pageSize);
+            var serviceDtos = services
+                .Select(s => new ServiceDto
+                {
+                    Name = s.Name,
+                    Description = s.Description,
+                    Price = s.Price,
+                    Duration = s.Duration,
+                    IsActive = s.IsActive,
+                    EmployeeId = s.EmployeeId
+                });
 
-            // Map each Service entity to a ServiceDto
-            return services.Select(service => new ServiceDto
+            return new GetServicesResponse
             {
-                Name = service.Name,
-                Description = service.Description,
-                Price = service.Price,
-                Duration = service.Duration,
-                IsActive = service.IsActive,
-                EmployeeId = service.EmployeeId
-            });
+                Services = serviceDtos
+            };
         }
 
-        public async Task CreateService(ServiceDto serviceDto)
+        public async Task CreateService(CreateServiceRequest request)
         {
-            var service = serviceDto.ToDomain();
+            var service = new Service
+            {
+                Name = request.Name,
+                Description = request.Description,
+                Price = request.Price,
+                Duration = request.Duration,
+                IsActive = request.IsActive,
+                EmployeeId = request.EmployeeId
+            };
+            
             await _serviceRepository.Create(service);
             await _unitOfWork.SaveChanges();
         }
 
-        public async Task UpdateService(Guid serviceId, ServiceDto serviceDto)
+        public async Task UpdateService(Guid serviceId, UpdateServiceRequest request)
         {
             var existingService = await _serviceRepository.Get(serviceId);
 
-            if (existingService != null)
-            {
-                existingService.Name = serviceDto.Name;
-                existingService.Description = serviceDto.Description;
-                existingService.Price = serviceDto.Price;
-                existingService.Duration = serviceDto.Duration;
-                existingService.IsActive = serviceDto.IsActive;
-                existingService.EmployeeId = serviceDto.EmployeeId;
-
-                _serviceRepository.Update(existingService);
-                await _unitOfWork.SaveChanges();
-            }
-            else
+            if (existingService == null)
             {
                 throw new KeyNotFoundException("Service not found.");
             }
+            
+            existingService.Name = request.Name ?? existingService.Name;
+            existingService.Description = request.Description ?? existingService.Description;
+            existingService.Price = request.Price ?? existingService.Price;
+            existingService.Duration = request.Duration ?? existingService.Duration;
+            existingService.IsActive = request.IsActive ?? existingService.IsActive;
+            existingService.EmployeeId = request.EmployeeId ?? existingService.EmployeeId;
+
+            await _serviceRepository.Update(existingService);
+            await _unitOfWork.SaveChanges();
         }
     }

@@ -8,7 +8,7 @@ public class ItemGroup : Entity
     
     public string Description { get; set; }
     
-    public ICollection<Item> Items { get; set; }
-    
-    public ICollection<GroupDiscount> GroupDiscounts { get; set; }
+    public ICollection<Item> Items { get; set; } = new List<Item>();
+
+    public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 }
