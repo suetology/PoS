@@ -39,6 +39,11 @@ public class ItemRepository : IItemRepository
             .ToListAsync();
     }
 
+    public Task Update(Item entity)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<Item>> GetAllItemsByFiltering(QueryParameters parameters)
     {
         var allItems = _dbContext.Items

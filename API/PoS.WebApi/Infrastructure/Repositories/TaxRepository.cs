@@ -19,6 +19,11 @@ public class TaxRepository : ITaxRepository
         return await _dbContext.Taxes.ToListAsync();
     }
 
+    public Task Update(Tax entity)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Tax> Get(Guid id)
     {
         return await _dbContext.Taxes.FirstOrDefaultAsync(i => i.Id == id);

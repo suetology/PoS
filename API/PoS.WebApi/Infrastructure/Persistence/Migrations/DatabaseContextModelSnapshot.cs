@@ -216,7 +216,7 @@ namespace PoS.WebApi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("DiscountAmount")
+                    b.Property<decimal>("DiscountAmount")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("DiscountId")
@@ -234,7 +234,7 @@ namespace PoS.WebApi.Migrations
                     b.Property<decimal>("ServiceChargeAmount")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ServiceChargeId")
+                    b.Property<Guid?>("ServiceChargeId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -342,6 +342,24 @@ namespace PoS.WebApi.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AccessToken")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Refund", b =>
@@ -669,8 +687,7 @@ namespace PoS.WebApi.Migrations
                     b.HasOne("PoS.WebApi.Domain.Entities.ServiceCharge", "ServiceCharge")
                         .WithMany()
                         .HasForeignKey("ServiceChargeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Discount");
 

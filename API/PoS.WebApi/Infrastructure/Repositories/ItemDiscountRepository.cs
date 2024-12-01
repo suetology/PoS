@@ -59,4 +59,9 @@ public class ItemDiscountRepository : IItemDiscountRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task Update(ItemDiscount entity)
+    {
+        throw new NotImplementedException();
+    }
 }

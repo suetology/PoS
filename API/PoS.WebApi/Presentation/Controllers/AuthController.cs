@@ -26,12 +26,16 @@ public class AuthController : ControllerBase
     [HttpPost("refresh-token", Name = nameof(RefreshAccessToken))]
     public async Task<IActionResult> RefreshAccessToken(RefreshAccessTokenRequest request)
     {
-        throw new NotImplementedException();
+        var response = await _authService.RefreshAccessToken(request);
+        
+        return Ok(response);
     }
-
+    
     [HttpPost("logout", Name = nameof(Logout))]
     public async Task<IActionResult> Logout(LogoutRequest request)
     {
-        throw new NotImplementedException();
+        await _authService.Logout(request);
+
+        return NoContent();
     }
 }

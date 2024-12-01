@@ -38,6 +38,11 @@ public class GroupDiscountRepository : IGroupDiscountRepository
         throw new NotImplementedException();
     }
 
+    public Task Update(GroupDiscount entity)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<GroupDiscountDto>> GetAllDto()
     {
         return await _dbContext.GroupDiscounts

@@ -33,24 +33,35 @@ public class AuthService : IAuthService
 
         var claims = new List<Claim>
         {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, user.Name),
             new Claim(RoleClaimName, user.Role.ToString())
         };
+
+        var accessToken = await _jwtProvider.GenerateAccessToken(claims);
+        var refreshToken = await _jwtProvider.GenerateRefreshToken(accessToken);
         
         return new LoginResponse
         {
-            AccessToken = await _jwtProvider.GenerateAccessToken(claims)
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
         };
     }
 
-    public Task<RefreshAccessTokenResponse> RefreshAccessToken(RefreshAccessTokenRequest request)
+    public async Task<RefreshAccessTokenResponse> RefreshAccessToken(RefreshAccessTokenRequest request)
     {
-        throw new NotImplementedException();
+        var tokens = await _jwtProvider.RefreshAccessToken(request.RefreshToken);
+
+        return new RefreshAccessTokenResponse
+        {
+            RefreshToken = tokens.Item1,
+            AccessToken = tokens.Item2
+        };
     }
 
     public Task Logout(LogoutRequest request)
     {
-        throw new NotImplementedException();
+        return _jwtProvider.RevokeTokens(request.RefreshToken);
     }
 }

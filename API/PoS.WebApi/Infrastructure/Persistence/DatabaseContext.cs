@@ -24,6 +24,7 @@ public class DatabaseContext : DbContext
     public DbSet<Shift> Shifts { get; set; }
     public DbSet<Tax> Taxes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
