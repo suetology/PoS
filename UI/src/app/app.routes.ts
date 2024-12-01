@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { ReservationsComponent } from './reservations/reservations.component';
-import { AppComponent } from './app.component';
 import { ItemsComponent } from './items/items.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { BusinessComponent } from './business/business.component';
