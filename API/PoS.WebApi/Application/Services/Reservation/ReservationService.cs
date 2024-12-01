@@ -22,47 +22,87 @@ public class ReservationService : IReservationService
         _orderRepository = orderRepository;
     }
 
-    public async Task CreateReservation(ReservationDto reservationDto)
+    public async Task CreateReservation(CreateReservationRequest request)
     {
         // Validate employee availability
-        var availableTimes = await GetAvailableTimesForEmployee(reservationDto.EmployeeId, reservationDto.AppointmentTime.Date);
-        if (!availableTimes.Any(t => t == reservationDto.AppointmentTime))
+        /*var availableTimes = await GetAvailableTimesForEmployee(request.EmployeeId, request.AppointmentTime.Date);
+        if (!availableTimes.Any(t => t == request.AppointmentTime))
         {
             throw new InvalidOperationException("Selected time slot is not available");
-        }
+        }*/
 
-        // Create associated order
-        var order = new Order
+        var reservation = new Reservation
         {
-            Status = OrderStatus.Open,
-            Created = DateTime.UtcNow,
-            FinalAmount = 0m,
-            PaidAmount = 0m,
-            TipAmount = 0m,
-            EmployeeId = reservationDto.EmployeeId,
-            ServiceChargeId = Guid.Parse("F96AFBE4-9169-49C7-AFE7-3D9B375AE1BE"),
-            ServiceChargeAmount = 0m
+            NotificationSent = false,
+            Status = AppointmentStatus.Booked,
+            ReservationTime = DateTime.UtcNow,
+            AppointmentTime = request.AppointmentTime,
+            CustomerId = request.CustomerId,
+            OrderId = request.OrderId,
+            EmployeeId = request.EmployeeId
         };
-
-        await _orderRepository.Create(order);
-        await _unitOfWork.SaveChanges();
-
-        var reservation = reservationDto.ToDomain(order.Id);
+        
         await _reservationRepository.Create(reservation);
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<IEnumerable<Reservation>> GetAllReservations()
+    public async Task<GetAllReservationsResponse> GetAllReservations()
     {
-        return await _reservationRepository.GetAll();
+        var reservations = await _reservationRepository.GetAll();
+        var reservationDtos = reservations
+            .Select(r => new ReservationDto
+            {
+                NotificationSent = r.NotificationSent,
+                Status = r.Status,
+                ReservationTime = r.ReservationTime,
+                AppointmentTime = r.AppointmentTime,
+                CustomerId = r.CustomerId,
+                EmployeeId = r.EmployeeId
+            });
+
+        return new GetAllReservationsResponse
+        {
+            Reservations = reservationDtos
+        };
     }
 
-    public async Task<Reservation> GetReservationById(Guid id)
+    public async Task<GetReservationResponse> GetReservationById(Guid id)
     {
-        return await _reservationRepository.GetById(id);
+        var reservation = await _reservationRepository.GetById(id);
+
+        return new GetReservationResponse
+        {
+            Reservation = new ReservationDto
+            {
+                NotificationSent = reservation.NotificationSent,
+                Status = reservation.Status,
+                ReservationTime = reservation.ReservationTime,
+                AppointmentTime = reservation.AppointmentTime,
+                CustomerId = reservation.CustomerId,
+                EmployeeId = reservation.EmployeeId
+            }
+        };
     }
 
-    public async Task<IEnumerable<DateTime>> GetAvailableTimesForEmployee(Guid employeeId, DateTime date)
+    public async Task<bool> UpdateReservation(Guid id, UpdateReservationRequest request)
+    {
+        var reservation = await _reservationRepository.GetById(id);
+
+        if (reservation == null)
+        {
+            return false;
+        }
+        
+        reservation.AppointmentTime = request.AppointmentTime ?? reservation.AppointmentTime;
+        reservation.Status = request.Status ?? reservation.Status;
+        
+        await _reservationRepository.Update(reservation);
+        await _unitOfWork.SaveChanges();
+
+        return true;
+    }
+    
+    /*public async Task<IEnumerable<DateTime>> GetAvailableTimesForEmployee(Guid employeeId, DateTime date)
     {
         var existingReservations = await _reservationRepository.GetReservationsByEmployeeAndDate(employeeId, date);
         
@@ -90,9 +130,9 @@ public class ReservationService : IReservationService
         }
 
         return availableTimes;
-    }
+    }*/
 
-    public async Task<bool> CancelReservation(Guid reservationId)
+    /*public async Task<bool> CancelReservation(Guid reservationId)
     {
         var reservation = await _reservationRepository.GetById(reservationId);
         if (reservation == null)
@@ -102,28 +142,14 @@ public class ReservationService : IReservationService
         await _reservationRepository.Update(reservation);
         await _unitOfWork.SaveChanges();
         return true;
-    }
+    }*/
 
-    public async Task<IEnumerable<Reservation>> GetUpcomingReservations(DateTime startDate, DateTime endDate)
+    /*public async Task<IEnumerable<Reservation>> GetUpcomingReservations(DateTime startDate, DateTime endDate)
     {
         return await _reservationRepository.GetReservationsInRange(startDate, endDate);
-    }
+    }*/
 
-    public async Task SendNotifications()
-    {
-        var tomorrow = DateTime.UtcNow.Date.AddDays(1);
-        var reservations = await _reservationRepository.GetReservationsByDate(tomorrow);
-
-        foreach (var reservation in reservations.Where(r => !r.NotificationSent))
-        {
-            reservation.NotificationSent = true;
-            await _reservationRepository.Update(reservation);
-        }
-
-        await _unitOfWork.SaveChanges();
-    }
-
-    public async Task<bool> UpdateReservationStatus(Guid reservationId, AppointmentStatus status)
+    /*public async Task<bool> UpdateReservationStatus(Guid reservationId, AppointmentStatus status)
     {
         var reservation = await _reservationRepository.GetById(reservationId);
         if (reservation == null)
@@ -133,5 +159,5 @@ public class ReservationService : IReservationService
         await _reservationRepository.Update(reservation);
         await _unitOfWork.SaveChanges();
         return true;
-    }
+    }*/
 }

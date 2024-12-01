@@ -15,7 +15,7 @@ public class Order : Entity
 
     public decimal PaidAmount { get; set; } // same neturi buti, nes is Paymentu skaiciuojasi
     
-    public decimal? TipAmount { get; set; }
+    public decimal TipAmount { get; set; }
     
     public ICollection<OrderItem> OrderItems { get; set; }
     

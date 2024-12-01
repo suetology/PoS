@@ -4,8 +4,10 @@ namespace PoS.WebApi.Application.Services.Order.Contracts;
 using PoS.WebApi.Domain.Enums;
 using PoS.WebApi.Domain.Entities;
 
-public class OrderDto {
-
+public class OrderDto 
+{
+    public Guid Id { get; set; }
+    
     public Guid EmployeeId { get; set; }
 
     public OrderStatus Status { get; set; }
@@ -24,25 +26,7 @@ public class OrderDto {
 
     public decimal PaidAmount { get; set; }
 
-    public DateTime OrderCreated { get; set; }
+    public DateTime Created { get; set; }
 
-    public DateTime OrderClosed { get; set; }
-
-    public Order ToDomain()
-    {
-        return new Order
-        {
-            Status = Status,
-            Created = OrderCreated,
-            Closed = OrderClosed,
-            FinalAmount = FinalAmount,
-            PaidAmount = PaidAmount,
-            TipAmount = TipAmount,
-            EmployeeId = EmployeeId,
-            ServiceChargeId = ServiceChargeId,
-            ServiceChargeAmount = ServiceChargeAmount,
-            DiscountId = DiscountId,
-            DiscountAmount = DiscountAmount
-        };
-    }
+    public DateTime Closed { get; set; }
 }

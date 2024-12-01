@@ -1,4 +1,6 @@
 
+using PoS.WebApi.Domain.Enums;
+
 namespace PoS.WebApi.Application.Services.Order;
 
 using PoS.WebApi.Domain.Entities;
@@ -18,20 +20,73 @@ public class OrderService: IOrderService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task CreateOrder(OrderDto orderDto)
+    public async Task CreateOrder(CreateOrderRequest request)
     {
-        var order = orderDto.ToDomain();
+        var order = new Order
+        {   
+            EmployeeId = request.EmployeeId,
+            DiscountId = request.DiscountId,
+            ServiceChargeId = request.ServiceChargeId,
+            Status = OrderStatus.Open,
+            Created = DateTime.UtcNow,
+            // dar reiks pagalvot cia
+            OrderItems = (ICollection<OrderItem>)request.OrderItems
+                .Select(o => new OrderItem
+                {
+                    ItemId = o.ItemId,
+                    Quantity = o.Quantity
+                })
+        };
+        
         await _orderRepository.Create(order);
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<IEnumerable<Order>> GetAllOrders(OrderQueryParameters parameters)
+    public async Task<GetAllOrdersResponse> GetAllOrders(OrderQueryParameters parameters)
     {
-        return await _orderRepository.GetAllFiltered(parameters);
+        var orders = await _orderRepository.GetAllFiltered(parameters);
+        var orderDtos = orders
+            .Select(o => new OrderDto
+            {
+                Status = o.Status,
+                Created = o.Created,
+                Closed = o.Closed,
+                //FinalAmount = FinalAmount,
+                //PaidAmount = PaidAmount,
+                TipAmount = o.TipAmount,
+                EmployeeId = o.EmployeeId,
+                ServiceChargeId = o.ServiceChargeId,
+                //ServiceChargeAmount = ServiceChargeAmount,
+                DiscountId = o.DiscountId,
+                //DiscountAmount = DiscountAmount
+            });
+
+        return new GetAllOrdersResponse
+        {
+            Orders = orderDtos
+        };
     }
 
-    public async Task<Order> GetOrder(Guid id)
+    public async Task<GetOrderResponse> GetOrder(Guid id)
     {
-        return await _orderRepository.Get(id);
+        var order = await _orderRepository.Get(id);
+
+        return new GetOrderResponse
+        {
+            Order = new OrderDto
+            {
+                Status = order.Status,
+                Created = order.Created,
+                Closed = order.Closed,
+                //FinalAmount = FinalAmount,
+                //PaidAmount = PaidAmount,
+                TipAmount = order.TipAmount,
+                EmployeeId = order.EmployeeId,
+                ServiceChargeId = order.ServiceChargeId,
+                //ServiceChargeAmount = ServiceChargeAmount,
+                DiscountId = order.DiscountId,
+                //DiscountAmount = DiscountAmount
+            }
+        };
     }
 }

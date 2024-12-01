@@ -18,9 +18,9 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] OrderDto orderDto)
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
-        await _orderService.CreateOrder(orderDto);
+        await _orderService.CreateOrder(request);
 
         return NoContent();
     }
@@ -28,18 +28,18 @@ public class OrderController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllOrders([FromQuery] OrderQueryParameters parameters)
     {
-        var orders = await _orderService.GetAllOrders(parameters);
+        var response = await _orderService.GetAllOrders(parameters);
 
-        return Ok(orders);
+        return Ok(response);
     }
 
     [HttpGet("{orderId}")]
     public async Task<IActionResult> GetOrder([FromRoute] Guid orderId)
     {
-        var order = await _orderService.GetOrder(orderId);
-        if (null == order) {
+        var response = await _orderService.GetOrder(orderId);
+        if (response == null) {
             return NotFound();
         }
-        return Ok(order);
+        return Ok(response);
     }
 }

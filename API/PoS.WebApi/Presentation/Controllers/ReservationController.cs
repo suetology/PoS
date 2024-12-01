@@ -16,77 +16,58 @@ public class ReservationController : ControllerBase
         _reservationService = reservationService;
     }
 
-    // Test Endpoints
-    [HttpPost("test")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateTestReservation()
-    {
-        var reservationDto = new ReservationDto
-        {
-            AppointmentTime = DateTime.UtcNow.AddDays(1).Date.AddHours(10), // Tomorrow at 10 AM
-            CustomerId = Guid.Parse("a7bc3a44-7f1a-4d9a-9c90-2d40fc56f5f3"), // Test Customer ID
-            EmployeeId = Guid.Parse("f8fb2cb2-6119-4f42-8954-412e8bdc2351"), // Test Employee ID
-        };
-
-        try
-        {
-            await _reservationService.CreateReservation(reservationDto);
-            return Ok(new { message = "Test reservation created successfully", reservation = reservationDto });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
-    }
-
-    [HttpGet("test/availability")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> TestAvailability()
-    {
-        var employeeId = Guid.Parse("f8fb2cb2-6119-4f42-8954-412e8bdc2351");
-        var tomorrow = DateTime.UtcNow.AddDays(1).Date;
-        
-        var times = await _reservationService.GetAvailableTimesForEmployee(employeeId, tomorrow);
-        return Ok(new
-        {
-            employeeId,
-            date = tomorrow,
-            availableSlots = times
-        });
-    }
-
-    // Regular Endpoints
     [HttpPost(Name = nameof(CreateReservation))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateReservation([FromBody] ReservationDto reservationDto)
+    public async Task<IActionResult> CreateReservation([FromBody] CreateReservationRequest request)
     {
-        try
-        {
-            if (!reservationDto.IsValid())
-            {
-                return BadRequest(new { message = "Invalid reservation data" });
-            }
-
-            await _reservationService.CreateReservation(reservationDto);
-            return NoContent();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        await _reservationService.CreateReservation(request);
+        return NoContent();
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllReservations()
     {
-        var reservations = await _reservationService.GetAllReservations();
-        return Ok(reservations);
+        var response = await _reservationService.GetAllReservations();
+        return Ok(response);
+    }
+    
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetReservationById(Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return BadRequest(new { message = "Invalid reservation ID" });
+        }
+
+        var response = await _reservationService.GetReservationById(id);
+        if (response == null)
+        {
+            return NotFound(new { message = "Reservation not found" });
+        }
+
+        return Ok(response);
     }
 
-    [HttpGet("available-times")]
+    [HttpPatch("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateReservation(Guid id, UpdateReservationRequest request)
+    {
+        if (id == Guid.Empty)
+        {
+            return BadRequest(new { message = "Invalid reservation ID" });
+        }
+
+        await _reservationService.UpdateReservation(id, request);
+        
+        return NoContent();
+    }
+
+/*    [HttpGet("available-times")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAvailableTimes([FromQuery] Guid employeeId, [FromQuery] DateTime date)
@@ -175,24 +156,5 @@ public class ReservationController : ControllerBase
         }
         
         return NoContent();
-    }
-
-    [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetReservationById(Guid id)
-    {
-        if (id == Guid.Empty)
-        {
-            return BadRequest(new { message = "Invalid reservation ID" });
-        }
-
-        var reservation = await _reservationService.GetReservationById(id);
-        if (reservation == null)
-        {
-            return NotFound(new { message = "Reservation not found" });
-        }
-
-        return Ok(reservation);
-    }
+    }*/
 }

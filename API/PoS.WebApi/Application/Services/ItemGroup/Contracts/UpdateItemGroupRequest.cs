@@ -1,9 +1,8 @@
 ﻿namespace PoS.WebApi.Application.Services.ItemGroup.Contracts;
 
-using Domain.Entities;
-
-public class ItemGroupDto
+public class UpdateItemGroupRequest
 {
     public string Name { get; set; }
+    
     public string Description { get; set; }
 }

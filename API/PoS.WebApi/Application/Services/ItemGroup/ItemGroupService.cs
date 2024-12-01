@@ -15,24 +15,49 @@ public class ItemGroupService : IItemGroupService
         _itemGroupRepository = itemGroupRepository;
         _unitOfWork = unitOfWork;
     }
-    public async Task<IEnumerable<ItemGroup>> GetAllItemGroupsAsync(QueryParameters parameters)
+    public async Task<GetAllItemGroupsResponse> GetAllItemGroupsAsync(QueryParameters parameters)
     {
-        return await _itemGroupRepository.GetAllGroupsByFiltering(parameters);
+        var itemGroups = await _itemGroupRepository.GetAllGroupsByFiltering(parameters);
+        var itemGroupDtos = itemGroups
+            .Select(i => new ItemGroupDto
+            {
+                Name = i.Name,
+                Description = i.Description
+            });
+
+        return new GetAllItemGroupsResponse
+        {
+            ItemGroups = itemGroupDtos
+        };
     }
 
-    public async Task<ItemGroup> GetItemGroupByIdAsync(Guid id)
+    public async Task<GetItemGroupResponse> GetItemGroupByIdAsync(Guid id)
     {
-        return await _itemGroupRepository.Get(id);
+        var itemGroup = await _itemGroupRepository.Get(id);
+
+        return new GetItemGroupResponse
+        {
+            ItemGroup = new ItemGroupDto
+            {
+                Name = itemGroup.Name,
+                Description = itemGroup.Description
+            }
+        };
     }
 
-    public async Task CreateItemGroup(ItemGroupDto itemGroupDto)
+    public async Task CreateItemGroup(CreateItemGroupRequest request)
     {
-        var itemGroup = itemGroupDto.ToDomain();
+        var itemGroup = new ItemGroup
+        {
+            Name = request.Name,
+            Description = request.Description
+        };
+        
         await _itemGroupRepository.Create(itemGroup);
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task UpdateItemGroup(Guid id, ItemGroupDto itemGroupDto)
+    public async Task UpdateItemGroup(Guid id, UpdateItemGroupRequest request)
     {
         var existingItemGroup = await _itemGroupRepository.Get(id);
         if (existingItemGroup == null)
@@ -40,14 +65,14 @@ public class ItemGroupService : IItemGroupService
             throw new KeyNotFoundException("ItemGroup not found.");
         }
 
-        if (!string.IsNullOrEmpty(itemGroupDto.Name))
+        if (!string.IsNullOrEmpty(request.Name))
         {
-            existingItemGroup.Name = itemGroupDto.Name;
+            existingItemGroup.Name = request.Name;
         }
 
-        if (!string.IsNullOrEmpty(itemGroupDto.Description))
+        if (!string.IsNullOrEmpty(request.Description))
         {
-            existingItemGroup.Description = itemGroupDto.Description;
+            existingItemGroup.Description = request.Description;
         }
 
         await _itemGroupRepository.Update(existingItemGroup);
