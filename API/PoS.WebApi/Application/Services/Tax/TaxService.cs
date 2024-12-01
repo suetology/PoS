@@ -18,19 +18,49 @@ public class TaxService : ITaxService
         _taxRepository = taxRepository;
         _unitOfWork = unitOfWork;
     }
-    public async Task<IEnumerable<Tax>> GetAllTaxes()
+    public async Task<GetAllTaxesResponse> GetAllTaxes()
     {
-        return await _taxRepository.GetAll();
+        var taxes = await _taxRepository.GetAll();
+        var taxesDtos = taxes
+            .Select(t => new TaxDto
+            {
+                Name = t.Name,
+                Type = t.Type,
+                Value = t.Value,
+                IsPercentage = t.IsPercentage
+            });
+
+        return new GetAllTaxesResponse
+        {
+            Taxes = taxesDtos
+        };
     }
 
-    public async Task<Tax> GetTax(Guid taxId)
+    public async Task<GetTaxResponse> GetTax(Guid taxId)
     {
-        return await _taxRepository.Get(taxId);
+        var tax = await _taxRepository.Get(taxId);
+
+        return new GetTaxResponse
+        {
+            Tax = new TaxDto
+            {
+                Name = tax.Name,
+                Type = tax.Type,
+                Value = tax.Value,
+                IsPercentage = tax.IsPercentage
+            }
+        };
     }
 
-    public async Task CreateTax(TaxDto taxDto)
+    public async Task CreateTax(CreateTaxRequest request)
     {
-        var tax = taxDto.ToDomain();
+        var tax = new Tax
+        {
+            Name = request.Name,
+            Type = request.Type,
+            Value = request.Value,
+            IsPercentage = request.IsPercentage
+        };
         
         await _taxRepository.Create(tax);
         await _unitOfWork.SaveChanges();

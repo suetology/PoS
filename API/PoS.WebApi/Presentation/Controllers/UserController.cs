@@ -20,9 +20,9 @@ public class UserController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPost(Name = nameof(CreateUser))]
     [Tags("User Management")]
-    public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
-        await _userService.CreateUser(userDto);
+        await _userService.CreateUser(request);
 
         return NoContent();
     }
@@ -37,9 +37,9 @@ public class UserController : ControllerBase
             return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
         }
 
-        var allUsers = await _userService.GetAllUsers(parameters);
+        var response = await _userService.GetAllUsers(parameters);
 
-        return Ok(allUsers);
+        return Ok(response);
     }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
@@ -48,9 +48,9 @@ public class UserController : ControllerBase
     [Route("{userId}", Name = nameof(GetUser))]
     public async Task<IActionResult> GetUser([FromRoute] Guid userId)
     {
-        var user = await _userService.GetUser(userId);
+        var response = await _userService.GetUser(userId);
 
-        return Ok(user);
+        return Ok(response);
     }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]

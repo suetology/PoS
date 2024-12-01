@@ -1,8 +1,6 @@
 ﻿namespace PoS.WebApi.Application.Services.Business.Contracts;
 
-using Domain.Entities;
-
-public class BusinessDto
+public class CreateBusinessRequest
 {
     public string Name { get; set; }
     

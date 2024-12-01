@@ -32,9 +32,9 @@ public class TaxController : ControllerBase
     }
 
     [HttpPost(Name = nameof(CreateTax))]
-    public async Task<IActionResult> CreateTax([FromBody] TaxDto taxDto)
+    public async Task<IActionResult> CreateTax([FromBody] CreateTaxRequest request)
     {
-        await _taxService.CreateTax(taxDto);
+        await _taxService.CreateTax(request);
 
         return NoContent();
     }

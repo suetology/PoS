@@ -5,8 +5,8 @@ using Domain.Entities;
 
 public interface ICustomerService
 {
-    Task<Customer> GetCustomer(Guid customerId);
-    Task CreateCustomer(CustomerDto customer);
-    Task<IEnumerable<Customer>> GetAll();
+    Task<GetCustomerResponse> GetCustomer(Guid customerId);
+    Task CreateCustomer(CreateCustomerRequest customer);
+    Task<GetAllCustomersResponse> GetAll();
 }
 

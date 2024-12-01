@@ -16,39 +16,42 @@ namespace PoS.WebApi.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetShifts([FromQuery] Guid? employeeId, [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate)
+        public async Task<IActionResult> GetShifts(GetShiftsRequest request)
         {
-            var shifts = await _shiftService.GetShifts(employeeId, fromDate, toDate);
-            return Ok(new { shifts });
+            var response = await _shiftService.GetShifts(request);
+            
+            return Ok(response);
         }
 
         [HttpGet("{shiftId}")]
         public async Task<IActionResult> GetShiftById(Guid shiftId)
         {
-            var shift = await _shiftService.GetShift(shiftId);
-            if (shift == null)
+            var response = await _shiftService.GetShift(shiftId);
+            if (response == null)
             {
                 return NotFound();
             }
-            return Ok(shift);
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateShift([FromBody] ShiftDto shiftDto)
+        public async Task<IActionResult> CreateShift([FromBody] CreateShiftRequest request)
         {
-            if (shiftDto == null)
+            if (request == null)
             {
                 return BadRequest("Shift data is null.");
             }
 
-            await _shiftService.CreateShift(shiftDto);
-            return CreatedAtAction(nameof(GetShiftById), new { shiftId = shiftDto.ToDomain().Id }, shiftDto);
+            await _shiftService.CreateShift(request);
+            
+            return CreatedAtAction(nameof(GetShiftById), request);
         }
 
         [HttpDelete("{shiftId}")]
         public async Task<IActionResult> DeleteShift(Guid shiftId)
         {
             await _shiftService.DeleteShift(shiftId);
+            
             return NoContent();
         }
     }

@@ -1,9 +1,8 @@
-﻿namespace PoS.WebApi.Application.Services.Tax.Contracts;
+﻿using PoS.WebApi.Domain.Enums;
 
-using Domain.Entities;
-using Domain.Enums;
+namespace PoS.WebApi.Application.Services.Tax.Contracts;
 
-public class TaxDto
+public class CreateTaxRequest
 {
     public string Name { get; set; }
     
