@@ -10,15 +10,4 @@ public class ShiftDto
     public string EndTime { get; set; }
 
     public Guid EmployeeId { get; set; }
-
-    public Shift ToDomain() 
-    {
-        return new Shift()
-        {
-            Date = this.Date,
-            StartTime = TimeOnly.Parse(StartTime),
-            EndTime = TimeOnly.Parse(EndTime),
-            EmployeeId = this.EmployeeId
-        };
-    }
 }

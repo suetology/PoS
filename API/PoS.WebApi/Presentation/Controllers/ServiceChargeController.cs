@@ -18,17 +18,18 @@ namespace PoS.WebApi.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateServiceCharge([FromBody] ServiceChargeDto serviceChargeDto)
+        public async Task<IActionResult> CreateServiceCharge([FromBody] CreateServiceChargeRequest request)
         {
-            await _serviceChargeService.CreateServiceCharge(serviceChargeDto);
+            await _serviceChargeService.CreateServiceCharge(request);
+            
             return NoContent();
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServiceChargeDto>>> GetServiceCharges()
         {
-            var serviceCharges = await _serviceChargeService.GetServiceCharges();
-            return Ok(serviceCharges);
+            var response = await _serviceChargeService.GetServiceCharges();
+            return Ok(response);
         }
     }
 }

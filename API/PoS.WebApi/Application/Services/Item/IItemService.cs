@@ -5,7 +5,7 @@ using Domain.Entities;
 
 public interface IItemService
 {
-    Task<IEnumerable<Item>> GetAllItems(QueryParameters parameters);
-    Task<Item> GetItem(Guid itemId);
-    Task CreateItem(ItemDto itemDto);
+    Task<GetAllItemsResponse> GetAllItems(QueryParameters parameters);
+    Task<GetItemResponse> GetItem(Guid itemId);
+    Task CreateItem(CreateItemRequest request);
 }

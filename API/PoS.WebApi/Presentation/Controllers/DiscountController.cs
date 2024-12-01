@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Discount;
 using PoS.WebApi.Application.Services.Discount.Contracts;
-using PoS.WebApi.Application.Services.GroupDiscount;
-using PoS.WebApi.Application.Services.ItemDiscount;
 
 namespace PoS.WebApi.Presentation.Controllers;
 [ApiController]
@@ -12,14 +10,10 @@ namespace PoS.WebApi.Presentation.Controllers;
 public class DiscountController : ControllerBase
 {
     private readonly IDiscountService _discountService;
-    private readonly IGroupDiscountService _groupDiscountService;
-    private readonly IItemDiscountService _itemDiscountService;
 
-    public DiscountController(IDiscountService discountService, IGroupDiscountService groupDiscountService, IItemDiscountService itemDiscountService)
+    public DiscountController(IDiscountService discountService)
     {
         _discountService = discountService;
-        _groupDiscountService = groupDiscountService;
-        _itemDiscountService = itemDiscountService;
     }
 
     [Authorize(Roles = "SuperAdmin,BusinessOwner")]
@@ -61,8 +55,8 @@ public class DiscountController : ControllerBase
         await _discountService.DeleteDiscountById(discountId);
         return NoContent();
     }
-
-
+    
+    /*
     // GROUP DISCOUNTS
     [Authorize(Roles = "SuperAdmin,BusinessOwner")]
     [HttpPost("{discountId}/assign-group/{groupId}")]
@@ -96,20 +90,6 @@ public class DiscountController : ControllerBase
         await _itemDiscountService.AssignDiscountToItemAsync(discountId, itemId);
         return NoContent();
     }
-
-    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
-    [HttpDelete("{discountId}/remove-item/{itemId}")]
-    public async Task<IActionResult> RemoveDiscountFromItem([FromRoute] Guid discountId, [FromRoute] Guid itemId)
-    {
-        await _itemDiscountService.RemoveDiscountFromItemAsync(discountId, itemId);
-        return NoContent();
-    }
-
-    [HttpGet("itemDiscount")]
-    public async Task<IActionResult> GetAllItemDiscounts()
-    {
-        var itemDiscounts = await _itemDiscountService.GetAllItemDiscounts();
-        return Ok(itemDiscounts);
-    }
+    */
 }
 

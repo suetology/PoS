@@ -20,9 +20,9 @@ public class ItemController : ControllerBase
     [HttpPost]
     [Route("item")]
     [Tags("Inventory")]
-    public async Task<IActionResult> CreateItem([FromBody] ItemDto itemDto)
+    public async Task<IActionResult> CreateItem([FromBody] CreateItemRequest request)
     {
-        await _itemService.CreateItem(itemDto);
+        await _itemService.CreateItem(request);
 
         return NoContent();
     }
@@ -37,9 +37,9 @@ public class ItemController : ControllerBase
         //    return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
         //}
 
-        var allItems = await _itemService.GetAllItems(parameters);
+        var response = await _itemService.GetAllItems(parameters);
 
-        return Ok(allItems);
+        return Ok(response);
     }
 
     [HttpGet]
@@ -47,8 +47,8 @@ public class ItemController : ControllerBase
     [Route("item/{itemId}", Name = nameof(GetItem))]
     public async Task<IActionResult> GetItem([FromRoute] Guid itemId)
     {
-        var item = await _itemService.GetItem(itemId);
+        var response = await _itemService.GetItem(itemId);
 
-        return Ok(item);
+        return Ok(response);
     }
 }

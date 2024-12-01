@@ -8,17 +8,5 @@ using Domain.Entities;
         public string Description { get; set; }
         public decimal Value { get; set; }
         public bool IsPercentage { get; set; }
-
-        public ServiceCharge ToDomain()
-        {
-            return new ServiceCharge
-            {
-                Name = Name,
-                Description = Description,
-                Value = Value,
-                IsPercentage = IsPercentage,
-                LastUpdated = DateTime.UtcNow
-            };
-        }
     }
 

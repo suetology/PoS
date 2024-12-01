@@ -20,32 +20,32 @@ namespace PoS.WebApi.Presentation.Controllers
         [HttpGet("{customerId}")]
         public async Task<IActionResult> GetCustomer(Guid customerId)
         {
-            var customer = await _customerService.GetCustomer(customerId);
-            if (customer == null)
+            var response = await _customerService.GetCustomer(customerId);
+            if (response == null)
             {
                 return NotFound();
             }
-            return Ok(customer);
+            return Ok(response);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var customers = await _customerService.GetAll();
+            var response = await _customerService.GetAll();
 
-            return Ok(customers);
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer([FromBody] CustomerDto customerDto)
+        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerRequest request)
         {
-            if (customerDto == null)
+            if (request == null)
             {
                 return BadRequest("Customer data is null.");
             }
 
-            await _customerService.CreateCustomer(customerDto);
-            return CreatedAtAction(nameof(GetCustomer), new { customerId = customerDto.ToDomain().Id }, customerDto);
+            await _customerService.CreateCustomer(request);
+            return CreatedAtAction(nameof(GetCustomer), request);
         }
     }
 }

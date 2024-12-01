@@ -8,47 +8,76 @@ namespace PoS.WebApi.Application.Services.Item
     public class ItemService : IItemService
     {
         private readonly IItemRepository _itemRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ITaxRepository _taxRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ItemService(
             IItemRepository itemRepository,
-            IUnitOfWork unitOfWork, ITaxRepository taxRepository)
+            ITaxRepository taxRepository,
+            IUnitOfWork unitOfWork)
         {
             _itemRepository = itemRepository;
-            _unitOfWork = unitOfWork;
             _taxRepository = taxRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task CreateItem(ItemDto itemDto)
+        public async Task CreateItem(CreateItemRequest request)
         {
-            var item = itemDto.ToDomain();
+            var item = new Domain.Entities.Item
+            {
+                Name = request.Name,
+                Description = request.Description,
+                Image = new byte[0],
+                Price = request.Price,
+                Stock = request.Stock,
+                ItemGroupId = request.ItemGroupId
+            };
 
-            var taxes = await _taxRepository.GetTaxesByIds(itemDto.TaxIds);
-
-            // Create ItemTax relationships
+            var taxes = await _taxRepository.GetTaxesByIds(request.TaxIds);
+            
             foreach (var tax in taxes)
             {
-                var itemTax = new ItemTax
-                {
-                    Item = item,
-                    Tax = tax
-                };
-                item.ItemTaxes.Add(itemTax);
+                item.Taxes.Add(tax);
             }
 
             await _itemRepository.Create(item);
             await _unitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<Domain.Entities.Item>> GetAllItems(QueryParameters parameters)
+        public async Task<GetAllItemsResponse> GetAllItems(QueryParameters parameters)
         {
-            return await _itemRepository.GetAllItemsByFiltering(parameters);
+            var items = await _itemRepository.GetAllItemsByFiltering(parameters);
+            var itemDtos = items
+                .Select(i => new ItemDto
+                {
+                    Name = i.Name,
+                    Description = i.Description,
+                    Price = i.Price,
+                    Stock = i.Stock,
+                    Image = i.Image
+                });
+
+            return new GetAllItemsResponse
+            {
+                Items = itemDtos
+            };
         }
 
-        public async Task<Domain.Entities.Item> GetItem(Guid itemId)
+        public async Task<GetItemResponse> GetItem(Guid itemId)
         {
-            return await _itemRepository.Get(itemId);
+            var item = await _itemRepository.Get(itemId);
+
+            return new GetItemResponse
+            {
+                Item = new ItemDto
+                {
+                    Name = item.Name,
+                    Description = item.Description,
+                    Price = item.Price,
+                    Stock = item.Stock,
+                    Image = item.Image
+                }
+            };
         }
     }
 }
