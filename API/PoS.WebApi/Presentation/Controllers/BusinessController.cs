@@ -20,34 +20,34 @@ public class BusinessController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllBusinesses()
     {
-        var allBusinesses = await _businessService.GetAllBusiness();
+        var response = await _businessService.GetAllBusiness();
 
-        return Ok(allBusinesses);
+        return Ok(response);
     }
 
     [Authorize(Roles = "SuperAdmin,BusinessOwner")]
     [HttpGet("{businessId}", Name = nameof(GetBusiness))]
     public async Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
     {
-        var business = await _businessService.GetBusiness(businessId);
+        var response = await _businessService.GetBusiness(businessId);
 
-        return Ok(business);
+        return Ok(response);
     }
 
     [Authorize(Roles = "SuperAdmin")]
     [HttpPost(Name = nameof(CreateBusiness))]
-    public async Task<IActionResult> CreateBusiness([FromBody] BusinessDto businessDto)
+    public async Task<IActionResult> CreateBusiness([FromBody] CreateBusinessRequest request)
     {
-        await _businessService.CreateBusiness(businessDto);
+        await _businessService.CreateBusiness(request);
 
         return NoContent();
     }
 
     [Authorize(Roles = "SuperAdmin,BusinessOwner")]
     [HttpPatch("{businessId}", Name = nameof(UpdateBusiness))]
-    public async Task<IActionResult> UpdateBusiness([FromRoute] Guid businessId, [FromBody] BusinessDto businessDto)
+    public async Task<IActionResult> UpdateBusiness([FromRoute] Guid businessId, [FromBody] UpdateBusinessRequest request)
     {
-        var sucess = await _businessService.UpdateBusiness(businessId, businessDto);
+        var sucess = await _businessService.UpdateBusiness(businessId, request);
 
         if (!sucess)
         {

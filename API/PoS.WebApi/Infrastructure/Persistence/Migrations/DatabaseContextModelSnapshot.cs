@@ -17,6 +17,51 @@ namespace PoS.WebApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
+            modelBuilder.Entity("DiscountItem", b =>
+                {
+                    b.Property<Guid>("DiscountsId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ItemsId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("DiscountsId", "ItemsId");
+
+                    b.HasIndex("ItemsId");
+
+                    b.ToTable("DiscountItem");
+                });
+
+            modelBuilder.Entity("DiscountItemGroup", b =>
+                {
+                    b.Property<Guid>("DiscountsId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ItemGroupsId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("DiscountsId", "ItemGroupsId");
+
+                    b.HasIndex("ItemGroupsId");
+
+                    b.ToTable("DiscountItemGroup");
+                });
+
+            modelBuilder.Entity("ItemTax", b =>
+                {
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("TaxesId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ItemId", "TaxesId");
+
+                    b.HasIndex("TaxesId");
+
+                    b.ToTable("ItemTax");
+                });
+
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Business", b =>
                 {
                     b.Property<Guid>("Id")
@@ -90,27 +135,6 @@ namespace PoS.WebApi.Migrations
                     b.ToTable("Discounts");
                 });
 
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.GroupDiscount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("DiscountId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ItemGroupId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasIndex("ItemGroupId");
-
-                    b.ToTable("GroupDiscounts");
-                });
-
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Item", b =>
                 {
                     b.Property<Guid>("Id")
@@ -145,27 +169,6 @@ namespace PoS.WebApi.Migrations
                     b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.ItemDiscount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("DiscountId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("ItemDiscounts");
-                });
-
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.ItemGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -183,27 +186,6 @@ namespace PoS.WebApi.Migrations
                     b.ToTable("ItemGroups");
                 });
 
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.ItemTax", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("TaxId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("TaxId");
-
-                    b.ToTable("ItemTaxes");
-                });
-
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -216,7 +198,7 @@ namespace PoS.WebApi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("DiscountAmount")
+                    b.Property<decimal>("DiscountAmount")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("DiscountId")
@@ -234,7 +216,7 @@ namespace PoS.WebApi.Migrations
                     b.Property<decimal>("ServiceChargeAmount")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ServiceChargeId")
+                    b.Property<Guid?>("ServiceChargeId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -337,6 +319,24 @@ namespace PoS.WebApi.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AccessToken")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Refund", b =>
@@ -571,23 +571,49 @@ namespace PoS.WebApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.GroupDiscount", b =>
+            modelBuilder.Entity("DiscountItem", b =>
                 {
-                    b.HasOne("PoS.WebApi.Domain.Entities.Discount", "Discount")
-                        .WithMany("GroupDiscounts")
-                        .HasForeignKey("DiscountId")
+                    b.HasOne("PoS.WebApi.Domain.Entities.Discount", null)
+                        .WithMany()
+                        .HasForeignKey("DiscountsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PoS.WebApi.Domain.Entities.ItemGroup", "ItemGroup")
-                        .WithMany("GroupDiscounts")
-                        .HasForeignKey("ItemGroupId")
+                    b.HasOne("PoS.WebApi.Domain.Entities.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DiscountItemGroup", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Discount", null)
+                        .WithMany()
+                        .HasForeignKey("DiscountsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Discount");
+                    b.HasOne("PoS.WebApi.Domain.Entities.ItemGroup", null)
+                        .WithMany()
+                        .HasForeignKey("ItemGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Navigation("ItemGroup");
+            modelBuilder.Entity("ItemTax", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PoS.WebApi.Domain.Entities.Tax", null)
+                        .WithMany()
+                        .HasForeignKey("TaxesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Item", b =>
@@ -598,44 +624,6 @@ namespace PoS.WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ItemGroup");
-                });
-
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.ItemDiscount", b =>
-                {
-                    b.HasOne("PoS.WebApi.Domain.Entities.Discount", "Discount")
-                        .WithMany("ItemDiscounts")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PoS.WebApi.Domain.Entities.Item", "Item")
-                        .WithMany("ItemDiscounts")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Discount");
-
-                    b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.ItemTax", b =>
-                {
-                    b.HasOne("PoS.WebApi.Domain.Entities.Item", "Item")
-                        .WithMany("ItemTaxes")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PoS.WebApi.Domain.Entities.Tax", "Tax")
-                        .WithMany()
-                        .HasForeignKey("TaxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Tax");
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Order", b =>
@@ -654,8 +642,7 @@ namespace PoS.WebApi.Migrations
                     b.HasOne("PoS.WebApi.Domain.Entities.ServiceCharge", "ServiceCharge")
                         .WithMany()
                         .HasForeignKey("ServiceChargeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Discount");
 
@@ -794,24 +781,8 @@ namespace PoS.WebApi.Migrations
                     b.Navigation("Reservations");
                 });
 
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.Discount", b =>
-                {
-                    b.Navigation("GroupDiscounts");
-
-                    b.Navigation("ItemDiscounts");
-                });
-
-            modelBuilder.Entity("PoS.WebApi.Domain.Entities.Item", b =>
-                {
-                    b.Navigation("ItemDiscounts");
-
-                    b.Navigation("ItemTaxes");
-                });
-
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.ItemGroup", b =>
                 {
-                    b.Navigation("GroupDiscounts");
-
                     b.Navigation("Items");
                 });
 

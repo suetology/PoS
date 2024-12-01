@@ -20,7 +20,6 @@ namespace PoS.WebApi.Infrastructure.Repositories
         public async Task Create(Service service)
         {
             await _dbContext.Services.AddAsync(service);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Service>> GetAll() =>
@@ -52,7 +51,6 @@ namespace PoS.WebApi.Infrastructure.Repositories
         public async Task Update(Service service)
         {
             _dbContext.Services.Update(service);
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

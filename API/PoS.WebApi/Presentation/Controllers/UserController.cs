@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
+using PoS.WebApi.Domain.Enums;
 
 namespace PoS.WebApi.Presentation.Controllers;
 
@@ -16,17 +17,17 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPost(Name = nameof(CreateUser))]
     [Tags("User Management")]
-    public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
-        await _userService.CreateUser(userDto);
+        await _userService.CreateUser(request);
 
         return NoContent();
     }
 
-    [Authorize(Roles = "SuperAdmin,BusinessOwner,Employee")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [Tags("User Management")]
     public async Task<IActionResult> GetAllUsers([FromQuery] QueryParameters parameters)
@@ -36,35 +37,29 @@ public class UserController : ControllerBase
             return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
         }
 
-        var allUsers = await _userService.GetAllUsers(parameters);
+        var response = await _userService.GetAllUsers(parameters);
 
-        return Ok(allUsers);
+        return Ok(response);
     }
 
-    [Authorize(Roles = "SuperAdmin,BusinessOwner,Employee")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [Tags("User Management")]
     [Route("{userId}", Name = nameof(GetUser))]
     public async Task<IActionResult> GetUser([FromRoute] Guid userId)
     {
-        var user = await _userService.GetUser(userId);
+        var response = await _userService.GetUser(userId);
 
-        return Ok(user);
+        return Ok(response);
     }
 
-    //[HttpPatch("{userId}", Name = nameof(UpdateUser))]
-    //public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] JsonPatchDocument<User> user)
-    //{
-    //    var post = await _userService.GetUser(userId);
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
+    [HttpGet("roles", Name = nameof(GetAvailableRoles))]
+    [Tags("User Management")]
+    public async Task<IActionResult> GetAvailableRoles()
+    {
+        var roles = await _userService.GetAvailableRoles();
 
-    //    if (post is null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    user.ApplyTo(post);
-    //    await _userService.EditAsync(post);
-
-    //    return NoContent();
-    //}
+        return Ok(roles);
+    }
 }

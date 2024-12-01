@@ -19,25 +19,55 @@ public class BusinessService : IBusinessService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task CreateBusiness(BusinessDto businessDto)
+    public async Task CreateBusiness(CreateBusinessRequest request)
     {
-        var business = businessDto.ToDomain();
+        var business = new Business
+        {
+            Name = request.Name,
+            Address = request.Address,
+            Email = request.Email,
+            PhoneNumber = request.PhoneNumber
+        };
 
         await _businessRepository.Create(business);
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<IEnumerable<Business>> GetAllBusiness()
+    public async Task<GetAllBusinessesResponse> GetAllBusiness()
     {
-        return await _businessRepository.GetAll();
+        var businesses = await _businessRepository.GetAll();
+        var businessDtos = businesses
+            .Select(b => new BusinessDto
+            {
+                Name = b.Name,
+                Address = b.Address,
+                Email = b.Email,
+                PhoneNumber = b.PhoneNumber
+            });
+        
+        return new GetAllBusinessesResponse
+        {
+            Businesses = businessDtos
+        };
     }
 
-    public async Task<Business> GetBusiness(Guid businessId)
+    public async Task<GetBusinessResponse> GetBusiness(Guid businessId)
     {
-        return await _businessRepository.Get(businessId);
+        var business = await _businessRepository.Get(businessId);
+
+        return new GetBusinessResponse
+        {
+            Business = new BusinessDto
+            {                
+                Name = business.Name,
+                Address = business.Address,
+                Email = business.Email,
+                PhoneNumber = business.PhoneNumber
+            }
+        };
     }
 
-    public async Task<bool> UpdateBusiness(Guid businessId, BusinessDto businessDto)
+    public async Task<bool> UpdateBusiness(Guid businessId, UpdateBusinessRequest request)
     {
         var existingBusiness = await _businessRepository.Get(businessId);
 
@@ -45,14 +75,15 @@ public class BusinessService : IBusinessService
         {
             return false;
         }
+        
+        existingBusiness.Name = request.Name ?? existingBusiness.Name;
+        existingBusiness.Address = request.Address ?? existingBusiness.Address;
+        existingBusiness.Email = request.Email ?? existingBusiness.Email;
+        existingBusiness.PhoneNumber = request.PhoneNumber ?? existingBusiness.PhoneNumber;
 
-        var updatedBusiness = businessDto.ToDomain();
-        existingBusiness.Update(updatedBusiness);
-
-        _businessRepository.Update(existingBusiness);
+        await _businessRepository.Update(existingBusiness);
         await _unitOfWork.SaveChanges();
 
         return true;
-
     }
 }

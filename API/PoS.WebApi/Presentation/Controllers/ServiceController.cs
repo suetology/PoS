@@ -18,32 +18,35 @@ namespace PoS.WebApi.Presentation.Controllers
         [HttpGet("{serviceId}")]
         public async Task<IActionResult> GetService(Guid serviceId)
         {
-            var service = await _serviceService.GetService(serviceId);
-            if (service == null)
+            var response = await _serviceService.GetService(serviceId);
+            if (response == null)
             {
                 return NotFound();
             }
-            return Ok(service);
+            return Ok(response);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetServices([FromQuery] string sort = "name", [FromQuery] string order = "desc", [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
-            var services = await _serviceService.GetServices(sort, order, page, pageSize);
-            return Ok(new { services });
+            var response = await _serviceService.GetServices(sort, order, page, pageSize);
+            
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateService([FromBody] ServiceDto serviceDto)
+        public async Task<IActionResult> CreateService([FromBody] CreateServiceRequest request)
         {
-            await _serviceService.CreateService(serviceDto);
-            return CreatedAtAction(nameof(GetService), new { serviceId = serviceDto.EmployeeId }, serviceDto);
+            await _serviceService.CreateService(request);
+            
+            return CreatedAtAction(nameof(GetService), request);
         }
 
         [HttpPatch("{serviceId}")]
-        public async Task<IActionResult> UpdateService(Guid serviceId, [FromBody] ServiceDto serviceDto)
+        public async Task<IActionResult> UpdateService(Guid serviceId, [FromBody] UpdateServiceRequest request)
         {
-            await _serviceService.UpdateService(serviceId, serviceDto);
+            await _serviceService.UpdateService(serviceId, request);
+            
             return NoContent();
         }
     }

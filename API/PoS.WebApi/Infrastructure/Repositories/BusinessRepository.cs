@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
+using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Domain.Entities;
 using PoS.WebApi.Infrastructure.Persistence;
 
@@ -19,6 +20,11 @@ public class BusinessRepository : IBusinessRepository
         return await _dbContext.Businesses.Include(b => b.Employees).ToListAsync();
     }
 
+    public async Task Update(Business business)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Business> Get(Guid id)
     {
         return await _dbContext.Businesses.Include(b => b.Employees).FirstOrDefaultAsync(i => i.Id == id);
@@ -27,10 +33,5 @@ public class BusinessRepository : IBusinessRepository
     public async Task Create(Business business)
     {
         await _dbContext.Businesses.AddAsync(business);
-    }
-
-    public void Update(Business business)
-    {
-        _dbContext.Businesses.Update(business);
     }
 }

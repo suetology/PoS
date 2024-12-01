@@ -14,24 +14,5 @@ public class UserDto
     public Role Role { get; set; }
     public EmployeeStatus Status { get; set; }
     public DateTime DateOfEmployment { get; set; }
-    public Guid BusinessId { get; set; }
-
-    public User ToDomain()
-    {
-        return new User()
-        {
-            Username = Username,
-            PasswordHash = PasswordHash,
-            Name = Name,
-            Surname = Surname,
-            Email = Email,
-            PhoneNumber = PhoneNumber,
-            Role = Role,
-            Status = Status,
-            DateOfEmployment = DateOfEmployment,
-            BusinessId = BusinessId,
-            LastUpdated = DateTime.UtcNow
-        };
-    }
 }
 

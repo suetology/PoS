@@ -27,6 +27,11 @@ namespace PoS.WebApi.Infrastructure.Repositories
         {
             return await _dbContext.Customers.ToListAsync();
         }
+
+        public Task Update(Customer entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
     

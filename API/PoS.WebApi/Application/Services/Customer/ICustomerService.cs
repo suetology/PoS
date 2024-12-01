@@ -1,14 +1,12 @@
-﻿
-
-namespace PoS.WebApi.Application.Services.Customer;
+﻿namespace PoS.WebApi.Application.Services.Customer;
 
 using PoS.WebApi.Application.Services.Customer.Contracts;
 using Domain.Entities;
 
 public interface ICustomerService
-    {
-    Task<Customer> GetCustomer(Guid customerId);
-
-    Task CreateCustomer(CustomerDto customer);
-    }
+{
+    Task<GetCustomerResponse> GetCustomer(Guid customerId);
+    Task CreateCustomer(CreateCustomerRequest customer);
+    Task<GetAllCustomersResponse> GetAll();
+}
 

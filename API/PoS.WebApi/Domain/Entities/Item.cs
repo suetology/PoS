@@ -18,7 +18,7 @@ public class Item : Entity
     
     public ItemGroup? ItemGroup { get; set; }
     
-    public ICollection<ItemTax> ItemTaxes { get; set; } = new List<ItemTax>();
+    public ICollection<Tax> Taxes { get; set; } = new List<Tax>();
 
-    public ICollection<ItemDiscount> ItemDiscounts { get; set; }
+    public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 }

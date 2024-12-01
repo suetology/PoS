@@ -11,19 +11,17 @@ using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Infrastructure.Persistence;
 using PoS.WebApi.Infrastructure.Repositories;
 using PoS.WebApi.Presentation.Extensions;
-using PoS.WebApi.Application.Services.NewFolder;
-using PoS.WebApi.Domain.Entities;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using PoS.WebApi.Application.Services.Auth;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Service;
-using PoS.WebApi.Application.Services.ItemDiscount;
+using PoS.WebApi.Application.Services.Reservation;
 using PoS.WebApi.Infrastructure.Security;
 using PoS.WebApi.Application.Services.Discount;
+using PoS.WebApi.Application.Services.Order;
 using PoS.WebApi.Application.Services.ItemGroup;
 using PoS.WebApi.Application.Services.Item;
-using PoS.WebApi.Application.Services.GroupDiscount;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,20 +104,24 @@ builder.Services.AddTransient<IDiscountService, DiscountService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
+builder.Services.AddTransient<IOrderService, PoS.WebApi.Application.Services.Order.OrderService>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+
 builder.Services.AddTransient<IItemGroupService, ItemGroupService>();
 builder.Services.AddTransient<IItemGroupRepository, ItemGroupRepository>();
-
-builder.Services.AddTransient<IGroupDiscountRepository, GroupDiscountRepository>();
-builder.Services.AddTransient<IGroupDiscountService, GroupDiscountService>();
 
 builder.Services.AddTransient<IItemRepository, ItemRepository>();
 builder.Services.AddTransient<IItemService, ItemService>();
 
-builder.Services.AddTransient<IItemDiscountRepository, ItemDiscountRepository>();
-builder.Services.AddTransient<IItemDiscountService, ItemDiscountService>();
-
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IJwtProvider, JwtProvider>();
+builder.Services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+    
+builder.Services.AddTransient<IReservationService, ReservationService>();
+builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 
 // Adding controllers
 builder.Services.AddControllers()

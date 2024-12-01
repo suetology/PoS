@@ -25,15 +25,11 @@ public class ItemTypeConfiguration : BaseEntityTypeConfiguration<Item>
         
         builder.Property(i => i.Stock)
             .IsRequired();
-        
-        builder.HasMany(i => i.ItemTaxes)
-            .WithOne(i => i.Item)
-            .HasForeignKey(i => i.ItemId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasMany(i => i.ItemDiscounts)
-            .WithOne(i => i.Item)
-            .HasForeignKey(i => i.ItemId)
-            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(i => i.Taxes)
+            .WithMany();
+
+        builder.HasMany(i => i.Discounts)
+            .WithMany(d => d.Items);
     }
 }

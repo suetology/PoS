@@ -26,6 +26,13 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.ToListAsync();
     }
 
+    public async Task Update(User entity)
+    {
+        _dbContext.Users.Update(entity);
+
+        await Task.CompletedTask;
+    }
+
     public async Task<User> Get(Guid id)
     {
         return await _dbContext.Users.FirstOrDefaultAsync(i => i.Id == id);

@@ -12,16 +12,4 @@ public class TaxDto
     public decimal Value { get; set; }
 
     public bool IsPercentage { get; set; } = true;
-
-    public Tax ToDomain()
-    {
-        return new Tax()
-        {
-            Name = Name,
-            Type = Type,
-            Value = Value,
-            IsPercentage = IsPercentage,
-            LastUpdated = DateTime.UtcNow
-        };
-    }
 }

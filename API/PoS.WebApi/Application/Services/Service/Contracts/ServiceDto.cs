@@ -15,18 +15,5 @@
         public bool IsActive { get; set; }
 
         public Guid EmployeeId { get; set; }
-
-        public Service ToDomain()
-        {
-            return new Service
-            {
-                Name = Name,
-                Description = Description,
-                Price = Price,
-                Duration = Duration,
-                IsActive = IsActive,
-                EmployeeId = EmployeeId
-            };
-        }
     }
 }
