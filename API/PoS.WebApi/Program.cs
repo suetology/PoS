@@ -11,8 +11,6 @@ using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Infrastructure.Persistence;
 using PoS.WebApi.Infrastructure.Repositories;
 using PoS.WebApi.Presentation.Extensions;
-using PoS.WebApi.Application.Services.NewFolder;
-using PoS.WebApi.Domain.Entities;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using PoS.WebApi.Application.Services.Auth;

@@ -8,4 +8,5 @@ public interface IUserService
     Task CreateUser(UserDto user);
     Task<IEnumerable<User>> GetAllUsers(QueryParameters parameters);
     Task<User> GetUser(Guid id);
+    Task<IEnumerable<string>> GetAvailableRoles();
 }

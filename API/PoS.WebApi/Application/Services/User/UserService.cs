@@ -1,4 +1,6 @@
-﻿namespace PoS.WebApi.Application.Services.NewFolder;
+﻿using PoS.WebApi.Domain.Enums;
+
+namespace PoS.WebApi.Application.Services.User;
 
 using Domain.Entities;
 using PoS.WebApi.Application.Repositories;
@@ -35,5 +37,10 @@ public class UserService : IUserService
     public async Task<User> GetUser(Guid userId)
     {
         return await _userRepository.Get(userId);
+    }
+
+    public Task<IEnumerable<string>> GetAvailableRoles()
+    {
+        return Task.FromResult<IEnumerable<string>>(Enum.GetNames(typeof(Role)));
     }
 }

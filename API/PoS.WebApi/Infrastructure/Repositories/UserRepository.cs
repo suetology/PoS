@@ -26,9 +26,11 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.ToListAsync();
     }
 
-    public Task Update(User entity)
+    public async Task Update(User entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Users.Update(entity);
+
+        await Task.CompletedTask;
     }
 
     public async Task<User> Get(Guid id)
