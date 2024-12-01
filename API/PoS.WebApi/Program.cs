@@ -70,6 +70,13 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
+
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 // Registering dependencies
@@ -141,7 +148,7 @@ app.UseExceptionHandling(
     });
 
 //app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 
 // Mapping Controllers
 app.MapControllers();
