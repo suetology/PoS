@@ -12,7 +12,6 @@ public class DatabaseContext : DbContext
     public DbSet<ItemGroup> ItemGroups { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
-    public DbSet<OrderService> OrderServices { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Refund> Refunds { get; set; }
     public DbSet<Reservation> Reservations { get; set; }

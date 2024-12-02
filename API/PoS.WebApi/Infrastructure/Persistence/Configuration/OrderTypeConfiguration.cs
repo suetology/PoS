@@ -29,11 +29,6 @@ public class OrderTypeConfiguration : BaseEntityTypeConfiguration<Order>
             .WithOne(o => o.Order)
             .HasForeignKey(o => o.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasMany(o => o.OrderServices)
-            .WithOne(o => o.Order)
-            .HasForeignKey(o => o.OrderId)
-            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(o => o.ServiceCharge)
             .WithMany()

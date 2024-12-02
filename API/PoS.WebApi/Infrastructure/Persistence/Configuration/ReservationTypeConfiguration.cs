@@ -27,5 +27,10 @@ public class ReservationTypeConfiguration : BaseEntityTypeConfiguration<Reservat
             .WithOne(o => o.Reservation)
             .HasForeignKey<Reservation>(r => r.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(r => r.Service)
+            .WithMany(s => s.Reservations)
+            .HasForeignKey(r => r.ServiceId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
