@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Customer;
 using PoS.WebApi.Application.Services.Customer.Contracts;
+using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Presentation.Controllers
 {
@@ -17,10 +20,24 @@ namespace PoS.WebApi.Presentation.Controllers
             _customerService = customerService;
         }
 
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet("{customerId}")]
-        public async Task<IActionResult> GetCustomer(Guid customerId)
+        public async Task<IActionResult> GetCustomer([FromRoute] Guid customerId)
         {
-            var response = await _customerService.GetCustomer(customerId);
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new GetCustomerRequest
+            {
+                Id = customerId,
+                BusinessId = businessId.Value
+            };
+            
+            var response = await _customerService.GetCustomer(request);
             if (response == null)
             {
                 return NotFound();
@@ -31,7 +48,19 @@ namespace PoS.WebApi.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _customerService.GetAll();
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new GetAllCustomersRequest
+            {
+                BusinessId = businessId.Value
+            };
+            
+            var response = await _customerService.GetAll(request);
 
             return Ok(response);
         }
@@ -39,10 +68,14 @@ namespace PoS.WebApi.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerRequest request)
         {
-            if (request == null)
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
             {
-                return BadRequest("Customer data is null.");
+                return Unauthorized("Failed to retrieve Business ID");
             }
+
+            request.BusinessId = businessId.Value;
 
             await _customerService.CreateCustomer(request);
             return CreatedAtAction(nameof(GetCustomer), request);

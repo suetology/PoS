@@ -5,6 +5,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class Payment : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public PaymentMethod Method { get; set; }
     
     public decimal Amount { get; set; }

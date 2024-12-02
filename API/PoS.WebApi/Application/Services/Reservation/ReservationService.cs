@@ -33,6 +33,7 @@ public class ReservationService : IReservationService
 
         var reservation = new Reservation
         {
+            BusinessId = request.BusinessId,
             NotificationSent = false,
             Status = AppointmentStatus.Booked,
             ReservationTime = DateTime.UtcNow,
@@ -46,10 +47,11 @@ public class ReservationService : IReservationService
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<GetAllReservationsResponse> GetAllReservations()
+    public async Task<GetAllReservationsResponse> GetAllReservations(GetAllReservationsRequest request)
     {
         var reservations = await _reservationRepository.GetAll();
         var reservationDtos = reservations
+            .Where(r => r.BusinessId == request.BusinessId)
             .Select(r => new ReservationDto
             {
                 NotificationSent = r.NotificationSent,
@@ -66,10 +68,15 @@ public class ReservationService : IReservationService
         };
     }
 
-    public async Task<GetReservationResponse> GetReservationById(Guid id)
+    public async Task<GetReservationResponse> GetReservationById(GetReservationRequest request)
     {
-        var reservation = await _reservationRepository.GetById(id);
+        var reservation = await _reservationRepository.GetById(request.Id);
 
+        if (reservation.BusinessId != request.BusinessId)
+        {
+            return null;
+        }
+        
         return new GetReservationResponse
         {
             Reservation = new ReservationDto
@@ -84,11 +91,11 @@ public class ReservationService : IReservationService
         };
     }
 
-    public async Task<bool> UpdateReservation(Guid id, UpdateReservationRequest request)
+    public async Task<bool> UpdateReservation(UpdateReservationRequest request)
     {
-        var reservation = await _reservationRepository.GetById(id);
+        var reservation = await _reservationRepository.GetById(request.Id);
 
-        if (reservation == null)
+        if (reservation == null || reservation.BusinessId != request.BusinessId)
         {
             return false;
         }

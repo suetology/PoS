@@ -24,6 +24,7 @@ public class OrderService: IOrderService
     {
         var order = new Order
         {   
+            BusinessId = request.BusinessId,
             EmployeeId = request.EmployeeId,
             DiscountId = request.DiscountId,
             ServiceChargeId = request.ServiceChargeId,
@@ -42,10 +43,11 @@ public class OrderService: IOrderService
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<GetAllOrdersResponse> GetAllOrders(OrderQueryParameters parameters)
+    public async Task<GetAllOrdersResponse> GetAllOrders(GetAllOrdersRequest request)
     {
-        var orders = await _orderRepository.GetAllFiltered(parameters);
+        var orders = await _orderRepository.GetAllFiltered(request.QueryParameters);
         var orderDtos = orders
+            .Where(o => o.BusinessId == request.BusinessId)
             .Select(o => new OrderDto
             {
                 Status = o.Status,
@@ -67,9 +69,14 @@ public class OrderService: IOrderService
         };
     }
 
-    public async Task<GetOrderResponse> GetOrder(Guid id)
+    public async Task<GetOrderResponse> GetOrder(GetOrderRequest request)
     {
-        var order = await _orderRepository.Get(id);
+        var order = await _orderRepository.Get(request.Id);
+
+        if (order.BusinessId != request.BusinessId)
+        {
+            return null;
+        }
 
         return new GetOrderResponse
         {

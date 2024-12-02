@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Item;
 using PoS.WebApi.Application.Services.Item.Contracts;
+using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Presentation.Controllers;
 
@@ -16,17 +18,27 @@ public class ItemController : ControllerBase
         _itemService = itemService;
     }
 
-    //[Authorize(Roles = "SuperAdmin,BusinessOwner,Employee")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost]
     [Route("item")]
     [Tags("Inventory")]
     public async Task<IActionResult> CreateItem([FromBody] CreateItemRequest request)
     {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.BusinessId = businessId.Value;
+        
         await _itemService.CreateItem(request);
 
         return NoContent();
     }
 
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [Route("item")]
     [Tags("Inventory")]
@@ -36,18 +48,45 @@ public class ItemController : ControllerBase
         //{
         //    return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
         //}
+        
+        var businessId = User.GetBusinessId();
 
-        var response = await _itemService.GetAllItems(parameters);
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetAllItemsRequest
+        {
+            BusinessId = businessId.Value,
+            QueryParameters = parameters
+        };
+
+        var response = await _itemService.GetAllItems(request);
 
         return Ok(response);
     }
 
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [Tags("Inventory")]
     [Route("item/{itemId}", Name = nameof(GetItem))]
     public async Task<IActionResult> GetItem([FromRoute] Guid itemId)
     {
-        var response = await _itemService.GetItem(itemId);
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetItemRequest
+        {
+            BusinessId = businessId.Value,
+            ItemId = itemId
+        };
+        
+        var response = await _itemService.GetItem(request);
 
         return Ok(response);
     }

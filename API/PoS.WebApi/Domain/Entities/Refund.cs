@@ -4,6 +4,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class Refund : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public decimal Amount { get; set; }
     
     public DateTime Date { get; set; }

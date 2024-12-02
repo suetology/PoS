@@ -45,7 +45,7 @@ public class UserTypeConfiguration : BaseEntityTypeConfiguration<User>
         
         builder.HasMany(u => u.Shifts)
             .WithOne(s => s.Employee)
-            .HasForeignKey(s => s.EmployeeId)
+            .HasForeignKey(s => s.EmployeeId)   
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasMany(u => u.Services)

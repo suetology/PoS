@@ -16,10 +16,11 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
             _unitOfWork = unitOfWork;
         }
             
-        public async Task<GetAllServiceChargesResponse> GetServiceCharges()
+        public async Task<GetAllServiceChargesResponse> GetServiceCharges(GetAllServiceChargesRequest request)
         {
             var serviceCharges = await _serviceChargeRepository.GetAll();
             var serviceChargesDtos = serviceCharges
+                .Where(s => s.BusinessId == request.BusinessId)
                 .Select(s => new ServiceChargeDto
                 {
                     Name = s.Name,
@@ -38,6 +39,7 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
         {
             var serviceCharge = new Domain.Entities.ServiceCharge
             {
+                BusinessId = request.BusinessId,
                 Name = request.Name,
                 Description = request.Description,
                 Value = request.Value,

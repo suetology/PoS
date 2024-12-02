@@ -51,9 +51,9 @@ public class BusinessService : IBusinessService
         };
     }
 
-    public async Task<GetBusinessResponse> GetBusiness(Guid businessId)
+    public async Task<GetBusinessResponse> GetBusiness(GetBusinessRequest request)
     {
-        var business = await _businessRepository.Get(businessId);
+        var business = await _businessRepository.Get(request.Id);
 
         return new GetBusinessResponse
         {
@@ -67,9 +67,9 @@ public class BusinessService : IBusinessService
         };
     }
 
-    public async Task<bool> UpdateBusiness(Guid businessId, UpdateBusinessRequest request)
+    public async Task<bool> UpdateBusiness(UpdateBusinessRequest request)
     {
-        var existingBusiness = await _businessRepository.Get(businessId);
+        var existingBusiness = await _businessRepository.Get(request.Id);
 
         if (existingBusiness == null)
         {

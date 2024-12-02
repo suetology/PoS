@@ -4,6 +4,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class ItemGroup : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public string Name { get; set; }
     
     public string Description { get; set; }

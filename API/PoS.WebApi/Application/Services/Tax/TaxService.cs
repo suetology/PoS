@@ -18,10 +18,11 @@ public class TaxService : ITaxService
         _taxRepository = taxRepository;
         _unitOfWork = unitOfWork;
     }
-    public async Task<GetAllTaxesResponse> GetAllTaxes()
+    public async Task<GetAllTaxesResponse> GetAllTaxes(GetAllTaxesRequest request)
     {
         var taxes = await _taxRepository.GetAll();
         var taxesDtos = taxes
+            .Where(t => t.BusinessId == request.BusinessId)
             .Select(t => new TaxDto
             {
                 Id = t.Id,
@@ -37,9 +38,14 @@ public class TaxService : ITaxService
         };
     }
 
-    public async Task<GetTaxResponse> GetTax(Guid taxId)
+    public async Task<GetTaxResponse> GetTax(GetTaxRequest request)
     {
-        var tax = await _taxRepository.Get(taxId);
+        var tax = await _taxRepository.Get(request.Id);
+
+        if (tax == null || tax.BusinessId != request.BusinessId)
+        {
+            return null;
+        }
 
         return new GetTaxResponse
         {
@@ -58,6 +64,7 @@ public class TaxService : ITaxService
     {
         var tax = new Tax
         {
+            BusinessId = request.BusinessId,
             Name = request.Name,
             Type = request.Type,
             Value = request.Value,

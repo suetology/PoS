@@ -4,9 +4,9 @@ namespace PoS.WebApi.Application.Services.Shift
 {
     public interface IShiftService
     {
-        Task<GetShiftResponse> GetShift(Guid shiftId);
+        Task<GetShiftResponse> GetShift(GetShiftRequest request);
         Task CreateShift(CreateShiftRequest request);
-        Task<GetShiftsResponse> GetShifts(GetShiftsRequest request);
-        Task DeleteShift(Guid shiftId);
+        Task<GetAllShiftsResponse> GetShifts(GetAllShiftsRequest request);
+        Task DeleteShift(DeleteShiftRequest request);
     }
 }

@@ -5,6 +5,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class Reservation : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public DateTime ReservationTime { get; set; }
     
     public DateTime AppointmentTime { get; set; }

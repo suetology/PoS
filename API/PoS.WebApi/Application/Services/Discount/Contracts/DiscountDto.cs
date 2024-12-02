@@ -14,19 +14,8 @@ public class DiscountDto
 
     public DateTime ValidTo { get; set; }
 
-    public List<Guid>? ItemGroupIds { get; set; } = new List<Guid>();
-
-    public Discount ToDomain()
-        {
-        return new Discount()
-        {
-            Name = Name,
-            Value = Value,
-            IsPercentage = IsPercentage,
-            AmountAvailable = AmountAvailable,
-            ValidFrom = ValidFrom,
-            ValidTo = ValidTo
-        };
-        }
+    public List<ItemDto> Items { get; set; }
+    
+    public List<ItemGroupDto> ItemGroups { get; set; }
 }
 

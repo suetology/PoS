@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Shift.Contracts;
+using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Presentation.Controllers
 {
@@ -15,18 +18,42 @@ namespace PoS.WebApi.Presentation.Controllers
             _shiftService = shiftService;
         }
 
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet]
-        public async Task<IActionResult> GetShifts(GetShiftsRequest request)
+        public async Task<IActionResult> GetShifts(GetAllShiftsRequest request)
         {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            request.BusinessId = businessId.Value;
+            
             var response = await _shiftService.GetShifts(request);
             
             return Ok(response);
         }
 
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet("{shiftId}")]
         public async Task<IActionResult> GetShiftById(Guid shiftId)
         {
-            var response = await _shiftService.GetShift(shiftId);
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new GetShiftRequest
+            {
+                Id = shiftId,
+                BusinessId = businessId.Value
+            };
+            
+            var response = await _shiftService.GetShift(request);
             if (response == null)
             {
                 return NotFound();
@@ -34,6 +61,7 @@ namespace PoS.WebApi.Presentation.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpPost]
         public async Task<IActionResult> CreateShift([FromBody] CreateShiftRequest request)
         {
@@ -41,6 +69,15 @@ namespace PoS.WebApi.Presentation.Controllers
             {
                 return BadRequest("Shift data is null.");
             }
+            
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            request.BusinessId = businessId.Value;
 
             await _shiftService.CreateShift(request);
             
@@ -50,7 +87,20 @@ namespace PoS.WebApi.Presentation.Controllers
         [HttpDelete("{shiftId}")]
         public async Task<IActionResult> DeleteShift(Guid shiftId)
         {
-            await _shiftService.DeleteShift(shiftId);
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new DeleteShiftRequest
+            {
+                Id = shiftId,
+                BusinessId = businessId.Value
+            };
+            
+            await _shiftService.DeleteShift(request);
             
             return NoContent();
         }

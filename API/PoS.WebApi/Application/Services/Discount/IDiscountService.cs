@@ -4,8 +4,8 @@ using PoS.WebApi.Application.Services.Discount.Contracts;
 
 public interface IDiscountService
 {
-    Task CreateDiscount(DiscountDto discount);
-    Task<IEnumerable<DiscountWithGroupsDto>> GetAllDiscounts(QueryParameters parameters);
-    Task<DiscountWithGroupsDto> GetDiscount(Guid id);
-    Task DeleteDiscountById(Guid id);
+    Task CreateDiscount(CreateDiscountRequest request);
+    Task<GetAllDiscountsResponse> GetAllDiscounts(GetAllDiscountsRequest request);
+    Task<GetDiscountResponse> GetDiscount(GetDiscountRequest request);
+    Task DeleteDiscountById(DeleteDiscountRequest request);
 }

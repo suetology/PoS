@@ -5,6 +5,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class Order : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public OrderStatus Status { get; set; }
     
     public DateTime Created { get; set; }

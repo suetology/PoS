@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Business;
 using PoS.WebApi.Application.Services.Business.Contracts;
+using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Presentation.Controllers;
 
@@ -16,7 +18,7 @@ public class BusinessController : ControllerBase
         _businessService = businessService;
     }
 
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)}")]
     [HttpGet]
     public async Task<IActionResult> GetAllBusinesses()
     {
@@ -25,16 +27,26 @@ public class BusinessController : ControllerBase
         return Ok(response);
     }
 
-    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpGet("{businessId}", Name = nameof(GetBusiness))]
     public async Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
     {
-        var response = await _businessService.GetBusiness(businessId);
+        if (User.GetBusinessId() != businessId)
+        {
+            return Unauthorized("Can't access other business data");
+        }
+
+        var request = new GetBusinessRequest
+        {
+            Id = businessId
+        };
+        
+        var response = await _businessService.GetBusiness(request);
 
         return Ok(response);
     }
 
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)}")]
     [HttpPost(Name = nameof(CreateBusiness))]
     public async Task<IActionResult> CreateBusiness([FromBody] CreateBusinessRequest request)
     {
@@ -43,11 +55,20 @@ public class BusinessController : ControllerBase
         return NoContent();
     }
 
-    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPatch("{businessId}", Name = nameof(UpdateBusiness))]
     public async Task<IActionResult> UpdateBusiness([FromRoute] Guid businessId, [FromBody] UpdateBusinessRequest request)
     {
-        var sucess = await _businessService.UpdateBusiness(businessId, request);
+        var businessIdClaim = User.GetBusinessId();
+        
+        if (businessIdClaim != businessId)
+        {
+            return Unauthorized("Can't access other business data");
+        }
+
+        request.Id = businessId;
+        
+        var sucess = await _businessService.UpdateBusiness(request);
 
         if (!sucess)
         {

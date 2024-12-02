@@ -16,9 +16,14 @@ public class CustomerService : ICustomerService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<GetCustomerResponse> GetCustomer(Guid customerId)
+    public async Task<GetCustomerResponse> GetCustomer(GetCustomerRequest request)
     {
-        var customer = await _customerRepository.Get(customerId);
+        var customer = await _customerRepository.Get(request.Id);
+
+        if (customer.BusinessId != request.BusinessId)
+        {
+            return null;
+        }
 
         return new GetCustomerResponse
         {
@@ -35,6 +40,7 @@ public class CustomerService : ICustomerService
     {
         var customer = new Customer
         {
+            BusinessId = request.BusinessId,
             Name = request.Name,
             Email = request.Email,
             PhoneNumber = request.PhoneNumber
@@ -44,10 +50,11 @@ public class CustomerService : ICustomerService
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<GetAllCustomersResponse> GetAll()
+    public async Task<GetAllCustomersResponse> GetAll(GetAllCustomersRequest request)
     {
         var customers =  await _customerRepository.GetAll();
         var customersDtos = customers
+            .Where(c => c.BusinessId == request.BusinessId)
             .Select(c => new CustomerDto
             {
                 Name = c.Name,

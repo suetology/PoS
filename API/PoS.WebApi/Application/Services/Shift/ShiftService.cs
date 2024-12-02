@@ -16,10 +16,14 @@ namespace PoS.WebApi.Application.Services.Shift
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GetShiftResponse> GetShift(Guid shiftId)
+        public async Task<GetShiftResponse> GetShift(GetShiftRequest request)
         {
-            var shift = await _shiftRepository.Get(shiftId);
-            if (shift == null) return null;
+            var shift = await _shiftRepository.Get(request.Id);
+
+            if (shift == null || shift.BusinessId != request.BusinessId)
+            {
+                return null;
+            }
 
             return new GetShiftResponse
             {
@@ -37,6 +41,7 @@ namespace PoS.WebApi.Application.Services.Shift
         {
             var shift = new Domain.Entities.Shift
             {
+                BusinessId = request.BusinessId,
                 Date = request.Date,
                 StartTime = TimeOnly.Parse(request.StartTime),
                 EndTime = TimeOnly.Parse(request.EndTime),
@@ -47,10 +52,11 @@ namespace PoS.WebApi.Application.Services.Shift
             await _unitOfWork.SaveChanges();
         }
 
-        public async Task<GetShiftsResponse> GetShifts(GetShiftsRequest request)
+        public async Task<GetAllShiftsResponse> GetShifts(GetAllShiftsRequest request)
         {
             var shifts = await _shiftRepository.GetShiftsByFilters(request.EmployeeId, request.FromDate, request.ToDate);
             var shiftsDtos = shifts
+                .Where(s => s.BusinessId == request.BusinessId)
                 .Select(s => new ShiftDto
                 {
                     Date = s.Date,
@@ -59,14 +65,21 @@ namespace PoS.WebApi.Application.Services.Shift
                     EmployeeId = s.EmployeeId
                 });
             
-            return new GetShiftsResponse
+            return new GetAllShiftsResponse
             {
                 Shifts = shiftsDtos
             };
         }
-        public async Task DeleteShift(Guid shiftId)
+        public async Task DeleteShift(DeleteShiftRequest request)
         {
-            await _shiftRepository.Delete(shiftId);
+            var shift = await _shiftRepository.Get(request.Id);
+
+            if (shift == null || shift.BusinessId != request.BusinessId)
+            {
+                return;
+            }
+            
+            await _shiftRepository.Delete(request.Id);
             await _unitOfWork.SaveChanges();
         }
     }

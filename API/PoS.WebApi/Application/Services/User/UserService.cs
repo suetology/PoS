@@ -42,10 +42,11 @@ public class UserService : IUserService
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task<GetAllUsersResponse> GetAllUsers(QueryParameters parameters)
+    public async Task<GetAllUsersResponse> GetAllUsers(GetAllUsersRequest request)
     {
-        var users = await _userRepository.GetAllUsersByFiltering(parameters);
+        var users = await _userRepository.GetAllUsersByFiltering(request.QueryParameters);
         var usersDtos = users
+            .Where(u => u.BusinessId == request.BusinessId)
             .Select(u => new UserDto
             {
                 Username = u.Username,
@@ -65,9 +66,14 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<GetUserResponse> GetUser(Guid userId)
+    public async Task<GetUserResponse> GetUser(GetUserRequest request)
     {
-        var user = await _userRepository.Get(userId);
+        var user = await _userRepository.Get(request.Id);
+
+        if (user == null || user.BusinessId != request.BusinessId)
+        {
+            return null;
+        }
 
         return new GetUserResponse
         {

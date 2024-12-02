@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
 using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Presentation.Controllers;
 
@@ -22,6 +23,15 @@ public class UserController : ControllerBase
     [Tags("User Management")]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.BusinessId = businessId.Value;
+        
         await _userService.CreateUser(request);
 
         return NoContent();
@@ -36,8 +46,21 @@ public class UserController : ControllerBase
         {
             return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
         }
+        
+        var businessId = User.GetBusinessId();
 
-        var response = await _userService.GetAllUsers(parameters);
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetAllUsersRequest
+        {
+            BusinessId = businessId.Value,
+            QueryParameters = parameters
+        };
+
+        var response = await _userService.GetAllUsers(request);
 
         return Ok(response);
     }
@@ -48,7 +71,20 @@ public class UserController : ControllerBase
     [Route("{userId}", Name = nameof(GetUser))]
     public async Task<IActionResult> GetUser([FromRoute] Guid userId)
     {
-        var response = await _userService.GetUser(userId);
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetUserRequest
+        {
+            Id = userId,
+            BusinessId = businessId.Value
+        };
+        
+        var response = await _userService.GetUser(request);
 
         return Ok(response);
     }

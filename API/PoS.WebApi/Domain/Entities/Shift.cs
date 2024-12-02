@@ -4,6 +4,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class Shift : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public DateTime Date { get; set; }
     
     public TimeOnly StartTime { get; set; }

@@ -7,8 +7,7 @@ namespace PoS.WebApi.Application.Repositories
 {
     public interface IDiscountRepository : IRepository<Discount>
     {
-        Task<IEnumerable<DiscountWithGroupsDto>> GetAll(QueryParameters parameters);
-        Task<DiscountWithGroupsDto> GetDto(Guid id);
+        Task<IEnumerable<Discount>> GetAll(QueryParameters parameters);
         Task Delete(Guid discountId);
     }
 }
