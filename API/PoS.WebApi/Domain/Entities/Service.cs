@@ -17,4 +17,6 @@ public class Service : Entity
     public Guid EmployeeId { get; set; }
     
     public User Employee { get; set; }
+
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }

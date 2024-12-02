@@ -21,8 +21,6 @@ public class Order : Entity
     
     public ICollection<Payment> Payments { get; set; }
     
-    public ICollection<OrderService> OrderServices { get; set; }
-    
     public Refund? Refund { get; set; }
     
     public Guid EmployeeId { get; set; }
