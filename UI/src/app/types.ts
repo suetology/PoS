@@ -17,15 +17,18 @@ export enum TaxType {
     AlcoholTax
 }
 
+export interface BusinessResponse {
+    business: Business[];
+}
 
-// export interface Business {
-//     id: string;
-//     name: string;
-//     address: string;
-//     phoneNumber: string;
-//     email: string;
-//     employees: Employees;
-// }
+export interface Business {
+    id: string;
+    name: string;
+    address: string;
+    phoneNumber: string;
+    email: string;
+    // employees: Employees;
+}
 
 // export interface Employees {
 //     id: string;
