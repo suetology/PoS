@@ -17,7 +17,8 @@ public class BusinessTypeConfiguration : BaseEntityTypeConfiguration<Business>
         builder.HasMany(b => b.Employees)
             .WithOne(u => u.Business)
             .HasForeignKey(u => u.BusinessId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
 
         builder.HasMany<Customer>()
             .WithOne()

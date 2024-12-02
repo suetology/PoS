@@ -25,7 +25,7 @@ public class User : Entity
     
     public DateTime LastUpdated { get; set; }
     
-    public Guid BusinessId { get; set; }
+    public Guid? BusinessId { get; set; }
     
     public Business Business { get; set; }
     
