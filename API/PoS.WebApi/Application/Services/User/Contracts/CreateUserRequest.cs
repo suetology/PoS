@@ -1,9 +1,13 @@
-﻿using PoS.WebApi.Domain.Enums;
+﻿using System.Text.Json.Serialization;
+using PoS.WebApi.Domain.Enums;
 
 namespace PoS.WebApi.Application.Services.User.Contracts;
 
 public class CreateUserRequest
 {
+    [JsonIgnore]
+    public Guid BusinessId { get; set; }
+    
     public string Username { get; set; }
     
     public string PasswordHash { get; set; }
@@ -22,5 +26,4 @@ public class CreateUserRequest
     
     public DateTime DateOfEmployment { get; set; }
     
-    public Guid BusinessId { get; set; }
 }

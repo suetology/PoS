@@ -17,9 +17,9 @@ using PoS.WebApi.Domain.Common;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GetServiceResponse> GetService(Guid serviceId)
+        public async Task<GetServiceResponse> GetService(GetServiceRequest request)
         { 
-            var service = await _serviceRepository.Get(serviceId);
+            var service = await _serviceRepository.Get(request.Id);
 
             return new GetServiceResponse
             {
@@ -35,10 +35,11 @@ using PoS.WebApi.Domain.Common;
             };
         }
 
-        public async Task<GetServicesResponse> GetServices(string sort, string order, int page, int pageSize)
+        public async Task<GetAllServicesResponse> GetServices(GetAllServicesRequest request)
         {
-            var services = await _serviceRepository.GetServices(sort, order, page, pageSize);
+            var services = await _serviceRepository.GetServices(request.Sort, request.Order, request.Page, request.PageSize);
             var serviceDtos = services
+                .Where(s => s.BusinessId == request.BusinessId)
                 .Select(s => new ServiceDto
                 {
                     Name = s.Name,
@@ -49,7 +50,7 @@ using PoS.WebApi.Domain.Common;
                     EmployeeId = s.EmployeeId
                 });
 
-            return new GetServicesResponse
+            return new GetAllServicesResponse
             {
                 Services = serviceDtos
             };
@@ -59,6 +60,7 @@ using PoS.WebApi.Domain.Common;
         {
             var service = new Service
             {
+                BusinessId = request.BusinessId,
                 Name = request.Name,
                 Description = request.Description,
                 Price = request.Price,
@@ -71,11 +73,11 @@ using PoS.WebApi.Domain.Common;
             await _unitOfWork.SaveChanges();
         }
 
-        public async Task UpdateService(Guid serviceId, UpdateServiceRequest request)
+        public async Task UpdateService(UpdateServiceRequest request)
         {
-            var existingService = await _serviceRepository.Get(serviceId);
+            var existingService = await _serviceRepository.Get(request.Id);
 
-            if (existingService == null)
+            if (existingService == null || existingService.BusinessId != request.BusinessId)
             {
                 throw new KeyNotFoundException("Service not found.");
             }

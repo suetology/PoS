@@ -92,6 +92,9 @@ namespace PoS.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
@@ -102,6 +105,8 @@ namespace PoS.WebApi.Migrations
                         .HasColumnType("VARCHAR(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessId");
 
                     b.ToTable("Customers");
                 });
@@ -114,6 +119,9 @@ namespace PoS.WebApi.Migrations
 
                     b.Property<int>("AmountAvailable")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsPercentage")
                         .HasColumnType("INTEGER");
@@ -132,6 +140,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.ToTable("Discounts");
                 });
 
@@ -139,6 +149,9 @@ namespace PoS.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -164,6 +177,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.HasIndex("ItemGroupId");
 
                     b.ToTable("Items");
@@ -175,6 +190,9 @@ namespace PoS.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
@@ -183,6 +201,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.ToTable("ItemGroups");
                 });
 
@@ -190,6 +210,9 @@ namespace PoS.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Closed")
@@ -227,6 +250,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.HasIndex("DiscountId");
 
                     b.HasIndex("EmployeeId");
@@ -240,6 +265,9 @@ namespace PoS.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ItemId")
@@ -261,6 +289,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.HasIndex("ItemId");
 
                     b.HasIndex("OrderId");
@@ -277,6 +307,9 @@ namespace PoS.WebApi.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
@@ -291,6 +324,8 @@ namespace PoS.WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessId");
 
                     b.HasIndex("OrderId");
 
@@ -324,6 +359,9 @@ namespace PoS.WebApi.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
@@ -334,6 +372,8 @@ namespace PoS.WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessId");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
@@ -348,6 +388,9 @@ namespace PoS.WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("AppointmentTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("CustomerId")
@@ -373,6 +416,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("EmployeeId");
@@ -389,6 +434,9 @@ namespace PoS.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -415,6 +463,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Services");
@@ -424,6 +474,9 @@ namespace PoS.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -445,6 +498,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.ToTable("ServiceCharges");
                 });
 
@@ -452,6 +507,9 @@ namespace PoS.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
@@ -468,6 +526,8 @@ namespace PoS.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessId");
+
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Shifts");
@@ -477,6 +537,9 @@ namespace PoS.WebApi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BusinessId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsPercentage")
@@ -496,6 +559,8 @@ namespace PoS.WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessId");
 
                     b.ToTable("Taxes");
                 });
@@ -597,8 +662,32 @@ namespace PoS.WebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.Customer", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.Discount", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Item", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.ItemGroup", "ItemGroup")
                         .WithMany("Items")
                         .HasForeignKey("ItemGroupId")
@@ -607,8 +696,23 @@ namespace PoS.WebApi.Migrations
                     b.Navigation("ItemGroup");
                 });
 
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.ItemGroup", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Order", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.Discount", "Discount")
                         .WithMany("Orders")
                         .HasForeignKey("DiscountId")
@@ -634,6 +738,12 @@ namespace PoS.WebApi.Migrations
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.OrderItem", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
@@ -653,6 +763,12 @@ namespace PoS.WebApi.Migrations
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Payment", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.Order", "Order")
                         .WithMany("Payments")
                         .HasForeignKey("OrderId")
@@ -664,6 +780,12 @@ namespace PoS.WebApi.Migrations
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Refund", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.Order", "Order")
                         .WithOne("Refund")
                         .HasForeignKey("PoS.WebApi.Domain.Entities.Refund", "OrderId")
@@ -675,6 +797,12 @@ namespace PoS.WebApi.Migrations
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Reservation", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.Customer", "Customer")
                         .WithMany("Reservations")
                         .HasForeignKey("CustomerId")
@@ -710,6 +838,12 @@ namespace PoS.WebApi.Migrations
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Service", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.User", "Employee")
                         .WithMany("Services")
                         .HasForeignKey("EmployeeId")
@@ -719,8 +853,23 @@ namespace PoS.WebApi.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.ServiceCharge", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.Shift", b =>
                 {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PoS.WebApi.Domain.Entities.User", "Employee")
                         .WithMany("Shifts")
                         .HasForeignKey("EmployeeId")
@@ -728,6 +877,15 @@ namespace PoS.WebApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("PoS.WebApi.Domain.Entities.Tax", b =>
+                {
+                    b.HasOne("PoS.WebApi.Domain.Entities.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PoS.WebApi.Domain.Entities.User", b =>

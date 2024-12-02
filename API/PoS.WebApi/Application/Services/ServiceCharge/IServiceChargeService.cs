@@ -6,7 +6,7 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
 {
     public interface IServiceChargeService
     {
-        Task<GetAllServiceChargesResponse> GetServiceCharges();
+        Task<GetAllServiceChargesResponse> GetServiceCharges(GetAllServiceChargesRequest request);
         Task CreateServiceCharge(CreateServiceChargeRequest request);
     }
 }

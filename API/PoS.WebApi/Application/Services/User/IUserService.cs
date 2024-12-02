@@ -6,7 +6,7 @@ using Domain.Entities;
 public interface IUserService
 {
     Task CreateUser(CreateUserRequest request);
-    Task<GetAllUsersResponse> GetAllUsers(QueryParameters parameters);
-    Task<GetUserResponse> GetUser(Guid id);
+    Task<GetAllUsersResponse> GetAllUsers(GetAllUsersRequest request);
+    Task<GetUserResponse> GetUser(GetUserRequest request);
     Task<GetAvailableRolesResponse> GetAvailableRoles();
 }

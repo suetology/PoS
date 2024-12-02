@@ -4,6 +4,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class Discount : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public string Name { get; set; }
     
     public decimal Value { get; set; }

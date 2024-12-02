@@ -25,6 +25,7 @@ namespace PoS.WebApi.Application.Services.Item
         {
             var item = new Domain.Entities.Item
             {
+                BusinessId = request.BusinessId,
                 Name = request.Name,
                 Description = request.Description,
                 Image = new byte[0],
@@ -44,10 +45,11 @@ namespace PoS.WebApi.Application.Services.Item
             await _unitOfWork.SaveChanges();
         }
 
-        public async Task<GetAllItemsResponse> GetAllItems(QueryParameters parameters)
+        public async Task<GetAllItemsResponse> GetAllItems(GetAllItemsRequest request)
         {
-            var items = await _itemRepository.GetAllItemsByFiltering(parameters);
+            var items = await _itemRepository.GetAllItemsByFiltering(request.QueryParameters);
             var itemDtos = items
+                .Where(i => i.BusinessId == request.BusinessId)
                 .Select(i => new ItemDto
                 {
                     Name = i.Name,
@@ -63,10 +65,15 @@ namespace PoS.WebApi.Application.Services.Item
             };
         }
 
-        public async Task<GetItemResponse> GetItem(Guid itemId)
+        public async Task<GetItemResponse> GetItem(GetItemRequest request)
         {
-            var item = await _itemRepository.Get(itemId);
+            var item = await _itemRepository.Get(request.ItemId);
 
+            if (item?.BusinessId != request.BusinessId)
+            {
+                return null;
+            }
+            
             return new GetItemResponse
             {
                 Item = new ItemDto

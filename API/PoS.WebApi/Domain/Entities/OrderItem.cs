@@ -4,6 +4,8 @@ namespace PoS.WebApi.Domain.Entities;
 
 public class OrderItem : Entity
 {
+    public Guid BusinessId { get; set; }
+    
     public string Name { get; set; } // nelabai reikia cj, nes is product Name ateina
     
     public int Quantity { get; set; }

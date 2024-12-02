@@ -4,13 +4,12 @@ using System.Security.Claims;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Auth.Contracts;
 using PoS.WebApi.Infrastructure.Security;
+using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Application.Services.Auth;
 
 public class AuthService : IAuthService
 {
-    private const string RoleClaimName = "role"; 
-    
     private readonly IJwtProvider _jwtProvider;
     private readonly IUserRepository _userRepository;
 
@@ -36,7 +35,8 @@ public class AuthService : IAuthService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, user.Name),
-            new Claim(RoleClaimName, user.Role.ToString())
+            new Claim(ClaimsPrincipalExtensions.RoleClaimName, user.Role.ToString()),
+            new Claim(ClaimsPrincipalExtensions.BusinessIdClaimName, user.BusinessId.ToString())
         };
 
         var accessToken = await _jwtProvider.GenerateAccessToken(claims);

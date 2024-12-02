@@ -15,10 +15,11 @@ public class ItemGroupService : IItemGroupService
         _itemGroupRepository = itemGroupRepository;
         _unitOfWork = unitOfWork;
     }
-    public async Task<GetAllItemGroupsResponse> GetAllItemGroupsAsync(QueryParameters parameters)
+    public async Task<GetAllItemGroupsResponse> GetAllItemGroupsAsync(GetAllItemGroupsRequest request)
     {
-        var itemGroups = await _itemGroupRepository.GetAllGroupsByFiltering(parameters);
+        var itemGroups = await _itemGroupRepository.GetAllGroupsByFiltering(request.QueryParameters);
         var itemGroupDtos = itemGroups
+            .Where(i => i.BusinessId == request.BusinessId)
             .Select(i => new ItemGroupDto
             {
                 Name = i.Name,
@@ -31,10 +32,15 @@ public class ItemGroupService : IItemGroupService
         };
     }
 
-    public async Task<GetItemGroupResponse> GetItemGroupByIdAsync(Guid id)
+    public async Task<GetItemGroupResponse> GetItemGroupByIdAsync(GetItemGroupRequest request)
     {
-        var itemGroup = await _itemGroupRepository.Get(id);
+        var itemGroup = await _itemGroupRepository.Get(request.Id);
 
+        if (itemGroup.BusinessId != request.BusinessId)
+        {
+            return null;
+        }
+        
         return new GetItemGroupResponse
         {
             ItemGroup = new ItemGroupDto
@@ -49,6 +55,7 @@ public class ItemGroupService : IItemGroupService
     {
         var itemGroup = new ItemGroup
         {
+            BusinessId = request.BusinessId,
             Name = request.Name,
             Description = request.Description
         };
@@ -57,10 +64,11 @@ public class ItemGroupService : IItemGroupService
         await _unitOfWork.SaveChanges();
     }
 
-    public async Task UpdateItemGroup(Guid id, UpdateItemGroupRequest request)
+    public async Task UpdateItemGroup(UpdateItemGroupRequest request)
     {
-        var existingItemGroup = await _itemGroupRepository.Get(id);
-        if (existingItemGroup == null)
+        var existingItemGroup = await _itemGroupRepository.Get(request.Id);
+        
+        if (existingItemGroup == null || existingItemGroup.BusinessId != request.BusinessId)
         {
             throw new KeyNotFoundException("ItemGroup not found.");
         }

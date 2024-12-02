@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Reservation;
 using PoS.WebApi.Application.Services.Reservation.Contracts;
 using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Presentation.Controllers;
 
@@ -21,18 +23,41 @@ public class ReservationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateReservation([FromBody] CreateReservationRequest request)
     {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.BusinessId = businessId.Value;
+        
         await _reservationService.CreateReservation(request);
         return NoContent();
     }
 
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllReservations()
     {
-        var response = await _reservationService.GetAllReservations();
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetAllReservationsRequest
+        {
+            BusinessId = businessId.Value
+        };
+        
+        var response = await _reservationService.GetAllReservations(request);
         return Ok(response);
     }
     
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -42,8 +67,21 @@ public class ReservationController : ControllerBase
         {
             return BadRequest(new { message = "Invalid reservation ID" });
         }
+        
+        var businessId = User.GetBusinessId();
 
-        var response = await _reservationService.GetReservationById(id);
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetReservationRequest
+        {
+            Id = id,
+            BusinessId = businessId.Value
+        };
+
+        var response = await _reservationService.GetReservationById(request);
         if (response == null)
         {
             return NotFound(new { message = "Reservation not found" });
@@ -52,6 +90,7 @@ public class ReservationController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPatch("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -61,8 +100,18 @@ public class ReservationController : ControllerBase
         {
             return BadRequest(new { message = "Invalid reservation ID" });
         }
+        
+        var businessId = User.GetBusinessId();
 
-        await _reservationService.UpdateReservation(id, request);
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.Id = id;
+        request.BusinessId = businessId.Value;
+
+        await _reservationService.UpdateReservation(request);
         
         return NoContent();
     }

@@ -6,7 +6,7 @@ using PoS.WebApi.Application.Services.Business.Contracts;
 public interface IBusinessService
 {
     Task<GetAllBusinessesResponse> GetAllBusiness();
-    Task<GetBusinessResponse> GetBusiness(Guid businessId);
+    Task<GetBusinessResponse> GetBusiness(GetBusinessRequest request);
     Task CreateBusiness(CreateBusinessRequest request);
-    Task<bool> UpdateBusiness(Guid id, UpdateBusinessRequest request);
+    Task<bool> UpdateBusiness(UpdateBusinessRequest request);
 }

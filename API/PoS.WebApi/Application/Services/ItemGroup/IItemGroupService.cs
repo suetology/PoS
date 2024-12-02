@@ -5,8 +5,8 @@ using Domain.Entities;
 
 public interface IItemGroupService
 {
-    Task<GetAllItemGroupsResponse> GetAllItemGroupsAsync(QueryParameters parameters);
-    Task<GetItemGroupResponse> GetItemGroupByIdAsync(Guid id);
+    Task<GetAllItemGroupsResponse> GetAllItemGroupsAsync(GetAllItemGroupsRequest request);
+    Task<GetItemGroupResponse> GetItemGroupByIdAsync(GetItemGroupRequest request);
     Task CreateItemGroup(CreateItemGroupRequest request);
-    Task UpdateItemGroup(Guid id, UpdateItemGroupRequest request);
+    Task UpdateItemGroup(UpdateItemGroupRequest request);
 }

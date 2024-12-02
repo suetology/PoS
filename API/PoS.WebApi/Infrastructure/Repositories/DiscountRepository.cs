@@ -19,30 +19,15 @@ public class DiscountRepository : IDiscountRepository
         await _dbContext.Discounts.AddAsync(discount);
     }
 
-    public async Task<DiscountWithGroupsDto> GetDto(Guid id)
+    public async Task<IEnumerable<Discount>> GetAll()
     {
-        var discount = await _dbContext.Discounts
-        .Where(d => d.Id == id)
-        .Include(d => d.ItemGroups)
-        .Select(d => new DiscountWithGroupsDto
-        {
-            DiscountId = d.Id,
-            DiscountName = d.Name,
-            Value = d.Value,
-            IsPercentage = d.IsPercentage,
-            AmountAvailable = d.AmountAvailable,
-            ValidFrom = d.ValidFrom,
-            ValidTo = d.ValidTo,
-            //ItemGroups = d.ItemGroups.Select(i => new ItemGroupDto)
-        })
-        .FirstOrDefaultAsync();
-
-         return discount;
+        return await _dbContext.Discounts.ToListAsync();
     }
-
-    public async Task<IEnumerable<DiscountWithGroupsDto>> GetAll(QueryParameters parameters)
+    
+    public async Task<IEnumerable<Discount>> GetAll(QueryParameters parameters)
     {
         var discountsQuery = _dbContext.Discounts
+            .Include(d => d.Items)
             .Include(d => d.ItemGroups)
             .AsQueryable();
 
@@ -71,23 +56,8 @@ public class DiscountRepository : IDiscountRepository
         discountsQuery = discountsQuery
             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
             .Take(parameters.PageSize);
-
-        // Project into DTO
-        var discountsWithGroups = await discountsQuery
-            .Select(d => new DiscountWithGroupsDto
-            {
-                DiscountId = d.Id,
-                DiscountName = d.Name,
-                Value = d.Value,
-                IsPercentage = d.IsPercentage,
-                AmountAvailable = d.AmountAvailable,
-                ValidFrom = d.ValidFrom,
-                ValidTo = d.ValidTo,
-                //ItemGroups = 
-            })
-            .ToListAsync();
-
-        return discountsWithGroups;
+        
+        return discountsQuery;
     }
 
     public async Task Delete(Guid discountId)
@@ -102,11 +72,6 @@ public class DiscountRepository : IDiscountRepository
     public async Task<Discount> Get(Guid id)
     {
         return await _dbContext.Discounts.FindAsync(id);
-    }
-
-    public async Task<IEnumerable<Discount>> GetAll()
-    {
-        return await _dbContext.Discounts.Include(d => d.ItemGroups).ToListAsync();
     }
 
     public Task Update(Discount entity)
