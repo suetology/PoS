@@ -83,7 +83,7 @@ namespace PoS.WebApi.Presentation.Controllers
             
             await _serviceService.CreateService(request);
             
-            return CreatedAtAction(nameof(GetService), request);
+            return CreatedAtAction(nameof(CreateService), request);
         }
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
