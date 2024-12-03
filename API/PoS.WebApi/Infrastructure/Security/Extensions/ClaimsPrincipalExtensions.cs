@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
 using PoS.WebApi.Domain.Enums;
 
 namespace PoS.WebApi.Infrastructure.Security.Extensions;
@@ -18,6 +19,18 @@ public static class ClaimsPrincipalExtensions
         }
 
         return businessId;
+    }
+
+    public static Guid? GetEmployeeId(this ClaimsPrincipal user)
+    {
+        var employeeIdClaim = user?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+
+        if (employeeIdClaim == null || !Guid.TryParse(employeeIdClaim.Value, out var employeeId))
+        {
+            return null;
+        }
+
+        return employeeId;
     }
 
     public static Role? GetRole(this ClaimsPrincipal user)

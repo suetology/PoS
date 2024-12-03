@@ -1,4 +1,5 @@
 
+using PoS.WebApi.Application.Services.Reservation;
 using PoS.WebApi.Domain.Enums;
 
 namespace PoS.WebApi.Application.Services.Order;
@@ -10,12 +11,13 @@ using PoS.WebApi.Domain.Common;
 
 public class OrderService: IOrderService
 {
+    private readonly IReservationService _reservationService;
     private readonly IOrderRepository _orderRepository;
-
     private readonly IUnitOfWork _unitOfWork;
 
-    public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
+    public OrderService(IReservationService reservationService, IOrderRepository orderRepository, IUnitOfWork unitOfWork)
     {
+        _reservationService = reservationService;
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
     }
@@ -36,11 +38,19 @@ public class OrderService: IOrderService
                 {
                     ItemId = o.ItemId,
                     Quantity = o.Quantity
-                })
+                }),
         };
         
         await _orderRepository.Create(order);
         await _unitOfWork.SaveChanges();
+        
+        if (request.Reservation != null)
+        {
+            request.Reservation.BusinessId = order.BusinessId;
+            request.Reservation.OrderId = order.Id;
+            
+            await _reservationService.CreateReservation(request.Reservation);
+        }
     }
 
     public async Task<GetAllOrdersResponse> GetAllOrders(GetAllOrdersRequest request)

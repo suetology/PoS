@@ -38,9 +38,9 @@ public class ReservationService : IReservationService
             Status = AppointmentStatus.Booked,
             ReservationTime = DateTime.UtcNow,
             AppointmentTime = request.AppointmentTime,
+            ServiceId = request.ServiceId,
             CustomerId = request.CustomerId,
-            OrderId = request.OrderId,
-            EmployeeId = request.EmployeeId
+            OrderId = request.OrderId
         };
         
         await _reservationRepository.Create(reservation);

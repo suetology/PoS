@@ -31,7 +31,15 @@ public class OrderController : ControllerBase
             return Unauthorized("Failed to retrieve Business ID");
         }
 
+        var employeeId = User.GetEmployeeId();
+
+        if (employeeId == null)
+        {
+            return Unauthorized("Failed to retrieve Employee ID");
+        }
+
         request.BusinessId = businessId.Value;
+        request.EmployeeId = employeeId.Value;
         
         await _orderService.CreateOrder(request);
 
