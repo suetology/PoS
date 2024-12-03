@@ -2,6 +2,8 @@
 using PoS.WebApi.Domain.Entities;
 public class DiscountDto
 {
+    public Guid Id { get; set; }
+    
     public string Name { get; set; }
 
     public decimal Value { get; set; }

@@ -25,6 +25,7 @@ using PoS.WebApi.Domain.Common;
             {
                 Service = new ServiceDto
                 {
+                    Id = service.Id,
                     Name = service.Name,
                     Description = service.Description,
                     Price = service.Price,
@@ -42,6 +43,7 @@ using PoS.WebApi.Domain.Common;
                 .Where(s => s.BusinessId == request.BusinessId)
                 .Select(s => new ServiceDto
                 {
+                    Id = s.Id,
                     Name = s.Name,
                     Description = s.Description,
                     Price = s.Price,

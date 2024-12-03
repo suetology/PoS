@@ -22,6 +22,7 @@ public class ItemGroupService : IItemGroupService
             .Where(i => i.BusinessId == request.BusinessId)
             .Select(i => new ItemGroupDto
             {
+                Id = i.Id,
                 Name = i.Name,
                 Description = i.Description
             });
@@ -45,6 +46,7 @@ public class ItemGroupService : IItemGroupService
         {
             ItemGroup = new ItemGroupDto
             {
+                Id = itemGroup.Id,
                 Name = itemGroup.Name,
                 Description = itemGroup.Description
             }

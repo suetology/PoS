@@ -3,6 +3,8 @@ using PoS.WebApi.Domain.Entities;
 
 public class ShiftDto
 {
+    public Guid Id { get; set; }
+    
     public DateTime Date { get; set; }
 
     public string StartTime { get; set; }

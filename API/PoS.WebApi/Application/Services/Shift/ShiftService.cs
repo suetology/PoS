@@ -29,6 +29,7 @@ namespace PoS.WebApi.Application.Services.Shift
             {
                 Shift = new ShiftDto
                 {
+                    Id = shift.Id,
                     Date = shift.Date,
                     StartTime = shift.StartTime.ToString(),
                     EndTime = shift.EndTime.ToString(),
@@ -59,6 +60,7 @@ namespace PoS.WebApi.Application.Services.Shift
                 .Where(s => s.BusinessId == request.BusinessId)
                 .Select(s => new ShiftDto
                 {
+                    Id = s.Id,
                     Date = s.Date,
                     StartTime = s.StartTime.ToString(),
                     EndTime = s.EndTime.ToString(),

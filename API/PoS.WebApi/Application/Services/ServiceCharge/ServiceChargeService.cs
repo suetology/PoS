@@ -23,6 +23,7 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
                 .Where(s => s.BusinessId == request.BusinessId)
                 .Select(s => new ServiceChargeDto
                 {
+                    Id = s.Id,
                     Name = s.Name,
                     Description = s.Description,
                     Value = s.Value,

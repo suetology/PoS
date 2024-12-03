@@ -52,6 +52,7 @@ namespace PoS.WebApi.Application.Services.Item
                 .Where(i => i.BusinessId == request.BusinessId)
                 .Select(i => new ItemDto
                 {
+                    Id = i.Id,
                     Name = i.Name,
                     Description = i.Description,
                     Price = i.Price,
@@ -78,6 +79,7 @@ namespace PoS.WebApi.Application.Services.Item
             {
                 Item = new ItemDto
                 {
+                    Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
                     Price = item.Price,

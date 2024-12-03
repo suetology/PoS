@@ -39,6 +39,7 @@ public class BusinessService : IBusinessService
         var businessDtos = businesses
             .Select(b => new BusinessDto
             {
+                Id = b.Id,
                 Name = b.Name,
                 Address = b.Address,
                 Email = b.Email,
@@ -58,7 +59,8 @@ public class BusinessService : IBusinessService
         return new GetBusinessResponse
         {
             Business = new BusinessDto
-            {                
+            {     
+                Id = business.Id,
                 Name = business.Name,
                 Address = business.Address,
                 Email = business.Email,

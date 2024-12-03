@@ -49,6 +49,7 @@ public class UserService : IUserService
             .Where(u => u.BusinessId == request.BusinessId)
             .Select(u => new UserDto
             {
+                Id = u.Id,
                 Username = u.Username,
                 PasswordHash = u.PasswordHash,
                 Name = u.Name,
@@ -79,6 +80,7 @@ public class UserService : IUserService
         {
             User = new UserDto
             {
+                Id = user.Id,
                 Username = user.Username,
                 PasswordHash = user.PasswordHash,
                 Name = user.Name,

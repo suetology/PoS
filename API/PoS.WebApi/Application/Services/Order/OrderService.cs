@@ -50,6 +50,7 @@ public class OrderService: IOrderService
             .Where(o => o.BusinessId == request.BusinessId)
             .Select(o => new OrderDto
             {
+                Id = o.Id,
                 Status = o.Status,
                 Created = o.Created,
                 Closed = o.Closed,
@@ -82,6 +83,7 @@ public class OrderService: IOrderService
         {
             Order = new OrderDto
             {
+                Id = order.Id,
                 Status = order.Status,
                 Created = order.Created,
                 Closed = order.Closed,

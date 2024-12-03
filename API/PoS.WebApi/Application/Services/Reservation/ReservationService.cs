@@ -54,6 +54,7 @@ public class ReservationService : IReservationService
             .Where(r => r.BusinessId == request.BusinessId)
             .Select(r => new ReservationDto
             {
+                Id = r.Id,
                 NotificationSent = r.NotificationSent,
                 Status = r.Status,
                 ReservationTime = r.ReservationTime,
@@ -81,6 +82,7 @@ public class ReservationService : IReservationService
         {
             Reservation = new ReservationDto
             {
+                Id = reservation.Id,
                 NotificationSent = reservation.NotificationSent,
                 Status = reservation.Status,
                 ReservationTime = reservation.ReservationTime,

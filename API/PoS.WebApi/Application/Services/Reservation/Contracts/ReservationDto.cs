@@ -5,6 +5,8 @@ using PoS.WebApi.Domain.Enums;
 
 public class ReservationDto
 {
+    public Guid Id { get; set; }
+    
     public bool NotificationSent { get; set; }
     
     public AppointmentStatus Status { get; set; }

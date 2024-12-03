@@ -29,6 +29,7 @@ public class CustomerService : ICustomerService
         {
             Customer = new CustomerDto
             {
+                Id = customer.Id,
                 Name = customer.Name,
                 Email = customer.Email,
                 PhoneNumber = customer.PhoneNumber
@@ -57,6 +58,7 @@ public class CustomerService : ICustomerService
             .Where(c => c.BusinessId == request.BusinessId)
             .Select(c => new CustomerDto
             {
+                Id = c.Id,
                 Name = c.Name,
                 Email = c.Email,
                 PhoneNumber = c.PhoneNumber

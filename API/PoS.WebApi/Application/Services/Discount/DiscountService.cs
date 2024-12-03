@@ -86,6 +86,7 @@ public class DiscountService : IDiscountService
             .Where(d => d.BusinessId == request.BusinessId)
             .Select(d => new DiscountDto
             {
+                Id = d.Id,
                 Name = d.Name,
                 Value = d.Value,
                 IsPercentage = d.IsPercentage,
@@ -125,6 +126,7 @@ public class DiscountService : IDiscountService
         {
             Discount = new DiscountDto
             {
+                Id = discount.Id,
                 Name = discount.Name,
                 Value = discount.Value,
                 IsPercentage = discount.IsPercentage,
