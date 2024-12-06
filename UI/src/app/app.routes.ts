@@ -10,15 +10,17 @@ import { TaxComponent } from './Tax/tax/tax.component';
 import { OrdersComponent } from './Orders/orders/orders.component';
 import { LoginComponent } from './login/login.component';
 import { TaxDetailsComponent } from './Tax/tax-details/tax-details.component';
+import { DiscountPageComponent } from './discount/discount-page/discount-page.component';
+import { TaxPageComponent } from './Tax/tax-page/tax-page.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'business', component: BusinessComponent },
-    { path: 'discount', component: DiscountComponent },
+    { path: 'discount', component: DiscountPageComponent },
     { path: 'inventory/item', component: ItemsComponent },
     { path: 'services', component: ServiceComponent },
     { path: 'shifts', component: ShiftComponent },
-    { path: 'tax', component: TaxComponent,
+    { path: 'tax', component: TaxPageComponent,
         children: [
             { path: ':id', component: TaxDetailsComponent },
         ]

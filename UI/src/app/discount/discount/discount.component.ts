@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Discount } from '../../types';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-//import { AddDiscountComponent } from '../add-discount/add-discount.component';
 
 @Component({
   selector: 'app-discount',

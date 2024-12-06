@@ -24,7 +24,14 @@ export interface RefreshAccessTokenResponse {
 export interface TaxResponse {
     taxes: Tax[];
 }  
-  
+
+export interface TaxRequest {
+    name: string;
+    type: TaxType;
+    value: number;
+    isPercentage: boolean;
+}
+
 export interface Tax {
     id: string;
     name: string;
