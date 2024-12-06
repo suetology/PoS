@@ -18,6 +18,8 @@ export class TaxService {
   }
   
   getTax(id: string): Observable<Tax>{
-    return this.httpClient.get<Tax>(`${environment.API_URL}/tax/${id}`)
+    return this.httpClient.get<{tax: Tax}>(`${environment.API_URL}/tax/${id}`).pipe(
+      map((response) => response.tax)
+    );
   }
 }

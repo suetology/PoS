@@ -8,6 +8,7 @@ import { ServiceComponent } from './service/service/service.component';
 import { ShiftComponent } from './shift/shift/shift.component';
 import { TaxComponent } from './Tax/tax/tax.component';
 import { OrdersComponent } from './Orders/orders/orders.component';
+import { TaxDetailsComponent } from './Tax/tax-details/tax-details.component';
 
 export const routes: Routes = [
     { path: 'business', component: BusinessComponent },
@@ -15,7 +16,11 @@ export const routes: Routes = [
     { path: 'inventory/item', component: ItemsComponent },
     { path: 'services', component: ServiceComponent },
     { path: 'shifts', component: ShiftComponent },
-    { path: 'tax', component: TaxComponent },
+    { path: 'tax', component: TaxComponent,
+        children: [
+            { path: ':id', component: TaxDetailsComponent },
+        ]
+     },
     { path: 'employees', component: EmployeesComponent },
     { path: 'reservations', component: ReservationsComponent },
     { path: 'orders', component: OrdersComponent }
