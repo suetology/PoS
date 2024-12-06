@@ -4,12 +4,12 @@ import { Observable } from 'rxjs';
 import { Discount } from '../../types';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AddDiscountComponent } from '../add-discount/add-discount.component';
+//import { AddDiscountComponent } from '../add-discount/add-discount.component';
 
 @Component({
   selector: 'app-discount',
   standalone: true,
-  imports: [CommonModule, AsyncPipe, DatePipe, RouterModule, AddDiscountComponent],
+  imports: [CommonModule, AsyncPipe, DatePipe, RouterModule],
   templateUrl: './discount.component.html',
   styleUrl: './discount.component.css'
 })
