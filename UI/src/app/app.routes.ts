@@ -8,9 +8,11 @@ import { ServiceComponent } from './service/service/service.component';
 import { ShiftComponent } from './shift/shift/shift.component';
 import { TaxComponent } from './Tax/tax/tax.component';
 import { OrdersComponent } from './Orders/orders/orders.component';
+import { LoginComponent } from './login/login.component';
 import { TaxDetailsComponent } from './Tax/tax-details/tax-details.component';
 
 export const routes: Routes = [
+    { path: 'login', component: LoginComponent },
     { path: 'business', component: BusinessComponent },
     { path: 'discount', component: DiscountComponent },
     { path: 'inventory/item', component: ItemsComponent },

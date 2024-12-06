@@ -13,7 +13,7 @@ export class BusinessService {
 
   getBusiness(): Observable<Business[]>{
     return this.http.get<BusinessResponse>(`${environment.API_URL}/business`).pipe(
-        map(response => response.business)
+        map(response => response.businesses)
       );
   }
 }

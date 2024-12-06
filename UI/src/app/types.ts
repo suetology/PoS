@@ -1,3 +1,26 @@
+export interface LoginRequest {
+    username: string,
+    password: string
+}
+
+export interface LoginResponse { 
+    accessToken: string, 
+    refreshToken: string
+}
+
+export interface LogoutRequest {
+    refreshToken: string
+}
+
+export interface RefreshAccessTokenRequest {
+    refreshToken: string
+}
+
+export interface RefreshAccessTokenResponse {
+    refreshToken: string,
+    accessToken: string
+}
+
 export interface TaxResponse {
     taxes: Tax[];
 }  
@@ -18,7 +41,7 @@ export enum TaxType {
 }
 
 export interface BusinessResponse {
-    business: Business[];
+    businesses: Business[];
 }
 
 export interface Business {
