@@ -1,0 +1,26 @@
+<div class="mx-auto px-4 lg:px-12 m-4">
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+
+        <form #taxForm="ngForm" (ngSubmit)="onTaxCreate(taxForm.value)">
+
+        <label for="taxName">Tax name</label>
+        <input type="text" id="taxName" name="name" ngModel placeholder="Enter tax name" required>
+
+        <label for="taxType">Type</label>
+        <select id="taxType" name="type" ngModel required>
+            <option [value]="1">VAT</option>
+            <option [value]="2">Food Tax</option>
+            <option [value]="3">Alcohol Tax</option>
+        </select>
+    
+        <label for="taxValue">Value</label>
+        <input type="number" id="taxValue" name="value" ngModel placeholder="Enter tax value" required>
+
+        <label for="taxIsPercentage">isPercentage</label>
+        <input type="checkbox" id="taxIsPercentage" ngModel>
+    
+        <button type="submit" class="text-white bg-cyan-400 hover:bg-cyan-500 focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+            + Add</button>
+        </form>
+    </div>
+</div>

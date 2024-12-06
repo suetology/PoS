@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Tax, TaxResponse } from '../types';
+import { Tax, TaxRequest, TaxResponse } from '../types';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -9,17 +9,21 @@ import { map, Observable } from 'rxjs';
 })
 export class TaxService {
 
-  constructor(private httpClient : HttpClient) { }
+  constructor(private http : HttpClient) { }
 
   getTaxes(): Observable<Tax[]> {
-    return this.httpClient.get<TaxResponse>(`${environment.API_URL}/tax`).pipe(
+    return this.http.get<TaxResponse>(`${environment.API_URL}/tax`).pipe(
       map(response => response.taxes)
     );
   }
   
   getTax(id: string): Observable<Tax>{
-    return this.httpClient.get<{tax: Tax}>(`${environment.API_URL}/tax/${id}`).pipe(
+    return this.http.get<{tax: Tax}>(`${environment.API_URL}/tax/${id}`).pipe(
       map((response) => response.tax)
     );
   }
+
+  addTax(taxRequest: TaxRequest): Observable<Tax[]> {
+    return this.http.post<Tax[]>(`${environment.API_URL}/tax`, taxRequest);
+    }
 }
