@@ -29,7 +29,6 @@ export interface TaxRequest {
     name: string;
     type: TaxType;
     value: number;
-    isPercentage: boolean;
 }
 
 export interface Tax {
@@ -43,8 +42,8 @@ export interface Tax {
 
 export enum TaxType {
     VAT = 1,
-    FoodTax,
-    AlcoholTax
+    FoodTax = 2,
+    AlcoholTax = 3
 }
 
 export interface BusinessResponse {

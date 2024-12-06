@@ -1,34 +1,39 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { TaxRequest } from '../../types';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaxService } from '../../services/tax.service';
+import { HttpClient } from '@angular/common/http';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-tax',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule, AsyncPipe],
   templateUrl: './add-tax.component.html',
   styleUrl: './add-tax.component.css'
 })
-export class AddTaxComponent {
+export class AddTaxComponent{
 
-  constructor(private taxService: TaxService) {}
-  
-  onTaxCreate(tax: {name: string, type: string, value: number, isPercentage: boolean}){
-    console.log(tax);
-    const taxRequest: TaxRequest = {
-      name: tax.name,
-      type: +tax.type,
-      value: tax.value,
-      isPercentage: tax.isPercentage
-    };
+  taxForm = new FormGroup({
+    name: new FormControl<string>('', Validators.required),
+    type: new FormControl<string>('', Validators.required),
+    value: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+  });
+
+  constructor(private taxService: TaxService, private http : HttpClient) {}
+
+   onSubmit() {
+    const taxRequest = {
+      name: this.taxForm.value.name || '',
+      type: +this.taxForm.value.type!,
+      value: this.taxForm.value.value ?? 0
+    }
 
     this.taxService.addTax(taxRequest).subscribe({
-      next: (response) => {
-        console.log('Tax created successfully:', response);
+      next: () => {
+        this.taxForm.reset();
       },
       error: (err) => {
-        console.error('Error creating tax:', err);
+        console.error('Error adding tax:', err);
       }
     });
   }

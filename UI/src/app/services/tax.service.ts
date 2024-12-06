@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Tax, TaxRequest, TaxResponse } from '../types';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaxService {
 
+  private taxesUpdated = new BehaviorSubject<void>(undefined);
+  
   constructor(private http : HttpClient) { }
 
   getTaxes(): Observable<Tax[]> {
@@ -23,7 +25,16 @@ export class TaxService {
     );
   }
 
+  getTaxesUpdated(): Observable<void> {
+    return this.taxesUpdated.asObservable();
+  }
+
   addTax(taxRequest: TaxRequest): Observable<Tax[]> {
-    return this.http.post<Tax[]>(`${environment.API_URL}/tax`, taxRequest);
+    return this.http.post<Tax[]>(`${environment.API_URL}/tax`, taxRequest).pipe(
+      map((tax) => {
+        this.taxesUpdated.next();
+        return tax;
+      })
+    );
     }
 }

@@ -18,11 +18,17 @@ export class TaxComponent {
   taxes$: Observable<Tax[]>;
   isModalOpen = false;
   private routeSub: Subscription;
+  private updateSub: Subscription;
 
   constructor(private taxService : TaxService, 
     private router: Router,
     private route: ActivatedRoute){
+
     this.taxes$ = this.taxService.getTaxes();
+
+    this.updateSub = this.taxService.getTaxesUpdated().subscribe(() => {
+    this.taxes$ = this.taxService.getTaxes();
+    });
 
     this.routeSub = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -34,6 +40,9 @@ export class TaxComponent {
   ngOnDestroy() {
     if (this.routeSub) {
       this.routeSub.unsubscribe();
+    }
+    if (this.updateSub) {
+      this.updateSub.unsubscribe();
     }
   }
 
