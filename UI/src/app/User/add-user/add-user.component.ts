@@ -37,8 +37,6 @@ export class AddUserComponent {
       status: +this.userForm.value.status!
     }
 
-    console.log(createUserRequest);
-
     this.userService.addUser(createUserRequest).subscribe({
       next: () => {
         this.userForm.reset();
