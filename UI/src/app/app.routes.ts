@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { ItemsComponent } from './items/items.component';
-import { EmployeesComponent } from './employees/employees.component';
 import { BusinessComponent } from './business/business.component';
 import { DiscountComponent } from './discount/discount/discount.component';
 import { ServiceComponent } from './service/service/service.component';
 import { ShiftComponent } from './shift/shift/shift.component';
-import { TaxComponent } from './Tax/tax/tax.component';
 import { OrdersComponent } from './Orders/orders/orders.component';
 import { LoginComponent } from './login/login.component';
 import { TaxDetailsComponent } from './Tax/tax-details/tax-details.component';
 import { DiscountPageComponent } from './discount/discount-page/discount-page.component';
 import { TaxPageComponent } from './Tax/tax-page/tax-page.component';
+import { UserPageComponent } from './User/user-page/user-page.component';
+import { UserDetailsComponent } from './User/user-details/user-details.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -25,7 +25,11 @@ export const routes: Routes = [
             { path: ':id', component: TaxDetailsComponent },
         ]
      },
-    { path: 'employees', component: EmployeesComponent },
+    { path: 'user', component: UserPageComponent,
+        children: [
+            { path: ':id', component: UserDetailsComponent },
+        ]
+     },
     { path: 'reservations', component: ReservationsComponent },
     { path: 'orders', component: OrdersComponent }
 ];

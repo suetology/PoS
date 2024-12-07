@@ -4,7 +4,6 @@ namespace PoS.WebApi.Application.Services.User;
 
 using Domain.Entities;
 using PoS.WebApi.Application.Repositories;
-using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
 using PoS.WebApi.Domain.Common;
 
@@ -33,7 +32,7 @@ public class UserService : IUserService
             PhoneNumber = request.PhoneNumber,
             Role = request.Role,
             Status = request.Status,
-            DateOfEmployment = request.DateOfEmployment,
+            DateOfEmployment = DateTime.UtcNow,
             BusinessId = request.BusinessId,
             LastUpdated = DateTime.UtcNow
         };

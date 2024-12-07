@@ -22,8 +22,5 @@ public class CreateUserRequest
     
     public Role Role { get; set; }
     
-    public EmployeeStatus Status { get; set; }
-    
-    public DateTime DateOfEmployment { get; set; }
-    
+    public EmployeeStatus Status { get; set; }    
 }

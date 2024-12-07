@@ -59,24 +59,54 @@ export interface Business {
     // employees: Employees;
 }
 
-// export interface Employees {
-//     id: string;
-//     username: string;
-//     passwordHash: string;
-//     name: string;
-//     surname: string;
-//     email: string;
-//     phoneNumber: string;
-//     role: null;
-//     dateOfEmployment: Date;
-//     lastUpdated: Date;
-//     businessId: string;
-//     business: Business;
-//     shifts: null;
-//     services: null;
-//     reservations: null;
-//     orders: null;
-// }
+export interface CreateUserRequest {
+    username: string,
+    passwordHash: string,
+    name: string,
+    surname: string,
+    email: string,
+    phoneNumber: string,
+    role: Role,
+    status: EmployeeStatus
+}
+
+export interface GetAllUsersRequest {
+
+}
+
+export interface GetAllUsersResponse {
+    users: User[]
+}
+
+export interface User {
+    id: string, 
+    username: string,
+    passwordHash: string,
+    name: string,
+    surname: string,
+    email: string,
+    phoneNumber: string,
+    role: Role,
+    status: EmployeeStatus,
+    dateOfEmployment: string
+}
+
+export enum Role {
+    SuperAdmin = 'SuperAdmin',
+    BusinessOwner = 'BusinessOwner',
+    Employee = 'Employee'
+}
+
+export enum EmployeeStatus {
+    Active = 1,
+    Left,
+    Fired,
+    UnpaidLeave,
+    PaidLeave,
+    SickLeave,
+    ChildcareLeave,
+    NotEmployee
+}
 
 export interface Item {
     id: string;
