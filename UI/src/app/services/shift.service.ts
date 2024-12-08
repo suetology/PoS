@@ -17,4 +17,8 @@ export class ShiftService {
       })
     );
   }
+
+  deleteShift(id: string) {
+    return this.http.delete(`${environment.API_URL}/shifts/${id}`);
+  }
 }
