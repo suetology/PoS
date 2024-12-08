@@ -3,6 +3,6 @@ input, select {
   }
 
 label {
-    @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4;
+    @apply block mb-2 text-sm font-medium text-gray-900;
 }
   
