@@ -21,7 +21,7 @@ export class AddTaxComponent{
 
   constructor(private taxService: TaxService, private http : HttpClient) {}
 
-   onSubmit() {
+  onSubmit() {
     const taxRequest = {
       name: this.taxForm.value.name || '',
       type: +this.taxForm.value.type!,

@@ -11,13 +11,19 @@ import { DiscountPageComponent } from './discount/discount-page/discount-page.co
 import { TaxPageComponent } from './Tax/tax-page/tax-page.component';
 import { UserPageComponent } from './User/user-page/user-page.component';
 import { UserDetailsComponent } from './User/user-details/user-details.component';
+import { ServicePageComponent } from './service/service-page/service-page.component';
+import { ServiceDetailsComponent } from './service/service-details/service-details.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'business', component: BusinessComponent },
     { path: 'discount', component: DiscountPageComponent },
     { path: 'inventory/item', component: ItemsComponent },
-    { path: 'services', component: ServiceComponent },
+    { path: 'services', component: ServicePageComponent,
+        children: [
+            { path: ':id', component: ServiceDetailsComponent },
+        ]
+     },
     { path: 'tax', component: TaxPageComponent,
         children: [
             { path: ':id', component: TaxDetailsComponent },
