@@ -29,6 +29,7 @@ export interface TaxRequest {
     name: string;
     type: TaxType;
     value: number;
+    isPercentage: boolean;
 }
 
 export interface Tax {

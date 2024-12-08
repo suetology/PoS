@@ -17,6 +17,7 @@ export class AddTaxComponent{
     name: new FormControl<string>('', Validators.required),
     type: new FormControl<string>('', Validators.required),
     value: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    isPercentage: new FormControl<boolean>(false, Validators.required)
   });
 
   constructor(private taxService: TaxService, private http : HttpClient) {}
@@ -25,7 +26,8 @@ export class AddTaxComponent{
     const taxRequest = {
       name: this.taxForm.value.name || '',
       type: +this.taxForm.value.type!,
-      value: this.taxForm.value.value ?? 0
+      value: this.taxForm.value.value ?? 0,
+      isPercentage: this.taxForm.value.isPercentage ?? false
     }
 
     this.taxService.addTax(taxRequest).subscribe({
