@@ -55,6 +55,7 @@
           <th>Date</th>
           <th>Start Time</th>
           <th>End Time</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -62,6 +63,8 @@
             <td>{{ shift.date }}</td>
             <td>{{ shift.startTime }}</td>
             <td>{{ shift.endTime }}</td>
+            <button type="button" class="hover:text-cyan-600" (click)="onDelete(shift.id)"
+              > Delete </button>
           </tr>
       </tbody>
     </table>
