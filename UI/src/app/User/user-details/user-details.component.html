@@ -1,5 +1,5 @@
-<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+    <h3 class="text-xl font-semibold text-gray-900">
       {{ user?.username }}
     </h3>
     <button
@@ -48,20 +48,20 @@
   </div>
   
   <div class="p-4 md:p-5 space-y-4">
-    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Shifts</h4>
-    <table class="min-w-full bg-white border dark:bg-gray-800 dark:border-gray-700">
-      <thead class="bg-gray-200 dark:bg-gray-700">
+    <h4 class="text-lg font-semibold text-gray-900">Shifts</h4>
+    <table class="min-w-full bg-white border">
+      <thead class="bg-gray-200">
         <tr>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-900 dark:text-white">Date</th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-900 dark:text-white">Start Time</th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-900 dark:text-white">End Time</th>
+          <th>Date</th>
+          <th>Start Time</th>
+          <th>End Time</th>
         </tr>
       </thead>
       <tbody>
           <tr *ngFor="let shift of user?.shifts">
-            <td class="px-4 py-2 text-gray-900 dark:text-gray-300">{{ shift.date }}</td>
-            <td class="px-4 py-2 text-gray-900 dark:text-gray-300">{{ shift.startTime }}</td>
-            <td class="px-4 py-2 text-gray-900 dark:text-gray-300">{{ shift.endTime }}</td>
+            <td>{{ shift.date }}</td>
+            <td>{{ shift.startTime }}</td>
+            <td>{{ shift.endTime }}</td>
           </tr>
       </tbody>
     </table>
@@ -74,7 +74,7 @@
         id="date" 
         name="date" 
         formControlName="date"
-        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       >
     
       <label for="startTime">Start Time</label>
@@ -83,7 +83,7 @@
         id="startTime" 
         name="startTime" 
         formControlName="startTime"
-        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       >
     
       <label for="endTime">End Time</label>
@@ -92,12 +92,12 @@
         id="endTime" 
         name="endTime" 
         formControlName="endTime"
-        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+        class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       >
     
       <button
         type="submit"
-        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        class="mt-4 px-4 py-2 bg-cyan-400 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
       >
         Add Shift
       </button>
