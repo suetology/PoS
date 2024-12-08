@@ -30,7 +30,7 @@ namespace PoS.WebApi.Application.Services.Shift
                 Shift = new ShiftDto
                 {
                     Id = shift.Id,
-                    Date = shift.Date,
+                    Date = shift.Date.ToString("yyyy-MM-dd"),
                     StartTime = shift.StartTime.ToString(),
                     EndTime = shift.EndTime.ToString(),
                     EmployeeId = shift.EmployeeId
@@ -61,7 +61,7 @@ namespace PoS.WebApi.Application.Services.Shift
                 .Select(s => new ShiftDto
                 {
                     Id = s.Id,
-                    Date = s.Date,
+                    Date = s.Date.ToString("yyyy-MM-dd"),
                     StartTime = s.StartTime.ToString(),
                     EndTime = s.EndTime.ToString(),
                     EmployeeId = s.EmployeeId

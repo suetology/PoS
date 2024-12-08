@@ -70,7 +70,7 @@ public class UserService : IUserService
                     .Select(s => new ShiftDto
                     {
                         Id = s.Id,
-                        Date = s.Date,
+                        Date = s.Date.ToString("yyyy-MM-dd"),
                         StartTime = s.StartTime.ToString("HH:mm"),
                         EndTime = s.EndTime.ToString("HH:mm")
                     })
@@ -110,7 +110,7 @@ public class UserService : IUserService
                 Shifts = userShifts.Select(s => new ShiftDto
                 {
                     Id = s.Id,
-                    Date = s.Date,
+                    Date = s.Date.ToString("yyyy-MM-dd"),
                     StartTime = s.StartTime.ToString("HH:mm"),
                     EndTime = s.EndTime.ToString("HH:mm")
                 })
