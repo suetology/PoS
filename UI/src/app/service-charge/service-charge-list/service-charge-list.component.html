@@ -1,0 +1,28 @@
+<div class="mx-auto px-4 lg:px-12 m-4">
+    <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">Service charge name</th>
+                        <th scope="col" class="px-4 py-3">Description</th>
+                        <th scope="col" class="px-4 py-3">Value</th>
+                        <th scope="col" class="px-4 py-3">% | € | $</th>
+                    </tr>
+                </thead>
+                @for(serviceCharge of serviceCharges$ | async ; track serviceCharge.id) 
+                {
+                <tbody>
+                    <tr class="border-b cursor-pointer hover:bg-gray-100">
+                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                            {{ serviceCharge.name }}</th>
+                        <td class="px-4 py-3">{{ serviceCharge.description }}</td>
+                        <td class="px-4 py-3">{{ serviceCharge.value }}</td>
+                        <td class="px-4 py-3">{{ serviceCharge.isPercentage ? '%' : '€' }}</td>
+                    </tr>
+                </tbody>
+            }
+            </table>
+        </div>
+    </div>
+</div>
