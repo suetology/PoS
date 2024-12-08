@@ -11,6 +11,7 @@ import { DiscountPageComponent } from './discount/discount-page/discount-page.co
 import { TaxPageComponent } from './Tax/tax-page/tax-page.component';
 import { UserPageComponent } from './User/user-page/user-page.component';
 import { UserDetailsComponent } from './User/user-details/user-details.component';
+import { ServiceChargePageComponent } from './service-charge/service-charge-page/service-charge-page.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -23,6 +24,7 @@ export const routes: Routes = [
             { path: ':id', component: TaxDetailsComponent },
         ]
      },
+    { path: 'service-charge', component: ServiceChargePageComponent },
     { path: 'user', component: UserPageComponent,
         children: [
             { path: ':id', component: UserDetailsComponent },

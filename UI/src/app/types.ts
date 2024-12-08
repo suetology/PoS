@@ -191,3 +191,22 @@ export interface DiscountRequest {
     validFrom: Date;
     validTo: Date;
 }
+
+export interface ServiceCharge {
+    id: string;
+    name: string;
+    description: string;
+    value: number;
+    isPercentage: boolean;
+}
+
+export interface ServiceChargeResponse {
+    serviceCharges: ServiceCharge[];
+}
+
+export interface ServiceChargeRequest {
+    name: string;
+    description: string;
+    value: number;
+    isPercentage: boolean;
+}

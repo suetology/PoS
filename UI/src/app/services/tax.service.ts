@@ -36,5 +36,5 @@ export class TaxService {
         return tax;
       })
     );
-    }
+  }
 }
