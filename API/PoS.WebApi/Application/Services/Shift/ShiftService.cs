@@ -55,7 +55,7 @@ namespace PoS.WebApi.Application.Services.Shift
 
         public async Task<GetAllShiftsResponse> GetShifts(GetAllShiftsRequest request)
         {
-            var shifts = await _shiftRepository.GetShiftsByFilters(request.EmployeeId, request.FromDate, request.ToDate);
+            var shifts = await _shiftRepository.GetShiftsByFilters(request.QueryParameters.EmployeeId, request.QueryParameters.FromDate, request.QueryParameters.ToDate);
             var shiftsDtos = shifts
                 .Where(s => s.BusinessId == request.BusinessId)
                 .Select(s => new ShiftDto

@@ -88,7 +88,22 @@ export interface User {
     phoneNumber: string,
     role: Role,
     status: EmployeeStatus,
-    dateOfEmployment: string
+    dateOfEmployment: string,
+    shifts: Shift[]
+}
+
+export interface Shift {
+    id: string, 
+    date: string,
+    startTime: string,
+    endTime: string
+}
+
+export interface CreateShiftRequest {
+    date: string,
+    startTime: string,
+    endTime: string,
+    employeeId: string
 }
 
 export enum Role {

@@ -20,7 +20,7 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet]
-        public async Task<IActionResult> GetShifts(GetAllShiftsRequest request)
+        public async Task<IActionResult> GetShifts([FromQuery] QueryParameters parameters)
         {
             var businessId = User.GetBusinessId();
 
@@ -29,7 +29,11 @@ namespace PoS.WebApi.Presentation.Controllers
                 return Unauthorized("Failed to retrieve Business ID");
             }
 
-            request.BusinessId = businessId.Value;
+            var request = new GetAllShiftsRequest
+            {
+                BusinessId = businessId.Value,
+                QueryParameters = parameters
+            };
             
             var response = await _shiftService.GetShifts(request);
             
@@ -81,7 +85,7 @@ namespace PoS.WebApi.Presentation.Controllers
 
             await _shiftService.CreateShift(request);
             
-            return CreatedAtAction(nameof(GetShiftById), request);
+            return CreatedAtAction(nameof(CreateShift), request);
         }
 
         [HttpDelete("{shiftId}")]

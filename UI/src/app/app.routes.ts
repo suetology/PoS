@@ -4,7 +4,6 @@ import { ItemsComponent } from './items/items.component';
 import { BusinessComponent } from './business/business.component';
 import { DiscountComponent } from './discount/discount/discount.component';
 import { ServiceComponent } from './service/service/service.component';
-import { ShiftComponent } from './shift/shift/shift.component';
 import { OrdersComponent } from './Orders/orders/orders.component';
 import { LoginComponent } from './login/login.component';
 import { TaxDetailsComponent } from './Tax/tax-details/tax-details.component';
@@ -19,7 +18,6 @@ export const routes: Routes = [
     { path: 'discount', component: DiscountPageComponent },
     { path: 'inventory/item', component: ItemsComponent },
     { path: 'services', component: ServiceComponent },
-    { path: 'shifts', component: ShiftComponent },
     { path: 'tax', component: TaxPageComponent,
         children: [
             { path: ':id', component: TaxDetailsComponent },
