@@ -10,13 +10,18 @@ using PoS.WebApi.Domain.Common;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+
+    private readonly IShiftRepository _shiftRepository;
+    
     private readonly IUnitOfWork _unitOfWork;
 
     public UserService(
         IUserRepository userRepository,
+        IShiftRepository shiftRepository,
         IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
+        _shiftRepository = shiftRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -43,6 +48,8 @@ public class UserService : IUserService
 
     public async Task<GetAllUsersResponse> GetAllUsers(GetAllUsersRequest request)
     {
+        var shifts = await _shiftRepository.GetAll();
+
         var users = await _userRepository.GetAllUsersByFiltering(request.QueryParameters);
         var usersDtos = users
             .Where(u => u.BusinessId == request.BusinessId)
@@ -57,7 +64,16 @@ public class UserService : IUserService
                 PhoneNumber = u.PhoneNumber,
                 Role = u.Role,
                 Status = u.Status,
-                DateOfEmployment = u.DateOfEmployment
+                DateOfEmployment = u.DateOfEmployment,
+                Shifts = shifts
+                    .Where(s => s.EmployeeId == u.Id)
+                    .Select(s => new ShiftDto
+                    {
+                        Id = s.Id,
+                        Date = s.Date,
+                        StartTime = s.StartTime.ToString("HH:mm"),
+                        EndTime = s.EndTime.ToString("HH:mm")
+                    })
             });
 
         return new GetAllUsersResponse
@@ -69,6 +85,8 @@ public class UserService : IUserService
     public async Task<GetUserResponse> GetUser(GetUserRequest request)
     {
         var user = await _userRepository.Get(request.Id);
+
+        var userShifts = await _shiftRepository.GetShiftsByFilters(employeeId: request.Id);
 
         if (user == null || user.BusinessId != request.BusinessId)
         {
@@ -88,7 +106,14 @@ public class UserService : IUserService
                 PhoneNumber = user.PhoneNumber,
                 Role = user.Role,
                 Status = user.Status,
-                DateOfEmployment = user.DateOfEmployment
+                DateOfEmployment = user.DateOfEmployment,
+                Shifts = userShifts.Select(s => new ShiftDto
+                {
+                    Id = s.Id,
+                    Date = s.Date,
+                    StartTime = s.StartTime.ToString("HH:mm"),
+                    EndTime = s.EndTime.ToString("HH:mm")
+                })
             }
         };
     }

@@ -15,5 +15,6 @@ public class UserDto
     public Role Role { get; set; }
     public EmployeeStatus Status { get; set; }
     public DateTime DateOfEmployment { get; set; }
+    public IEnumerable<ShiftDto> Shifts { get; set; }
 }
 
