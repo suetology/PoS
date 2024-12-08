@@ -106,6 +106,37 @@ export interface CreateShiftRequest {
     employeeId: string
 }
 
+export interface CreateServiceRequest {
+    name: string,
+    description: string,
+    price: number,
+    duration: number,
+    isActive: boolean,
+    employeeId: string
+}
+
+export interface GetAllServicesRequest {
+    
+}
+
+export interface GetAllServicesResponse {
+    services: Service[]
+}
+
+export interface GetServiceResponse {
+    service: Service
+}
+
+export interface Service {
+    id: string,
+    name: string,
+    description: string,
+    price: number,
+    duration: number,
+    isActive: boolean,
+    employeeId: string
+}
+
 export enum Role {
     SuperAdmin = 'SuperAdmin',
     BusinessOwner = 'BusinessOwner',
