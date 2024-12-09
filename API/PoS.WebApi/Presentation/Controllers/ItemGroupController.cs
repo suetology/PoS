@@ -45,7 +45,7 @@ public class ItemGroupController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [Tags("Inventory")]
-    [Route("{groupId}", Name = nameof(GetItemGroupById))]
+    [Route("item-Group/{groupId}", Name = nameof(GetItemGroupById))]
     public async Task<IActionResult> GetItemGroupById([FromRoute] Guid groupId)
     {
         var businessId = User.GetBusinessId();
@@ -92,7 +92,7 @@ public class ItemGroupController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPatch]
-    [Route("{groupID}", Name = nameof(UpdateItemGroup))]
+    [Route("item-Group/{groupID}", Name = nameof(UpdateItemGroup))]
     [Tags("Inventory")]
     public async Task<IActionResult> UpdateItemGroup([FromRoute] Guid groupID, [FromBody] UpdateItemGroupRequest request)
     {

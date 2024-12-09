@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
   <h3 class="text-xl font-semibold text-gray-900">
-    {{ user?.username }}
+    {{ item?.name }}
   </h3>
   <button type="button"
     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
@@ -15,68 +15,70 @@
 
 <div class="p-4 md:p-5 space-y-4">
   <p>
-    <strong>Name:</strong> {{ user?.name }}
+    <strong>Description:</strong> {{ item?.description }}
   </p>
   <p>
-    <strong>Surname:</strong> {{ user?.surname }}
+    <strong>Price:</strong> {{ item?.price }}
   </p>
   <p>
-    <strong>Email:</strong> {{ user?.email}}
+    <strong>Stock:</strong> {{ item?.stock }}
   </p>
   <p>
-    <strong>Phone number:</strong> {{ user?.phoneNumber }}
+    <strong>Item Group:</strong> {{ itemGroupName }}
   </p>
   <p>
-    <strong>Role:</strong> {{ user?.role }}
+    <strong>Applied taxes:</strong>
+    <span *ngFor="let taxName of taxNames; let last = last">
+      {{ taxName }}<span *ngIf="!last">, </span>
+    </span>
   </p>
-  <p>
-    <strong>Status:</strong> {{ user?.status }}
-  </p>
+
 </div>
 
 <div class="p-4 md:p-5 space-y-4">
-  <h4 class="text-lg font-semibold text-gray-900">Shifts</h4>
+  <h4 class="text-lg font-semibold text-gray-900">Item Variations</h4>
   <table class="min-w-full bg-white border">
     <thead class="bg-gray-200">
       <tr>
-        <th>Date</th>
-        <th>Start Time</th>
-        <th>End Time</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Added Price</th>
+        <th>Stock</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let shift of user?.shifts">
-        <td>{{ shift.date }}</td>
-        <td>{{ shift.startTime }}</td>
-        <td>{{ shift.endTime }}</td>
+      <tr *ngFor="let itemVariation of itemVariations">
+        <td>{{ itemVariation.name }}</td>
+        <td>{{ itemVariation.description }}</td>
+        <td>{{ itemVariation.addedPrice }}</td>
+        <td>{{ itemVariation.stock }}</td>
       </tr>
     </tbody>
   </table>
 
-  <form [formGroup]="shiftForm" (ngSubmit)="addShift()">
+  <form [formGroup]="itemVariationForm" (ngSubmit)="addItemVariation()">
 
-    <label for="date">Date</label>
-    <input type="date" id="date" name="date" formControlName="date"
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" formControlName="name"
       class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
 
-    <label for="startTime">Start Time</label>
-    <input type="time" id="startTime" name="startTime" formControlName="startTime"
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description" formControlName="description"
       class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
 
-    <label for="endTime">End Time</label>
-    <input type="time" id="endTime" name="endTime" formControlName="endTime"
+    <label for="addedPrice">Added Price</label>
+    <input type="number" id="addedPrice" name="addedPrice" formControlName="addedPrice"
+      class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+
+    <label for="stock">Stock</label>
+    <input type="number" id="stock" name="stock" formControlName="stock"
       class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
 
     <button type="submit"
       class="mt-4 px-4 py-2 bg-cyan-400 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-      Add Shift
+      Add Item Variation
     </button>
   </form>
-
-
-
-
-
 
 
 

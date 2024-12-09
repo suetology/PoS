@@ -2,27 +2,27 @@
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Item;
 using PoS.WebApi.Application.Services.Item.Contracts;
+using PoS.WebApi.Domain.Entities;
 using PoS.WebApi.Domain.Enums;
 using PoS.WebApi.Infrastructure.Security.Extensions;
 
 namespace PoS.WebApi.Presentation.Controllers;
 
 [ApiController]
-[Route("inventory")]
-public class ItemController : ControllerBase
+[Route("inventory/item/{itemId}/variations")]
+public class ItemVariationController : ControllerBase
 {
     private readonly IItemService _itemService;
 
-    public ItemController(IItemService itemService)
+    public ItemVariationController(IItemService itemService)
     {
         _itemService = itemService;
     }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPost]
-    [Route("item")]
     [Tags("Inventory")]
-    public async Task<IActionResult> CreateItem([FromBody] CreateItemRequest request)
+    public async Task<IActionResult> CreateItemVariation([FromRoute] Guid itemId, [FromBody] CreateItemVariationRequest request)
     {
         var businessId = User.GetBusinessId();
 
@@ -30,25 +30,20 @@ public class ItemController : ControllerBase
         {
             return Unauthorized("Failed to retrieve Business ID");
         }
-
-        request.BusinessId = businessId.Value;
         
-        await _itemService.CreateItem(request);
+        request.ItemId = itemId;
+        request.BusinessId = businessId.Value;
+
+        _itemService.CreateItemVariation(request);
 
         return NoContent();
     }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
-    [Route("item")]
     [Tags("Inventory")]
-    public async Task<IActionResult> GetAllItems([FromQuery] QueryParameters parameters)
+    public async Task<IActionResult> GetAllItemVariations([FromRoute] Guid itemId)
     {
-        //if (!QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
-        //{
-        //    return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
-        //}
-        
         var businessId = User.GetBusinessId();
 
         if (businessId == null)
@@ -56,22 +51,21 @@ public class ItemController : ControllerBase
             return Unauthorized("Failed to retrieve Business ID");
         }
 
-        var request = new GetAllItemsRequest
+        var request = new GetAllItemVariationsRequest
         {
+            ItemId = itemId,
             BusinessId = businessId.Value,
-            QueryParameters = parameters
         };
-
-        var response = await _itemService.GetAllItems(request);
+        
+        var response = await _itemService.GetAllItemVariations(request);
 
         return Ok(response);
     }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
-    [HttpGet]
+    [HttpGet("{itemVariationId}")]
     [Tags("Inventory")]
-    [Route("item/{itemId}", Name = nameof(GetItem))]
-    public async Task<IActionResult> GetItem([FromRoute] Guid itemId)
+    public async Task<IActionResult> GetItemVariation([FromRoute] Guid itemId, [FromRoute] Guid itemVariationId)
     {
         var businessId = User.GetBusinessId();
 
@@ -80,14 +74,15 @@ public class ItemController : ControllerBase
             return Unauthorized("Failed to retrieve Business ID");
         }
 
-        var request = new GetItemRequest
+        var request = new GetItemVariationRequest
         {
+            Id = itemVariationId,
+            ItemId = itemId,
             BusinessId = businessId.Value,
-            ItemId = itemId
         };
         
-        var response = await _itemService.GetItem(request);
-
+        var response = _itemService.GetItemVariation(request);
+        
         return Ok(response);
     }
 }

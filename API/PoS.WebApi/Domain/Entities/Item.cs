@@ -23,4 +23,6 @@ public class Item : Entity
     public ICollection<Tax> Taxes { get; set; } = new List<Tax>();
 
     public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
+
+    public ICollection<ItemVariation> ItemVariations { get; set; } = new List<ItemVariation>();
 }
