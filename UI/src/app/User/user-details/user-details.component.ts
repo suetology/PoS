@@ -5,7 +5,7 @@ import { UserService } from '../../services/user.service';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ShiftService } from '../../services/shift.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-details',
@@ -82,6 +82,22 @@ export class UserDetailsComponent implements OnInit {
     } else {
       this.close();
     }
+  }
+
+  onDelete(shiftId:string){
+    if (!this.user) return;
+
+    this.shiftService.deleteShift(shiftId).subscribe({
+      next: (value) => {
+          alert('Shift deleted');
+
+          this.userService.getUser(this.user!.id).subscribe({
+            next: (updatedUser) => {
+              this.user = updatedUser;
+            }
+        });
+      }
+    });
   }
 
   close() {
