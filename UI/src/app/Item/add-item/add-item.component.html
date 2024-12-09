@@ -1,0 +1,64 @@
+<div class="mx-auto px-4 lg:px-12 m-4">
+    <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden p-4">
+
+        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+
+        <label for="name">Name</label>
+        <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            formControlName="name"
+        >
+
+        <label for="description">Description</label>
+        <input 
+            type="text" 
+            id="description" 
+            name="description" 
+            formControlName="description"
+        >
+
+        <label for="price">Price</label>
+        <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            formControlName="price"
+        >
+
+        <label for="stock">Stock</label>
+        <input 
+            type="number" 
+            id="stock" 
+            name="stock" 
+            formControlName="stock"
+        >
+        
+        <label for="image">Image</label>
+        <input 
+            type="text" 
+            id="image" 
+            name="image" 
+            formControlName="image"
+        >
+
+        <label for="itemGroup">Item group</label>
+        <select id="itemGroup" name="itemGroupId" formControlName="itemGroupId">
+          <option *ngFor="let itemGroup of itemGroups" [value]="itemGroup.id">
+            {{ itemGroup.name }}
+          </option>
+        </select>
+
+        <label for="tax">Taxes</label>
+        <select id="tax" name="taxIds" formControlName="taxIds" multiple>
+          <option *ngFor="let tax of taxes" [value]="tax.id">
+            {{ tax.name }}
+          </option>
+        </select>
+
+        <button type="submit" class=" mt-4 text-white bg-cyan-400 hover:bg-cyan-500 focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+            + Add</button>
+        </form>
+    </div>
+</div>

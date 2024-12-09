@@ -120,7 +120,9 @@ builder.Services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>()
 builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
 
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddTransient<IItemVariationRepository, ItemVariationRepository>();
+
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 
 // Adding controllers

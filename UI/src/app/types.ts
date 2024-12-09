@@ -155,49 +155,12 @@ export enum EmployeeStatus {
     NotEmployee
 }
 
-export interface Item {
-    id: string;
-    name: string;
-    description: string;
-    image: string | null;
-    price: number;
-    stock: number;
-    itemGroupId?: string;
-    itemGroup?: ItemGroup;
-    itemTaxes?: ItemTax[];
-    itemDiscounts?: ItemDiscount[];
-}
-
-export interface ItemGroup {
-    id: string;
-    name: string;
-    description: string;
-    items: Item;
-    groupDiscounts: GroupDiscount;
-}
-
 export interface GroupDiscount {
     id: string;
     discountId: string;
     discount: Discount;
     itemGroupId: string;
     itemGroup: ItemGroup;
-}
-
-export interface ItemTax {
-    id: string;
-    taxId: string;
-    tax: Tax;
-    itemId: string;
-    item: Item;
-}
-
-export interface ItemDiscount {
-    id: string;
-    discountId: string;
-    discount: Discount;
-    itemId: string;
-    item: Item;
 }
 
 export interface DiscountResponse{
@@ -241,4 +204,87 @@ export interface ServiceChargeRequest {
     description: string;
     value: number;
     isPercentage: boolean;
+}
+
+export interface ItemGroup {
+    id: string,
+    name: string,
+    description: string
+}
+
+export interface CreateItemGroupRequest {
+    name: string,
+    description: string
+}
+
+export interface GetItemGroupResponse {
+    itemGroup: ItemGroup
+}
+
+export interface GetAllItemGroupsRequest {
+
+}
+
+export interface GetAllItemGroupsResponse {
+    itemGroups: ItemGroup[]    
+}
+
+export interface Item {
+    id: string,
+    name: string,
+    description: string,
+    price: number, 
+    stock: number,
+    image: string,
+    itemGroupId?: string,
+    taxIds: string[]
+}
+
+export interface CreateItemRequest {
+    name: string,
+    description: string,
+    price: number,
+    stock: number,
+    itemGroupId?: string,
+    taxIds: string[]
+}
+
+export interface GetItemResponse {
+    item: Item
+}
+
+export interface GetAllItemsRequest {
+
+}
+
+export interface GetAllItemsResponse {
+    items: Item[]
+}
+
+export interface ItemVariation {
+    id: string,
+    name: string,
+    description: string,
+    addedPrice: number,
+    stock: number,
+    itemId: string
+}
+
+export interface CreateItemVariationRequest {
+    name: string,
+    description: string,
+    addedPrice: number,
+    stock: number
+}
+
+export interface GetItemVariationResponse {
+    itemVariation: ItemVariation
+}
+
+export interface GetAllItemVariationsRequest {
+
+}
+
+export interface GetAllItemVariationsResponse {
+    itemVariations: ItemVariation[]
 }

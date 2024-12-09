@@ -15,6 +15,8 @@ public class OrderItem : Entity
     public Guid ItemId { get; set; }
     
     public Item Item { get; set; }
+
+    public ICollection<ItemVariation> ItemVariations { get; set; } = new List<ItemVariation>();
     
     public Guid OrderId { get; set; }
     
