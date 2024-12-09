@@ -63,10 +63,6 @@ export class AddItemComponent {
       taxIds: this.itemForm.value.taxIds || []
     }
 
-    console.log(request);
-
-    return;
-
     this.itemService.createItem(request).subscribe({
       next: () => {
         this.itemForm.reset();
