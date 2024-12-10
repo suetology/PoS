@@ -12,18 +12,24 @@
                         </th>
                     </tr>
                 </thead>
-                @for(item of items$ | async ; track item.id) 
-                {
-                <tbody>
-                    <tr class="border-b dark:border-gray-700 cursor-pointer hover:bg-gray-100" 
-                    (click)="goToItemDetails(item.id)">
-                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                            {{ item.name }}</th>
-                        <td class="px-4 py-3">{{ item.price }}</td>
-                        <td class="px-4 py-3">{{ item.stock }}</td>
+                @if(items$ | async; as item) {
+                    @for(item of items$ | async ; track item.id) 
+                    {
+                    <tbody>
+                        <tr class="border-b dark:border-gray-700 cursor-pointer hover:bg-gray-100" 
+                        (click)="goToItemDetails(item.id)">
+                            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                                {{ item.name }}</th>
+                            <td class="px-4 py-3">{{ item.price }}</td>
+                            <td class="px-4 py-3">{{ item.stock }}</td>
+                        </tr>
+                    </tbody>
+                    }
+                } @else {
+                    <tr class="border-b">
+                        <td class="px-4 py-3">No items created yet.</td>
                     </tr>
-                </tbody>
-            }
+                }
             </table>
         </div>
     </div>
