@@ -37,7 +37,7 @@ public class CustomerService : ICustomerService
         };
     }
     
-    public async Task CreateCustomer(CreateCustomerRequest request)
+    public async Task<CreateCustomerResponse> CreateCustomer(CreateCustomerRequest request)
     {
         var customer = new Customer
         {
@@ -49,6 +49,11 @@ public class CustomerService : ICustomerService
 
         await _customerRepository.Create(customer);
         await _unitOfWork.SaveChanges();
+
+        return new CreateCustomerResponse
+        {
+            Id = customer.Id
+        };
     }
 
     public async Task<GetAllCustomersResponse> GetAll(GetAllCustomersRequest request)

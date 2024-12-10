@@ -22,8 +22,7 @@ public class ReservationRepository : IReservationRepository
     public async Task<Reservation> GetById(Guid id)
     {
         return await _dbContext.Reservations
-            .Include(r => r.Employee)
-            .Include(r => r.Customer)
+            .Include(r => r.Service)
             .Include(r => r.Order)
             .FirstOrDefaultAsync(r => r.Id == id);
     }
@@ -31,8 +30,7 @@ public class ReservationRepository : IReservationRepository
     public async Task<IEnumerable<Reservation>> GetAll()
     {
         return await _dbContext.Reservations
-            .Include(r => r.Employee)
-            .Include(r => r.Customer)
+            .Include(r => r.Service)
             .Include(r => r.Order)
             .ToListAsync();
     }
@@ -41,21 +39,11 @@ public class ReservationRepository : IReservationRepository
     {
         _dbContext.Reservations.Update(reservation);
     }
-
-    public async Task<IEnumerable<Reservation>> GetReservationsByEmployeeAndDate(Guid employeeId, DateTime date)
-    {
-        return await _dbContext.Reservations
-            .Where(r => r.EmployeeId == employeeId 
-                && r.AppointmentTime.Date == date.Date 
-                && r.Status != Domain.Enums.AppointmentStatus.Cancelled)
-            .ToListAsync();
-    }
-
+    
     public async Task<IEnumerable<Reservation>> GetReservationsByDate(DateTime date)
     {
         return await _dbContext.Reservations
-            .Include(r => r.Customer)
-            .Include(r => r.Employee)
+            .Include(r => r.Service)
             .Where(r => r.AppointmentTime.Date == date.Date)
             .ToListAsync();
     }
@@ -63,8 +51,7 @@ public class ReservationRepository : IReservationRepository
     public async Task<IEnumerable<Reservation>> GetReservationsInRange(DateTime startDate, DateTime endDate)
     {
         return await _dbContext.Reservations
-            .Include(r => r.Customer)
-            .Include(r => r.Employee)
+            .Include(r => r.Service)
             .Include(r => r.Order)
             .Where(r => r.AppointmentTime.Date >= startDate.Date 
                 && r.AppointmentTime.Date <= endDate.Date)

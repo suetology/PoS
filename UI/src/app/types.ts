@@ -288,3 +288,112 @@ export interface GetAllItemVariationsRequest {
 export interface GetAllItemVariationsResponse {
     itemVariations: ItemVariation[]
 }
+
+export enum OrderStatus {
+    Open = 1,
+    Closed,
+    Paid,
+    Canceled,
+    Refunded
+}
+
+export interface OrderItem {
+    id: string,
+    quantity: number,
+    item: Item,
+    itemVariations: ItemVariation[]
+}
+
+export interface Order {
+    id: string,
+    employeeId: string,
+    status: OrderStatus,
+    tipAmount: number,
+    finalAmount: number,
+    paidAmount: number,
+    created: string,
+    closed?: string,
+    customer: Customer,
+    serviceCharge?: ServiceCharge,
+    reservation?: Reservation,
+    orderItems: OrderItem[],
+
+    // dicounts pridet
+}
+
+export interface GetOrderRespose {
+    order: Order
+}
+
+export interface GetAllOrdersRequest {
+
+}
+
+export interface GetAllOrdersResponse {
+    orders: Order[]
+}
+
+export interface AvailableTime {
+    start: string,
+    end: string
+}
+
+export interface GetAvailableTimesResponse {
+    availableTimes: AvailableTime[]
+} 
+
+export enum AppointmentStatus
+{
+    Booked = 1,
+    Cancelled,
+    Completed,
+    Refunded
+}
+
+export interface Reservation {
+    id: string,
+    status: AppointmentStatus,
+    reservationTime: string,
+    appointmentTime: string,
+
+}
+
+export interface CreateReservationRequest {
+    appointmentTime: string,
+    serviceId: string
+}
+
+export interface CreateOrderItemRequest {
+    itemId: string,
+    itemVariationsIds: string[],
+    quantity: number
+}
+
+export interface Customer {
+    id: string
+    name: string,
+    email: string,
+    phoneNumber: string
+}
+
+export interface CreateCustomerRequest {
+    name: string,
+    email: string,
+    phoneNumber: string
+}
+
+export interface GetCustomerResponse {
+    customer: Customer
+}
+
+export interface GetAllCustomersResponse {
+    customers: Customer[]
+}
+
+export interface CreateOrderRequest {
+    customerId?: string,
+    customer?: CreateCustomerRequest,
+    serviceChargeId?: string,
+    reservation?: CreateReservationRequest
+    orderItems: CreateOrderItemRequest[]
+}

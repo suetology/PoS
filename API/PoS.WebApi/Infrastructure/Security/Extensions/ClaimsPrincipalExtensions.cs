@@ -6,6 +6,7 @@ namespace PoS.WebApi.Infrastructure.Security.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
+    public const string UserIdClaimName = "user_id";
     public const string RoleClaimName = "role";
     public const string BusinessIdClaimName = "business_id";
     
@@ -23,12 +24,16 @@ public static class ClaimsPrincipalExtensions
 
     public static Guid? GetEmployeeId(this ClaimsPrincipal user)
     {
-        var employeeIdClaim = user?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+        var employeeIdClaim = user?.Claims.FirstOrDefault(c => c.Type == UserIdClaimName);
+
+        Console.WriteLine(employeeIdClaim);
 
         if (employeeIdClaim == null || !Guid.TryParse(employeeIdClaim.Value, out var employeeId))
         {
             return null;
         }
+
+        Console.WriteLine(employeeId);
 
         return employeeId;
     }

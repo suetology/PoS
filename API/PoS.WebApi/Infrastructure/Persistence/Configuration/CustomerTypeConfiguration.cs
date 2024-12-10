@@ -10,14 +10,7 @@ public class CustomerTypeConfiguration : BaseEntityTypeConfiguration<Customer>
     {
         base.Configure(builder);
         
-        builder.HasKey(c => c.Id);
-        
         builder.Property(c => c.PhoneNumber)
             .HasColumnType("VARCHAR(20)");
-
-        builder.HasMany(c => c.Reservations)
-            .WithOne(r => r.Customer)
-            .HasForeignKey(r => r.CustomerId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

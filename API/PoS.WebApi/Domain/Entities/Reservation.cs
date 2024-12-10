@@ -15,14 +15,6 @@ public class Reservation : Entity
     
     public bool NotificationSent { get; set; }
     
-    public Guid CustomerId { get; set; }
-    
-    public Customer Customer { get; set; }
-    
-    public Guid EmployeeId { get; set; }
-    
-    public User Employee { get; set; }
-    
     public Guid ServiceId { get; set; }
     
     public Service Service { get; set; }

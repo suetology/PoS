@@ -54,14 +54,14 @@ export class ItemDetailsComponent {
           );
 
           if (item.taxIds.length !== 0) {       
-            for (const taxId of item.taxIds) {
-              this.taxService.getTax(taxId).subscribe(
-                (tax) => {
-                  this.taxNames.push(tax.name);
-                }
-              );
-            }
+          for (const taxId of item.taxIds) {
+            this.taxService.getTax(taxId).subscribe(
+              (tax) => {
+                this.taxNames.push(tax.name);
+              }
+            );
           }
+        }
 
           this.itemService.getAllItemVariations(item.id).subscribe(
             (itemVariations) => {

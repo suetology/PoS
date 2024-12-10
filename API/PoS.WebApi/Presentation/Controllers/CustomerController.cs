@@ -78,7 +78,7 @@ namespace PoS.WebApi.Presentation.Controllers
             request.BusinessId = businessId.Value;
 
             await _customerService.CreateCustomer(request);
-            return CreatedAtAction(nameof(GetCustomer), request);
+            return CreatedAtAction(nameof(CreateCustomer), request);
         }
     }
 }

@@ -31,6 +31,7 @@ public class OrderController : ControllerBase
             return Unauthorized("Failed to retrieve Business ID");
         }
 
+        Console.WriteLine("LOl?");
         var employeeId = User.GetEmployeeId();
 
         if (employeeId == null)

@@ -10,4 +10,5 @@ public interface IServiceService
         Task<GetAllServicesResponse> GetServices(GetAllServicesRequest request);
         Task CreateService(CreateServiceRequest request);
         Task UpdateService(UpdateServiceRequest request);
+        Task<GetAvailableTimesResponse> GetAvailableTimes(GetAvailableTimesRequest request);
     }

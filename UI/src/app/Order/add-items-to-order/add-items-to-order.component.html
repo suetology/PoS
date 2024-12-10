@@ -1,0 +1,66 @@
+<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+	<h3 class="text-2xl font-semibold">Add Items</h3>
+	<button type="button"
+		class="text-white bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-full p-2 inline-flex justify-center items-center"
+		(click)="close()">
+		<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+			<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+				d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13" />
+		</svg>
+		<span class="sr-only">Close modal</span>
+	</button>
+</div>
+
+<div class="p-6 space-y-6 bg-white rounded-b-lg shadow-lg">
+
+	<form [formGroup]="itemForm" (ngSubmit)="addItem()">
+    <div class="space-y-4">
+      <div class="flex items-center gap-4">
+        <div class="w-3/4">
+          <label for="item" class="block text-lg font-semibold text-gray-800">Item</label>
+          <select id="item" name="itemId" formControlName="itemId" (change)="onItemSelect()"
+            class="w-full mt-2 px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            <option *ngFor="let item of items" [value]="item.id">
+              {{ item.name }} (Price: {{ item.price }}, Stock: {{ item.stock }})
+            </option>
+          </select>
+        </div>
+
+        <div class="w-1/4">
+          <label for="quantity" class="block text-lg font-semibold text-gray-800">Quantity</label>
+          <input id="quantity" type="number" formControlName="quantity" min="1" value="1"
+            class="w-full mt-2 px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400" />
+        </div>
+      </div>
+
+      <div *ngIf="itemVariations.length > 0" class="mt-6">
+        <h4 class="text-xl font-semibold text-gray-900">Item Variations</h4>
+        <div *ngFor="let itemVariation of itemVariations" class="flex items-center gap-4 mt-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition duration-300">
+          <input type="checkbox" [formControl]="itemVariationControls[itemVariation.id]" class="text-cyan-400" />
+          <div class="flex-1">
+            <p class="text-lg font-medium text-gray-900">{{ itemVariation.name }}</p>
+            <p class="text-sm text-gray-500">Price: <span class="font-semibold text-gray-700">{{ itemVariation.addedPrice }}</span></p>
+            <p class="text-sm text-gray-500">Stock: <span class="font-semibold text-gray-700">{{ itemVariation.stock }}</span></p>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit"
+        class="mt-6 w-full px-6 py-3 bg-cyan-500 text-white rounded-md hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition duration-200">
+        Add Item
+      </button>
+    </div>
+  </form>
+
+	<div *ngIf="addedOrderItemsDisplay.length > 0" class="mt-6">
+    <h4 class="text-xl font-semibold text-gray-900">Added items:</h4>
+    <div *ngFor="let orderItem of addedOrderItemsDisplay" class="mt-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition duration-300">
+      <p class="text-lg font-medium text-gray-900">{{ orderItem.name }} (Quantity: {{ orderItem.quantity }})</p>
+      <p *ngIf="orderItem.itemVariations.length > 0" class="text-sm text-gray-500">Variations: 
+        <span *ngFor="let variation of orderItem.itemVariations; let isLast = last">
+          {{ variation.name }}<span *ngIf="!isLast">, </span>
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
