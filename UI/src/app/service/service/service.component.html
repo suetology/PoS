@@ -12,18 +12,24 @@
                         </th>
                     </tr>
                 </thead>
-                @for(service of services$ | async ; track service.id) 
-                {
-                <tbody>
-                    <tr class="border-b dark:border-gray-700 cursor-pointer hover:bg-gray-100" 
-                    (click)="goToServiceDetails(service.id)">
-                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                            {{ service.name }}</th>
-                        <td class="px-4 py-3">{{ service.price }}</td>
-                        <td class="px-4 py-3">{{ service.duration }}</td>
+                @if(services$ | async; as service) {
+                    @for(service of services$ | async ; track service.id) 
+                    {
+                    <tbody>
+                        <tr class="border-b dark:border-gray-700 cursor-pointer hover:bg-gray-100" 
+                        (click)="goToServiceDetails(service.id)">
+                            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                                {{ service.name }}</th>
+                            <td class="px-4 py-3">{{ service.price }}</td>
+                            <td class="px-4 py-3">{{ service.duration }}</td>
+                        </tr>
+                    </tbody>
+                    }
+                } @else {
+                    <tr class="border-b">
+                        <td class="px-4 py-3">No services created yet.</td>
                     </tr>
-                </tbody>
-            }
+                }
             </table>
         </div>
     </div>
