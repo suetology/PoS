@@ -1,10 +1,6 @@
 import { Routes } from '@angular/router';
 import { ReservationsComponent } from './reservations/reservations.component';
-//import { ItemsComponent } from './items/items.component';
 import { BusinessComponent } from './business/business.component';
-import { DiscountComponent } from './discount/discount/discount.component';
-import { ServiceComponent } from './service/service/service.component';
-import { OrdersComponent } from './Orders/orders/orders.component';
 import { LoginComponent } from './login/login.component';
 import { TaxDetailsComponent } from './Tax/tax-details/tax-details.component';
 import { DiscountPageComponent } from './discount/discount-page/discount-page.component';
@@ -18,6 +14,10 @@ import { ItemGroupPageComponent } from './item-group/item-group-page/item-group-
 import { ItemGroupDetailsComponent } from './item-group/item-group-details/item-group-details.component';
 import { ItemPageComponent } from './Item/item-page/item-page.component';
 import { ItemDetailsComponent } from './Item/item-details/item-details.component';
+import { OrderPageComponent } from './Order/order-page/order-page.component';
+import { OrderDetailsComponent } from './Order/order-details/order-details.component';
+import { AddItemsToOrderComponent } from './Order/add-items-to-order/add-items-to-order.component';
+import { AddReservationToOrderComponent } from './Order/add-reservation-to-order/add-reservation-to-order.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -50,5 +50,11 @@ export const routes: Routes = [
         ]
      },
     { path: 'reservations', component: ReservationsComponent },
-    { path: 'orders', component: OrdersComponent }
+    { path: 'order', component: OrderPageComponent,
+        children: [
+            { path: 'add-items', component: AddItemsToOrderComponent },
+            { path: 'add-reservation', component: AddReservationToOrderComponent },
+            { path: ':id', component: OrderDetailsComponent },
+        ]
+     }
 ];

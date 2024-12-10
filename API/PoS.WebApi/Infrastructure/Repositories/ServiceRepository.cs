@@ -15,7 +15,11 @@ namespace PoS.WebApi.Infrastructure.Repositories
         }
 
         public async Task<Service> Get(Guid id) =>
-            await _dbContext.Services.FindAsync(id);
+            await _dbContext.Services
+                .Include(s => s.Employee)
+                    .ThenInclude(u => u.Shifts)
+                .Include(s => s.Reservations)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
         public async Task Create(Service service)
         {

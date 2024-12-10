@@ -5,6 +5,7 @@ using PoS.WebApi.Application.Services.Reservation.Contracts;
 using PoS.WebApi.Domain.Common;
 using Domain.Entities;
 using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Application.Services.Service.Contracts;
 
 public class ReservationService : IReservationService
 {
@@ -39,7 +40,6 @@ public class ReservationService : IReservationService
             ReservationTime = DateTime.UtcNow,
             AppointmentTime = request.AppointmentTime,
             ServiceId = request.ServiceId,
-            CustomerId = request.CustomerId,
             OrderId = request.OrderId
         };
         
@@ -58,9 +58,17 @@ public class ReservationService : IReservationService
                 NotificationSent = r.NotificationSent,
                 Status = r.Status,
                 ReservationTime = r.ReservationTime,
-                AppointmentTime = r.AppointmentTime,
-                CustomerId = r.CustomerId,
-                EmployeeId = r.EmployeeId
+                AppointmentTime = r.AppointmentTime,    
+                Service = new ServiceDto
+                {
+                    Id = r.Service.Id,
+                    Name = r.Service.Name,
+                    Description = r.Service.Description,
+                    Price = r.Service.Price,
+                    Duration = r.Service.Duration,
+                    IsActive = r.Service.IsActive,
+                    EmployeeId = r.Service.EmployeeId
+                }
             });
 
         return new GetAllReservationsResponse
@@ -87,8 +95,16 @@ public class ReservationService : IReservationService
                 Status = reservation.Status,
                 ReservationTime = reservation.ReservationTime,
                 AppointmentTime = reservation.AppointmentTime,
-                CustomerId = reservation.CustomerId,
-                EmployeeId = reservation.EmployeeId
+                Service = new ServiceDto
+                {
+                    Id = reservation.Service.Id,
+                    Name = reservation.Service.Name,
+                    Description = reservation.Service.Description,
+                    Price = reservation.Service.Price,
+                    Duration = reservation.Service.Duration,
+                    IsActive = reservation.Service.IsActive,
+                    EmployeeId = reservation.Service.EmployeeId
+                }
             }
         };
     }

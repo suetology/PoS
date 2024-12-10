@@ -1,8 +1,14 @@
-﻿namespace PoS.WebApi.Application.Services.Order.Contracts;
+using PoS.WebApi.Application.Services.Item.Contracts;
 
-public class OrderItemDto
+namespace PoS.WebApi.Application.Services.Order.Contracts;
+
+public class OrderItemDto 
 {
-    public Guid ItemId { get; set; }
-    
+    public Guid Id { get; set; }
+
     public int Quantity { get; set; }
+
+    public ItemDto Item { get; set; }
+
+    public IEnumerable<ItemVariationDto> ItemVariations { get; set; }
 }

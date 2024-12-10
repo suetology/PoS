@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CreateServiceRequest, GetAllServicesResponse, Service } from '../types';
+import { AvailableTime, CreateServiceRequest, GetAllServicesResponse, GetAvailableTimesResponse, Service } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,14 @@ export class ServiceService {
       map((service) => {
         this.servicesUpdated.next();
         return service;
+      })
+    );
+  }
+
+  getAvailableTimes(serviceId: string, date: string): Observable<AvailableTime[]> {
+    return this.http.get<GetAvailableTimesResponse>(`${environment.API_URL}/services/${serviceId}/available-times?date=${date}`).pipe(
+      map(response => {
+        return response.availableTimes
       })
     );
   }

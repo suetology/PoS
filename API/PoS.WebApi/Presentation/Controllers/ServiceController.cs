@@ -104,5 +104,28 @@ namespace PoS.WebApi.Presentation.Controllers
             
             return NoContent();
         }
+
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+        [HttpGet("{serviceId}/available-times")]
+        public async Task<IActionResult> GetAvailableTimes([FromRoute] Guid serviceId, [FromQuery] DateTime date)
+        {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            } 
+
+            var request = new GetAvailableTimesRequest
+            {
+                Id = serviceId,
+                BusinessId = businessId.Value,
+                Date = date
+            };
+
+            var response = await _serviceService.GetAvailableTimes(request);
+
+            return Ok(response);
+        }
     }
 }

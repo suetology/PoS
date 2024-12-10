@@ -33,8 +33,8 @@ public class AuthService : IAuthService
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, user.Name),
+            new Claim(ClaimsPrincipalExtensions.UserIdClaimName, user.Id.ToString()),
             new Claim(ClaimsPrincipalExtensions.RoleClaimName, user.Role.ToString()),
             new Claim(ClaimsPrincipalExtensions.BusinessIdClaimName, user.BusinessId.ToString())
         };

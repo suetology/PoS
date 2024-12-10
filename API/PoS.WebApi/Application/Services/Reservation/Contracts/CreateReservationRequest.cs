@@ -9,10 +9,11 @@ public class CreateReservationRequest
     
     [JsonIgnore]
     public Guid OrderId { get; set; }
+
+    [JsonIgnore]
+    public Guid CustomerId { get; set; }
     
     public DateTime AppointmentTime { get; set; }
     
     public Guid ServiceId { get; set; }
-    
-    public Guid CustomerId { get; set; }
 }

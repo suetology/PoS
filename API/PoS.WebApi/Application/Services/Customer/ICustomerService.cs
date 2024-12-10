@@ -6,7 +6,7 @@ using Domain.Entities;
 public interface ICustomerService
 {
     Task<GetCustomerResponse> GetCustomer(GetCustomerRequest request);
-    Task CreateCustomer(CreateCustomerRequest customer);
+    Task<CreateCustomerResponse> CreateCustomer(CreateCustomerRequest customer);
     Task<GetAllCustomersResponse> GetAll(GetAllCustomersRequest request);
 }
 
