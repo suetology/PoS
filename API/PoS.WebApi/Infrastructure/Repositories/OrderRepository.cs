@@ -24,7 +24,16 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> Get(Guid id)
     {
-        return await _dbContext.Orders.FirstOrDefaultAsync(i => i.Id == id);
+        return await _dbContext.Orders
+            .Include(o => o.ServiceCharge)
+            .Include(o => o.Employee)
+            .Include(o => o.Reservation)
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+                .ThenInclude(o => o.Item)
+            .Include(o => o.OrderItems)
+                .ThenInclude(o => o.ItemVariations)
+            .FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<IEnumerable<Order>> GetAll()
@@ -65,26 +74,26 @@ public class OrderRepository : IOrderRepository
             (OrderSortableFields.OrderClosed, SortOrder.Ascending) => query.OrderBy(s => s.Closed),
             (OrderSortableFields.OrderClosed, SortOrder.Descending) => query.OrderByDescending(s => s.Closed),
 
-            (OrderSortableFields.DiscountId, SortOrder.Ascending) => query.OrderBy(s => s.DiscountId),
-            (OrderSortableFields.DiscountId, SortOrder.Descending) => query.OrderByDescending(s => s.DiscountId),
+            //(OrderSortableFields.DiscountId, SortOrder.Ascending) => query.OrderBy(s => s.DiscountId),
+            //(OrderSortableFields.DiscountId, SortOrder.Descending) => query.OrderByDescending(s => s.DiscountId),
 
-            (OrderSortableFields.DiscountAmount, SortOrder.Ascending) => query.OrderBy(s => s.DiscountAmount),
-            (OrderSortableFields.DiscountAmount, SortOrder.Descending) => query.OrderByDescending(s => s.DiscountAmount),
+            //(OrderSortableFields.DiscountAmount, SortOrder.Ascending) => query.OrderBy(s => s.DiscountAmount),
+            //(OrderSortableFields.DiscountAmount, SortOrder.Descending) => query.OrderByDescending(s => s.DiscountAmount),
             
             (OrderSortableFields.ServiceChargeID, SortOrder.Ascending) => query.OrderBy(s => s.ServiceChargeId),
             (OrderSortableFields.ServiceChargeID, SortOrder.Descending) => query.OrderByDescending(s => s.ServiceChargeId),
 
-            (OrderSortableFields.ServiceChargeAmount, SortOrder.Ascending) => query.OrderBy(s => s.ServiceChargeAmount),
-            (OrderSortableFields.ServiceChargeAmount, SortOrder.Descending) => query.OrderByDescending(s => s.ServiceChargeAmount),
+            //(OrderSortableFields.ServiceChargeAmount, SortOrder.Ascending) => query.OrderBy(s => s.ServiceChargeAmount),
+            //(OrderSortableFields.ServiceChargeAmount, SortOrder.Descending) => query.OrderByDescending(s => s.ServiceChargeAmount),
 
             (OrderSortableFields.TipAmount, SortOrder.Ascending) => query.OrderBy(s => s.TipAmount),
             (OrderSortableFields.TipAmount, SortOrder.Descending) => query.OrderByDescending(s => s.TipAmount),
 
-            (OrderSortableFields.FinalAmount, SortOrder.Ascending) => query.OrderBy(s => s.FinalAmount),
-            (OrderSortableFields.FinalAmount, SortOrder.Descending) => query.OrderByDescending(s => s.FinalAmount),
+            //(OrderSortableFields.FinalAmount, SortOrder.Ascending) => query.OrderBy(s => s.FinalAmount),
+            //(OrderSortableFields.FinalAmount, SortOrder.Descending) => query.OrderByDescending(s => s.FinalAmount),
 
-            (OrderSortableFields.PaidAmount, SortOrder.Ascending) => query.OrderBy(s => s.PaidAmount),
-            (OrderSortableFields.PaidAmount, SortOrder.Descending) => query.OrderByDescending(s => s.PaidAmount),
+            //(OrderSortableFields.PaidAmount, SortOrder.Ascending) => query.OrderBy(s => s.PaidAmount),
+            //(OrderSortableFields.PaidAmount, SortOrder.Descending) => query.OrderByDescending(s => s.PaidAmount),
 
             _ => query.OrderBy(s => s.Id)
         };

@@ -1,7 +1,5 @@
 ﻿namespace PoS.WebApi.Application.Services.Service.Contracts
 {
-    using PoS.WebApi.Domain.Entities;
-
     public class ServiceDto
     {
         public Guid Id { get; set; }

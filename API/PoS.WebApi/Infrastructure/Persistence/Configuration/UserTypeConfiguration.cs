@@ -53,11 +53,6 @@ public class UserTypeConfiguration : BaseEntityTypeConfiguration<User>
             .HasForeignKey(u => u.EmployeeId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(u => u.Reservations)
-            .WithOne(r => r.Employee)
-            .HasForeignKey(r => r.EmployeeId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         builder.HasMany(u => u.Orders)
             .WithOne(o => o.Employee)
             .HasForeignKey(o => o.EmployeeId)

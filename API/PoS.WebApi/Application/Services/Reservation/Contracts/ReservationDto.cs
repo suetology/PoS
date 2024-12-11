@@ -1,6 +1,6 @@
 ﻿namespace PoS.WebApi.Application.Services.Reservation.Contracts;
 
-using PoS.WebApi.Domain.Entities;
+using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Domain.Enums;
 
 public class ReservationDto
@@ -14,8 +14,6 @@ public class ReservationDto
     public DateTime ReservationTime { get; set; }
     
     public DateTime AppointmentTime { get; set; }
-
-    public Guid CustomerId { get; set; }
     
-    public Guid EmployeeId { get; set; }
+    public ServiceDto Service { get; set; }
 }

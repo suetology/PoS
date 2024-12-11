@@ -1,0 +1,54 @@
+<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+	<h3 class="text-2xl font-semibold">Add Reservation</h3>
+	<button type="button"
+		class="text-white bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-full p-2 inline-flex justify-center items-center"
+		(click)="close()">
+		<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+			<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+				d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13" />
+		</svg>
+		<span class="sr-only">Close modal</span>
+	</button>
+</div>
+
+<div class="p-6 space-y-6 bg-white rounded-b-lg shadow-lg">
+
+	<form [formGroup]="reservationForm" (ngSubmit)="addReservation()">
+		<div class="space-y-4">
+
+			<label for="service" class="block text-lg font-semibold text-gray-800">Service</label>
+			<select id="service" name="serviceId" formControlName="serviceId" (change)="onServiceAndDateSelect()"
+				class="w-full mt-2 px-4 py-2 border rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+				<option *ngFor="let service of services" [value]="service.id">
+					{{ service.name }} (Price: {{ service.price }}, Duration: {{ service.duration }})
+				</option>
+			</select>
+
+			<label for="date">Date</label>
+			<input type="date" id="date" name="date" formControlName="date"
+				class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" (change)="onServiceAndDateSelect()">
+
+			<div *ngIf="availableTimes.length === 0; else availableTimesList">
+				<p class="text-red-500">There are no available times for this date.</p>
+			</div>
+			<ng-template #availableTimesList>
+				<label for="time" class="block text-lg font-semibold text-gray-800">Available Times</label>
+					<p *ngFor="let availableTime of availableTimes">
+						{{ availableTime.start }} - {{ availableTime.end }}
+					</p>
+
+					<label for="time" class="block text-lg font-semibold text-gray-800">Select Time</label>
+					<input type="time" id="time" name="time" formControlName="time"
+						class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+			</ng-template>
+
+
+
+			<button type="submit"
+				class="mt-6 w-full px-6 py-3 bg-cyan-500 text-white rounded-md hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition duration-200">
+				Add Reservation
+			</button>
+		</div>
+	</form>
+
+</div>

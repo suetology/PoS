@@ -16,9 +16,6 @@ public class OrderTypeConfiguration : BaseEntityTypeConfiguration<Order>
 
         builder.Property(o => o.Created)
             .IsRequired();
-
-        builder.Property(o => o.Closed)
-            .IsRequired();
         
         builder.HasMany(o => o.OrderItems)
             .WithOne(o => o.Order)
@@ -33,6 +30,11 @@ public class OrderTypeConfiguration : BaseEntityTypeConfiguration<Order>
         builder.HasOne(o => o.ServiceCharge)
             .WithMany()
             .HasForeignKey(o => o.ServiceChargeId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(o => o.Customer)
+            .WithMany(c => c.Orders)
+            .HasForeignKey(o => o.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(o => o.Discount)

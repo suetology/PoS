@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { ReservationsComponent } from './reservations/reservations.component';
-//import { ItemsComponent } from './items/items.component';
 import { BusinessComponent } from './business/business.component';
 import { OrdersComponent } from './Orders/orders/orders.component';
 import { LoginComponent } from './login/login.component';
@@ -17,6 +16,10 @@ import { ItemGroupDetailsComponent } from './item-group/item-group-details/item-
 import { ItemPageComponent } from './Item/item-page/item-page.component';
 import { ItemDetailsComponent } from './Item/item-details/item-details.component';
 import { DiscountDetailsComponent } from './discount/discount-details/discount-details.component';
+import { OrderPageComponent } from './Order/order-page/order-page.component';
+import { OrderDetailsComponent } from './Order/order-details/order-details.component';
+import { AddItemsToOrderComponent } from './Order/add-items-to-order/add-items-to-order.component';
+import { AddReservationToOrderComponent } from './Order/add-reservation-to-order/add-reservation-to-order.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -53,5 +56,11 @@ export const routes: Routes = [
         ]
      },
     { path: 'reservations', component: ReservationsComponent },
-    { path: 'orders', component: OrdersComponent }
+    { path: 'order', component: OrderPageComponent,
+        children: [
+            { path: 'add-items', component: AddItemsToOrderComponent },
+            { path: 'add-reservation', component: AddReservationToOrderComponent },
+            { path: ':id', component: OrderDetailsComponent },
+        ]
+     }
 ];
