@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { ReservationsComponent } from './reservations/reservations.component';
 import { BusinessComponent } from './business/business.component';
-import { OrdersComponent } from './Orders/orders/orders.component';
 import { LoginComponent } from './login/login.component';
 import { TaxDetailsComponent } from './Tax/tax-details/tax-details.component';
 import { DiscountPageComponent } from './discount/discount-page/discount-page.component';
