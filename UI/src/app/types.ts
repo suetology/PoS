@@ -237,7 +237,8 @@ export interface Item {
     stock: number,
     image: string,
     itemGroupId?: string,
-    taxIds: string[]
+    taxIds: string[],
+    taxes: Tax[]
 }
 
 export interface CreateItemRequest {
@@ -306,19 +307,21 @@ export interface OrderItem {
 
 export interface Order {
     id: string,
-    employeeId: string,
     status: OrderStatus,
-    tipAmount: number,
-    finalAmount: number,
-    paidAmount: number,
     created: string,
     closed?: string,
+    finalAmount: number,
+    paidAmount: number,
+    tipAmount: number,
+    employee: User,
     customer: Customer,
     serviceCharge?: ServiceCharge,
-    reservation?: Reservation,
     orderItems: OrderItem[],
+    reservation?: Reservation,
 
-    // dicounts pridet
+    // add payments
+    // add refund
+    // add discount
 }
 
 export interface GetOrderRespose {
@@ -355,7 +358,7 @@ export interface Reservation {
     status: AppointmentStatus,
     reservationTime: string,
     appointmentTime: string,
-
+    service: Service
 }
 
 export interface CreateReservationRequest {

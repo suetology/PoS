@@ -46,4 +46,19 @@ public class Order : Entity
     public Guid CustomerId { get; set; }
 
     public Customer Customer { get; set; }
+
+    public decimal CalculateTotalAmout()
+    {
+        // add discounts
+        var totalAmount = OrderItems.Sum(o => o.CalculateTotalAmout()) + (Reservation?.Service.Price ?? 0);
+        totalAmount += ServiceCharge == null ? 0 : (ServiceCharge.IsPercentage ? totalAmount * (ServiceCharge.Value / 100) : ServiceCharge.Value);
+        totalAmount += TipAmount;
+
+        return totalAmount;
+    }
+
+    public decimal CalculatePaidAmount()
+    {
+        return Payments.Sum(p => p.Amount);
+    }
 }

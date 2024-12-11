@@ -27,7 +27,7 @@ export class TaxComponent {
     this.taxes$ = this.taxService.getTaxes();
 
     this.updateSub = this.taxService.getTaxesUpdated().subscribe(() => {
-    this.taxes$ = this.taxService.getTaxes();
+      this.taxes$ = this.taxService.getTaxes();
     });
 
     this.routeSub = this.router.events

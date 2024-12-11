@@ -21,4 +21,9 @@ public class OrderItem : Entity
     public Guid OrderId { get; set; }
     
     public Order Order { get; set; }
+
+    public decimal CalculateTotalAmout()
+    {
+        return Quantity * (Item.CalculateTotalAmount() + ItemVariations.Sum(v => v.AddedPrice));
+    }
 }

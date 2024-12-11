@@ -14,6 +14,12 @@ using PoS.WebApi.Application.Services.Customer;
 using PoS.WebApi.Application.Services.Item;
 using PoS.WebApi.Application.Services.Item.Contracts;
 using PoS.WebApi.Application.Services.ServiceCharge.Contracts;
+using PoS.WebApi.Application.Services.Customer.Contracts;
+using PoS.WebApi.Application.Services.User.Contracts;
+using PoS.WebApi.Application.Services.ItemGroup.Contracts;
+using PoS.WebApi.Application.Services.Reservation.Contracts;
+using PoS.WebApi.Application.Services.Service.Contracts;
+using PoS.WebApi.Application.Services.Tax.Contracts;
 
 public class OrderService: IOrderService
 {
@@ -100,11 +106,22 @@ public class OrderService: IOrderService
                 Status = o.Status,
                 Created = o.Created,
                 Closed = o.Closed,
-                //FinalAmount = FinalAmount,
-                //PaidAmount = PaidAmount,
+                FinalAmount = o.CalculateTotalAmout(),
+                PaidAmount = o.CalculatePaidAmount(),
                 TipAmount = o.TipAmount,
-                EmployeeId = o.EmployeeId,
-                //DiscountId = o.DiscountId,
+                Employee = new UserDto
+                {
+                    Id = o.Employee.Id,
+                    Username = o.Employee.Username,
+                    Role = o.Employee.Role
+                },
+                Customer = new CustomerDto
+                {
+                    Id = o.Customer.Id,
+                    Name = o.Customer.Name,
+                    Email = o.Customer.Email,
+                    PhoneNumber = o.Customer.PhoneNumber
+                },
                 ServiceCharge = o.ServiceCharge == null ? null : new ServiceChargeDto
                 {
                     Id = o.ServiceCharge.Id,
@@ -113,8 +130,47 @@ public class OrderService: IOrderService
                     Value = o.ServiceCharge.Value,
                     IsPercentage = o.ServiceCharge.IsPercentage
                 },
-                //ServiceChargeAmount = ServiceChargeAmount,
-                //DiscountAmount = DiscountAmount
+                OrderItems = o.OrderItems.Select(i => new OrderItemDto
+                {
+                    Id = i.Id,
+                    Quantity = i.Quantity,
+                    Item = new ItemDto
+                    {
+                        Id = i.Item.Id,
+                        Name = i.Item.Name,
+                        Price = i.Item.Price,
+                        Taxes = i.Item.Taxes.Select(t => new TaxDto
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            Value = t.Value,
+                            Type = t.Type,
+                            IsPercentage = t.IsPercentage
+                        }).ToList()
+                    },
+                    ItemVariations = i.ItemVariations.Select(v => new ItemVariationDto
+                    {
+                        Id = v.Id,
+                        Name = v.Name,
+                        AddedPrice = v.AddedPrice
+                    })
+                }),
+                Reservation = o.Reservation == null ? null : new ReservationDto
+                {
+                    Id = o.Reservation.Id,
+                    Status = o.Reservation.Status,
+                    AppointmentTime = o.Reservation.AppointmentTime,
+                    Service = new ServiceDto
+                    {
+                        Id = o.Reservation.Service.Id,
+                        Name = o.Reservation.Service.Name,
+                        Price = o.Reservation.Service.Price,
+                        Duration = o.Reservation.Service.Duration
+                    }
+                }
+                // add paymentDtos
+                // add refundDto
+                // add discountDto
             });
 
         return new GetAllOrdersResponse
@@ -140,21 +196,71 @@ public class OrderService: IOrderService
                 Status = order.Status,
                 Created = order.Created,
                 Closed = order.Closed,
-                //FinalAmount = FinalAmount,
-                //PaidAmount = PaidAmount,
+                FinalAmount = order.CalculateTotalAmout(),
+                PaidAmount = order.CalculatePaidAmount(),
                 TipAmount = order.TipAmount,
-                EmployeeId = order.EmployeeId,
-                //DiscountId = order.DiscountId,
-                //ServiceChargeAmount = ServiceChargeAmount,
-                //DiscountAmount = DiscountAmount
+                Employee = new UserDto
+                {
+                    Id = order.Employee.Id,
+                    Username = order.Employee.Username,
+                    Role = order.Employee.Role
+                },
+                Customer = new CustomerDto
+                {
+                    Id = order.Customer.Id,
+                    Name = order.Customer.Name,
+                    Email = order.Customer.Email,
+                    PhoneNumber = order.Customer.PhoneNumber
+                },
                 ServiceCharge = order.ServiceCharge == null ? null : new ServiceChargeDto
                 {
-                    Id = order.ServiceCharge.Id,    
+                    Id = order.ServiceCharge.Id,
                     Name = order.ServiceCharge.Name,
                     Description = order.ServiceCharge.Description,
                     Value = order.ServiceCharge.Value,
                     IsPercentage = order.ServiceCharge.IsPercentage
                 },
+                OrderItems = order.OrderItems.Select(i => new OrderItemDto
+                {
+                    Id = i.Id,
+                    Quantity = i.Quantity,
+                    Item = new ItemDto
+                    {
+                        Id = i.Item.Id,
+                        Name = i.Item.Name,
+                        Price = i.Item.Price,
+                        Taxes = i.Item.Taxes.Select(t => new TaxDto
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            Value = t.Value,
+                            Type = t.Type,
+                            IsPercentage = t.IsPercentage
+                        }).ToList()
+                    },
+                    ItemVariations = i.ItemVariations.Select(v => new ItemVariationDto
+                    {
+                        Id = v.Id,
+                        Name = v.Name,
+                        AddedPrice = v.AddedPrice
+                    })
+                }),
+                Reservation = order.Reservation == null ? null : new ReservationDto
+                {
+                    Id = order.Reservation.Id,
+                    Status = order.Reservation.Status,
+                    AppointmentTime = order.Reservation.AppointmentTime,
+                    Service = new ServiceDto
+                    {
+                        Id = order.Reservation.Service.Id,
+                        Name = order.Reservation.Service.Name,
+                        Price = order.Reservation.Service.Price,
+                        Duration = order.Reservation.Service.Duration
+                    }
+                }
+                // add paymentDtos
+                // add refundDto
+                // add discountDto
             }
         };
     }
