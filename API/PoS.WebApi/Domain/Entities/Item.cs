@@ -25,4 +25,10 @@ public class Item : Entity
     public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 
     public ICollection<ItemVariation> ItemVariations { get; set; } = new List<ItemVariation>();
+
+    public decimal CalculateTotalAmount()
+    {
+        // add discounts
+        return Price + Taxes.Sum(t => t.IsPercentage ? Price * (t.Value / 100) : t.Value);
+    }
 }

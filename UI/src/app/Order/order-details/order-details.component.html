@@ -1,1 +1,82 @@
-<p>order-details works!</p>
+<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+	<h3 class="text-xl font-semibold">
+		Order Info
+	</h3>
+	<button type="button"
+		class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+		(click)="close()">
+		<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+			<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+				d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13" />
+		</svg>
+		<span class="sr-only">Close modal</span>
+	</button>
+</div>
+
+<div class="p-4 md:p-5 space-y-4">
+	<div>
+		<h4 class="text-lg font-medium">General Info</h4>
+		<p>Status: {{ order?.status ?? 'N/A' }}</p>
+		<p>Created at: {{ order?.created ?? 'N/A' }}</p>
+		<p>Closed at: {{ order?.closed?? 'N/A' }}</p>
+		<p>Service Charge: {{ order?.serviceCharge?.name ?? 'N/A' }} <span *ngIf="order?.serviceCharge">({{ order?.serviceCharge?.value }}{{ order?.serviceCharge?.isPercentage ? '%' : '' }})</span></p>
+		<p>Tip Amount: {{ order?.tipAmount?? 'N/A' }}</p>
+		<p>Total Amount: {{ order?.finalAmount?? 'N/A' }}</p>
+		<p>Paid Amount: {{ order?.paidAmount?? 'N/A' }}</p>
+	</div>
+
+	<div>
+		<h4 class="text-lg font-medium">Customer Info</h4>
+		<p>Name: {{ order?.customer?.name ?? 'N/A' }}</p>
+		<p>Email: {{ order?.customer?.email ?? 'N/A' }}</p>
+		<p>Phone: {{ order?.customer?.phoneNumber ?? 'N/A' }}</p>
+	</div>
+
+	<div *ngIf="order?.reservation">
+		<h4 class="text-lg font-medium">Reservation Info</h4>
+		<p>Reservation Name: {{ order?.reservation?.service?.name ?? 'N/A' }}</p>
+		<p>Duration: {{ order?.reservation?.service?.duration ?? 'N/A' }}</p>
+		<p>Appointment Time: {{ order?.reservation?.appointmentTime ?? 'N/A' }}</p>
+		<p>Price: {{ order?.reservation?.service?.price ?? 'N/A' }}</p>
+	</div>
+
+	<div *ngIf="order && order.orderItems.length > 0">
+		<h4 class="text-lg font-medium text-gray-800">Order Items</h4>
+		<table class="w-full table-auto border-collapse border border-gray-300">
+			<thead>
+				<tr class="bg-gray-100">
+					<th class="border border-gray-300 px-4 py-2 text-left">Item Name</th>
+					<th class="border border-gray-300 px-4 py-2 text-left">Quantity</th>
+					<th class="border border-gray-300 px-4 py-2 text-left">Price</th>
+					<th class="border border-gray-300 px-4 py-2 text-left">Taxes</th>
+					<th class="border border-gray-300 px-4 py-2 text-left">Variations</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let orderItem of order?.orderItems">
+					<td class="border border-gray-300 px-4 py-2">{{ orderItem?.item?.name }}</td>
+					<td class="border border-gray-300 px-4 py-2">{{ orderItem?.quantity }}</td>
+					<td class="border border-gray-300 px-4 py-2">{{ orderItem?.item?.price }}</td>
+
+					<td class="border border-gray-300 px-4 py-2">
+						<ul *ngIf="orderItem && orderItem.item.taxes && orderItem.item.taxes.length > 0">
+							<li *ngFor="let tax of orderItem?.item?.taxes">
+								{{ tax.name }} (+{{ tax.value }}{{ tax.isPercentage ? '%' : '' }})
+							</li>
+						</ul>
+						<p *ngIf="!orderItem.item || orderItem.item.taxes.length === 0">-</p>
+					</td>
+
+					<td class="border border-gray-300 px-4 py-2">
+						<ul *ngIf="orderItem && orderItem.itemVariations && orderItem.itemVariations.length > 0">
+							<li *ngFor="let itemVariation of orderItem?.itemVariations">
+								{{ itemVariation.name }} (+{{ itemVariation.addedPrice }})
+							</li>
+						</ul>
+						<p *ngIf="!orderItem.itemVariations || orderItem.itemVariations.length === 0">-</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

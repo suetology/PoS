@@ -25,20 +25,41 @@ public class OrderRepository : IOrderRepository
     public async Task<Order> Get(Guid id)
     {
         return await _dbContext.Orders
+            .Include(o => o.Payments)
+            .Include(o => o.Refund)
+            .Include(o => o.Discount)
             .Include(o => o.ServiceCharge)
             .Include(o => o.Employee)
             .Include(o => o.Reservation)
             .Include(o => o.Customer)
             .Include(o => o.OrderItems)
                 .ThenInclude(o => o.Item)
+                    .ThenInclude(i => i.Taxes)
             .Include(o => o.OrderItems)
                 .ThenInclude(o => o.ItemVariations)
+            .Include(o => o.Reservation)
+                .ThenInclude(r => r.Service)
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<IEnumerable<Order>> GetAll()
     {
-        return await _dbContext.Orders.ToListAsync();
+        return await _dbContext.Orders
+            .Include(o => o.Payments)
+            .Include(o => o.Refund)
+            .Include(o => o.Discount)
+            .Include(o => o.ServiceCharge)
+            .Include(o => o.Employee)
+            .Include(o => o.Reservation)
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+                .ThenInclude(o => o.Item)
+                    .ThenInclude(i => i.Taxes)
+            .Include(o => o.OrderItems)
+                .ThenInclude(o => o.ItemVariations)
+            .Include(o => o.Reservation)
+                .ThenInclude(r => r.Service)
+            .ToListAsync();
     }
 
     public Task Update(Order entity)
@@ -48,7 +69,22 @@ public class OrderRepository : IOrderRepository
 
     public async Task<IEnumerable<Order>> GetAllFiltered(OrderQueryParameters parameters)
     {
-        var query = _dbContext.Orders.AsQueryable();
+        var query = _dbContext.Orders
+            .Include(o => o.Payments)
+            .Include(o => o.Refund)
+            .Include(o => o.Discount)
+            .Include(o => o.ServiceCharge)
+            .Include(o => o.Employee)
+            .Include(o => o.Reservation)
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+                .ThenInclude(o => o.Item)
+                    .ThenInclude(i => i.Taxes)
+            .Include(o => o.OrderItems)
+                .ThenInclude(o => o.ItemVariations)
+            .Include(o => o.Reservation)
+                .ThenInclude(r => r.Service)
+            .AsQueryable();
 
         if (parameters.Status.HasValue) {
             query = query.Where(s => s.Status == parameters.Status);
@@ -74,8 +110,8 @@ public class OrderRepository : IOrderRepository
             (OrderSortableFields.OrderClosed, SortOrder.Ascending) => query.OrderBy(s => s.Closed),
             (OrderSortableFields.OrderClosed, SortOrder.Descending) => query.OrderByDescending(s => s.Closed),
 
-            //(OrderSortableFields.DiscountId, SortOrder.Ascending) => query.OrderBy(s => s.DiscountId),
-            //(OrderSortableFields.DiscountId, SortOrder.Descending) => query.OrderByDescending(s => s.DiscountId),
+            (OrderSortableFields.DiscountId, SortOrder.Ascending) => query.OrderBy(s => s.DiscountId),
+            (OrderSortableFields.DiscountId, SortOrder.Descending) => query.OrderByDescending(s => s.DiscountId),
 
             //(OrderSortableFields.DiscountAmount, SortOrder.Ascending) => query.OrderBy(s => s.DiscountAmount),
             //(OrderSortableFields.DiscountAmount, SortOrder.Descending) => query.OrderByDescending(s => s.DiscountAmount),
