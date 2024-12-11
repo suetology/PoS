@@ -22,7 +22,7 @@ public class BusinessRepository : IBusinessRepository
 
     public async Task Update(Business business)
     {
-        throw new NotImplementedException();
+        _dbContext.Businesses.Update(business);
     }
 
     public async Task<Business> Get(Guid id)

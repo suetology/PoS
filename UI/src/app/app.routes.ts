@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ReservationsComponent } from './components/reservations/reservations.component';
-import { BusinessComponent } from './components/business/business.component';
+import { BusinessComponent } from './components/business/business/business.component';
 import { LoginComponent } from './components/login/login.component';
 import { TaxDetailsComponent } from './components/Tax/tax-details/tax-details.component';
 import { DiscountPageComponent } from './components/discount/discount-page/discount-page.component';
@@ -20,11 +20,16 @@ import { OrderDetailsComponent } from './components/Order/order-details/order-de
 import { AddItemsToOrderComponent } from './components/Order/add-items-to-order/add-items-to-order.component';
 import { AddReservationToOrderComponent } from './components/Order/add-reservation-to-order/add-reservation-to-order.component';
 import { AuthGuard } from './guards/auth.guard';
+import { UpdateBusinessComponent } from './components/business/update-business/update-business.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginComponent },
-    { path: 'business', component: BusinessComponent, canActivate: [AuthGuard] },
+    { path: 'business', component: BusinessComponent, canActivate: [AuthGuard], 
+        children: [
+            { path: ':id/edit', component: UpdateBusinessComponent }
+        ]
+    },
     { path: 'discount', component: DiscountPageComponent, canActivate: [AuthGuard],
         children: [
             { path: ':id', component: DiscountDetailsComponent, canActivate: [AuthGuard] },
