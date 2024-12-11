@@ -19,47 +19,49 @@ import { OrderPageComponent } from './components/Order/order-page/order-page.com
 import { OrderDetailsComponent } from './components/Order/order-details/order-details.component';
 import { AddItemsToOrderComponent } from './components/Order/add-items-to-order/add-items-to-order.component';
 import { AddReservationToOrderComponent } from './components/Order/add-reservation-to-order/add-reservation-to-order.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+    { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginComponent },
-    { path: 'business', component: BusinessComponent },
-    { path: 'discount', component: DiscountPageComponent,
+    { path: 'business', component: BusinessComponent, canActivate: [AuthGuard] },
+    { path: 'discount', component: DiscountPageComponent, canActivate: [AuthGuard],
         children: [
-            { path: ':id', component: DiscountDetailsComponent },
+            { path: ':id', component: DiscountDetailsComponent, canActivate: [AuthGuard] },
         ]
     },
-    { path: 'item-group', component: ItemGroupPageComponent,
+    { path: 'item-group', component: ItemGroupPageComponent, canActivate: [AuthGuard],
         children: [
-            { path: ':id', component: ItemGroupDetailsComponent },
+            { path: ':id', component: ItemGroupDetailsComponent, canActivate: [AuthGuard] },
         ]
      },
-    { path: 'item', component: ItemPageComponent,
+    { path: 'item', component: ItemPageComponent, canActivate: [AuthGuard],
         children: [
-            { path: ':id', component: ItemDetailsComponent }
+            { path: ':id', component: ItemDetailsComponent, canActivate: [AuthGuard], }
         ]
      },
-    { path: 'services', component: ServicePageComponent,
+    { path: 'services', component: ServicePageComponent, canActivate: [AuthGuard],
         children: [
-            { path: ':id', component: ServiceDetailsComponent },
+            { path: ':id', component: ServiceDetailsComponent, canActivate: [AuthGuard] },
         ]
      },
-    { path: 'tax', component: TaxPageComponent,
+    { path: 'tax', component: TaxPageComponent, canActivate: [AuthGuard],
         children: [
-            { path: ':id', component: TaxDetailsComponent },
+            { path: ':id', component: TaxDetailsComponent, canActivate: [AuthGuard] },
         ]
      },
-    { path: 'service-charge', component: ServiceChargePageComponent },
-    { path: 'user', component: UserPageComponent,
+    { path: 'service-charge', component: ServiceChargePageComponent, canActivate: [AuthGuard] },
+    { path: 'user', component: UserPageComponent, canActivate: [AuthGuard],
         children: [
-            { path: ':id', component: UserDetailsComponent },
+            { path: ':id', component: UserDetailsComponent, canActivate: [AuthGuard] },
         ]
      },
-    { path: 'reservations', component: ReservationsComponent },
-    { path: 'order', component: OrderPageComponent,
+    { path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuard] },
+    { path: 'order', component: OrderPageComponent, canActivate: [AuthGuard],
         children: [
-            { path: 'add-items', component: AddItemsToOrderComponent },
-            { path: 'add-reservation', component: AddReservationToOrderComponent },
-            { path: ':id', component: OrderDetailsComponent },
+            { path: 'add-items', component: AddItemsToOrderComponent, canActivate: [AuthGuard]},
+            { path: 'add-reservation', component: AddReservationToOrderComponent, canActivate: [AuthGuard] },
+            { path: ':id', component: OrderDetailsComponent, canActivate: [AuthGuard] },
         ]
      }
 ];
