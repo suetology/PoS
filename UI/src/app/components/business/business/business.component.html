@@ -8,9 +8,7 @@
                 <th scope="col"> Address </th>
                 <th scope="col"> Phone number </th>
                 <th scope="col"> Email </th>
-                <!-- <th scope="col">
-                    <span class="sr-only">Edit</span>
-                </th> -->
+                <th scope="col"> Actions </th>
             </tr>
         </thead>
         @for(bus of business$ | async ; track $index) 
@@ -23,13 +21,16 @@
                     <td> {{ bus.address }} </td>
                     <td> {{ bus.phoneNumber }} </td>
                     <td> {{ bus.email }} </td>
-                    <!-- <td class="text-right"> -->
-                        <!-- <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a> -->
-                        <!-- <a class="font-medium text-blue-600 hover:underline">Edit</a>
-                    </td> -->
+                    <td
+                    class="font-medium text-cyan-600 hover:underline cursor-pointer"
+                    (click)="editBusiness(bus.id)"
+                    >
+                        Edit
+                    </td>
+                  
                 </tr>
             </tbody>
         }
     </table>
 </div>
-  
+<router-outlet></router-outlet>

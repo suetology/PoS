@@ -1,0 +1,65 @@
+<div class="mx-auto px-4 lg:px-12 m-6">
+  <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
+      <div class="overflow-x-auto m-6">
+        <h2 class="text-2xl ">Edit Business</h2>
+
+        <form [formGroup]="businessForm" (ngSubmit)="onSubmit()">
+          <div class="mt-4">
+            <label for="name">Business Name </label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-input"
+            />
+          </div>
+
+          <div class="mt-4">
+            <label for="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              formControlName="address"
+              class="form-input"
+            />
+          </div>
+
+          <div class="mt-4">
+            <label for="phoneNumber">Phone Number</label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              formControlName="phoneNumber"
+              class="form-input"
+            />
+          </div>
+
+          <div class="mt-4">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-input"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="mt-6 text-white bg-cyan-400 hover:bg-cyan-500 font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            Save Changes
+          </button>
+
+          <button
+          type="button"
+          class="mt-6 ml-4 text-gray-600 hover:text-gray-900"
+          (click)="goBack()"
+          >
+            Cancel
+          </button>
+        
+        </form>
+    </div>
+  </div>
+</div>

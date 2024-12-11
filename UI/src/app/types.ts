@@ -60,6 +60,13 @@ export interface Business {
     // employees: Employees;
 }
 
+export interface UpdateBusinessRequest  {
+    name?: string;
+    address?: string;
+    phoneNumber?: string;
+    email?: string;
+}
+
 export interface CreateUserRequest {
     username: string,
     passwordHash: string,
