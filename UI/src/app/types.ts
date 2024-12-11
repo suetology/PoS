@@ -163,28 +163,31 @@ export interface GroupDiscount {
     itemGroup: ItemGroup;
 }
 
-export interface DiscountResponse{
-    discount: Discount[];
+export interface DiscountResponse {
+    discounts: Discount[];
 }
 
 export interface Discount {
-    discountId: string;
-    discountName: string;
+    id: string;
+    name: string;
     value: number;
     isPercentage: boolean;
     amountAvailable: number;
     validFrom: Date;
     validTo: Date;
-    itemGroups?: GroupDiscount;
+    items: Item[];
+    itemGroups: ItemGroup[];
 }
 
 export interface DiscountRequest {
-    discountName: string;
+    name: string;
     value: number;
     isPercentage: boolean;
     amountAvailable: number;
-    validFrom: Date;
-    validTo: Date;
+    validFrom: string;
+    validTo: string;
+    applicableItems: string[];
+    applicableGroups: string[];
 }
 
 export interface ServiceCharge {

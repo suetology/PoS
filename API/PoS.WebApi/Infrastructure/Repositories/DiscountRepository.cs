@@ -71,7 +71,10 @@ public class DiscountRepository : IDiscountRepository
 
     public async Task<Discount> Get(Guid id)
     {
-        return await _dbContext.Discounts.FindAsync(id);
+        return await _dbContext.Discounts
+            .Include(d => d.Items)
+            .Include(d => d.ItemGroups)
+            .FirstOrDefaultAsync(d => d.Id == id);
     }
 
     public Task Update(Discount entity)
