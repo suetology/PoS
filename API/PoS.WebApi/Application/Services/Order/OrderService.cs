@@ -20,6 +20,7 @@ using PoS.WebApi.Application.Services.ItemGroup.Contracts;
 using PoS.WebApi.Application.Services.Reservation.Contracts;
 using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.Tax.Contracts;
+using PoS.WebApi.Application.Services.Discount.Contracts;
 
 public class OrderService: IOrderService
 {
@@ -146,6 +147,25 @@ public class OrderService: IOrderService
                             Value = t.Value,
                             Type = t.Type,
                             IsPercentage = t.IsPercentage
+                        }).ToList(),
+                        ItemGroup = new ItemGroupDto
+                        {
+                            Id = i.Item.ItemGroup.Id,
+                            Name = i.Item.ItemGroup.Name,
+                            Discounts = i.Item.ItemGroup.Discounts.Select(d => new DiscountDto
+                            {
+                                Id = d.Id,
+                                Name = d.Name,
+                                IsPercentage = d.IsPercentage,
+                                Value = d.Value
+                            }).ToList()
+                        },
+                        Discounts = i.Item.Discounts.Select(d => new DiscountDto
+                        {
+                            Id = d.Id,
+                            Name = d.Name,
+                            IsPercentage = d.IsPercentage,
+                            Value = d.Value
                         }).ToList()
                     },
                     ItemVariations = i.ItemVariations.Select(v => new ItemVariationDto
@@ -167,10 +187,16 @@ public class OrderService: IOrderService
                         Price = o.Reservation.Service.Price,
                         Duration = o.Reservation.Service.Duration
                     }
+                },
+                Discount = o.Discount == null ? null : new DiscountDto
+                {
+                    Id = o.Discount.Id,
+                    Name = o.Discount.Name,
+                    Value = o.Discount.Value,
+                    IsPercentage = o.Discount.IsPercentage
                 }
                 // add paymentDtos
                 // add refundDto
-                // add discountDto
             });
 
         return new GetAllOrdersResponse
@@ -236,6 +262,25 @@ public class OrderService: IOrderService
                             Value = t.Value,
                             Type = t.Type,
                             IsPercentage = t.IsPercentage
+                        }).ToList(),
+                        ItemGroup = new ItemGroupDto
+                        {
+                            Id = i.Item.ItemGroup.Id,
+                            Name = i.Item.ItemGroup.Name,
+                            Discounts = i.Item.ItemGroup.Discounts.Select(d => new DiscountDto
+                            {
+                                Id = d.Id,
+                                Name = d.Name,
+                                IsPercentage = d.IsPercentage,
+                                Value = d.Value
+                            }).ToList()
+                        },
+                        Discounts = i.Item.Discounts.Select(d => new DiscountDto
+                        {
+                            Id = d.Id,
+                            Name = d.Name,
+                            IsPercentage = d.IsPercentage,
+                            Value = d.Value
                         }).ToList()
                     },
                     ItemVariations = i.ItemVariations.Select(v => new ItemVariationDto
@@ -257,10 +302,16 @@ public class OrderService: IOrderService
                         Price = order.Reservation.Service.Price,
                         Duration = order.Reservation.Service.Duration
                     }
+                },
+                Discount = order.Discount == null ? null : new DiscountDto
+                {
+                    Id = order.Discount.Id,
+                    Name = order.Discount.Name,
+                    Value = order.Discount.Value,
+                    IsPercentage = order.Discount.IsPercentage
                 }
                 // add paymentDtos
                 // add refundDto
-                // add discountDto
             }
         };
     }

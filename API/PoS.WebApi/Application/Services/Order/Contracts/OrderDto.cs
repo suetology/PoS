@@ -34,7 +34,8 @@ public class OrderDto
 
     public ReservationDto Reservation { get; set; }
 
+    public DiscountDto Discount { get; set; }
+    
     // add paymentDtos
     // add refundDto
-    // add discountDto
 }

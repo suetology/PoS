@@ -11,7 +11,7 @@ import { AddReservationToOrderComponent } from '../add-reservation-to-order/add-
 @Component({
   selector: 'app-add-order',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, AsyncPipe, NgFor, NgIf, AsyncPipe, AddItemsToOrderComponent, AddReservationToOrderComponent],
+  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, AsyncPipe, AddItemsToOrderComponent, AddReservationToOrderComponent],
   templateUrl: './add-order.component.html',
   styleUrl: './add-order.component.css'
 })

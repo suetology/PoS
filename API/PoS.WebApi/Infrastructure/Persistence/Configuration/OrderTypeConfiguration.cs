@@ -38,8 +38,8 @@ public class OrderTypeConfiguration : BaseEntityTypeConfiguration<Order>
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(o => o.Discount)
-            .WithMany(d => d.Orders)
-            .HasForeignKey(o => o.DiscountId)
+            .WithOne(d => d.Order)
+            .HasForeignKey<Order>(o => o.DiscountId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -18,7 +18,7 @@ public class Discount : Entity
     
     public DateTime ValidTo { get; set; }
     
-    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    public Order Order { get; set; }
     
     public ICollection<ItemGroup> ItemGroups { get; set; } = new List<ItemGroup>();
     
