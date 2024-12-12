@@ -1,76 +1,91 @@
-<div class="mx-auto px-4 lg:px-12 m-4">
-    <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden p-4">
-
-        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-
-        <label for="username">Username</label>
-        <input 
+<div class="px-4 m-4">
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="grid gap-6 md:grid-cols-2">
+        <div>
+            <label for="name">First name</label>
+            <input 
+            type="text" 
+            id="name" 
+            placeholder="John"
+            name="name" 
+            formControlName="name"
+        >
+        </div>
+        <div>
+            <label for="surname">Surname</label>
+            <input 
+            type="text" 
+            id="surname" 
+            placeholder="Doe"
+            name="surname" 
+            formControlName="surname"
+        >
+        </div>
+        <div>
+            <label for="username">Username</label>
+            <input 
             type="text" 
             id="username" 
             name="username" 
             formControlName="username"
         >
+        </div>  
+        <div>
+            <label for="phoneNumber">Phone number</label>
+            <input 
+                type="text" 
+                id="phoneNumber"
+                placeholder="+3706001256" 
+                name="phoneNumber" 
+                formControlName="phoneNumber"
+            >
+        </div>
+        <div>
+            <label for="role">Role</label>
+            <select id="role" name="role" formControlName="role">
+                <option [value]="2">Business Owner</option>
+                <option [value]="3">Employee</option>
+            </select>
+        </div>
 
+        <div>
+            <label for="status">Status</label>
+            <select id="status" name="status" formControlName="status">
+                <option [value]="1">Active</option>
+                <option [value]="2">Left</option>
+                <option [value]="3">Fired</option>
+                <option [value]="4">Unpaid Leave</option>
+                <option [value]="5">Paid Leave</option>
+                <option [value]="6">Sick Leave</option>
+                <option [value]="7">Childcare Leave</option>
+                <option [value]="8">Not Employee</option>
+            </select>
+        </div>
+
+    <div class="mb-6">
+        <label for="email">Email address</label>
+        <input 
+        type="text" 
+        id="email" 
+        placeholder="john.doe@company.com"
+        name="email" 
+        formControlName="email"
+    >
+    </div> 
+
+    <div class="mb-6">
         <label for="passwordHash">Password</label>
         <input 
-            type="text" 
-            id="passwordHash" 
-            name="passwordHash" 
-            formControlName="passwordHash"
-        >
-
-        <label for="name">Name</label>
-        <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            formControlName="name"
-        >
-
-        <label for="surname">Surname</label>
-        <input 
-            type="text" 
-            id="surname" 
-            name="surname" 
-            formControlName="surname"
-        >
-        
-        <label for="email">Email</label>
-        <input 
-            type="text" 
-            id="email" 
-            name="email" 
-            formControlName="email"
-        >
-
-        <label for="phoneNumber">Phone Number</label>
-        <input 
-            type="text" 
-            id="phoneNumber" 
-            name="phoneNumber" 
-            formControlName="phoneNumber"
-        >
-
-        <label for="role">Role</label>
-        <select id="role" name="role" formControlName="role">
-            <option [value]="2">Business Owner</option>
-            <option [value]="3">Employee</option>
-        </select>
-
-        <label for="status">Status</label>
-        <select id="status" name="status" formControlName="status">
-            <option [value]="1">Active</option>
-            <option [value]="2">Left</option>
-            <option [value]="3">Fired</option>
-            <option [value]="4">Unpaid Leave</option>
-            <option [value]="5">Paid Leave</option>
-            <option [value]="6">Sick Leave</option>
-            <option [value]="7">Childcare Leave</option>
-            <option [value]="8">Not Employee</option>
-        </select>
-
-        <button type="submit" class=" mt-4 text-white bg-cyan-400 hover:bg-cyan-500 focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
-            + Add</button>
-        </form>
+        type="password" 
+        id="passwordHash" 
+        placeholder="•••••••••"
+        name="passwordHash" 
+        formControlName="passwordHash"
+    >
+    </div> 
     </div>
+    <button type="submit" class="text-white bg-cyan-400 hover:bg-cyan-500 focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+        + Add
+    </button>
+</form>
 </div>

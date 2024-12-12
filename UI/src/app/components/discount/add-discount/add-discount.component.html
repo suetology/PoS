@@ -19,13 +19,12 @@
             formControlName="value"
         >
 
-        <label for="isPercentage">isPercentage</label>
-        <input 
-            type="checkbox" 
-            id="isPercentage" 
-            name="isPercentage" 
-            formControlName="isPercentage"
-        >
+        <div class="flex items-start mt-4 mb-2">
+          <div class="flex items-center h-5">
+              <input id="isPercentage" type="checkbox" formControlName="isPercentage" name="isPercentage" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" />
+          </div>
+          <label for="isPercentage" class="ms-2 text-sm font-medium text-gray-900">Is this value percentage?</label>
+        </div>
 
         <label for="amountAvailable">amountAvailable</label>
         <input 

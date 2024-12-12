@@ -22,7 +22,7 @@ export class AddUserComponent {
     role: new FormControl<string>('', Validators.required),
     status: new FormControl<string>('', Validators.required),
   });
-
+  
   constructor(private userService: UserService) { }
 
   onSubmit() {

@@ -34,14 +34,13 @@
             name="duration" 
             formControlName="duration"
         >
-        
-        <label for="isActive">Is active</label>
-        <input 
-            type="checkbox" 
-            id="isActive" 
-            name="isActive" 
-            formControlName="isActive"
-        >
+
+        <div class="flex items-start mt-6">
+            <div class="flex items-center h-5">
+                <input id="isActive" type="checkbox" formControlName="isActive" name="isActive" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" />
+            </div>
+            <label for="isActive" class="ms-2 text-sm font-medium text-gray-900">Is this service active?</label>
+        </div>
 
         <label for="employee">Employee</label>
         <select id="employee" name="employeeId" formControlName="employeeId">

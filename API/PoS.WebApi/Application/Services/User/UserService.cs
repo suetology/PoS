@@ -118,6 +118,30 @@ public class UserService : IUserService
         };
     }
 
+    public async Task<bool> UpdateUser(UpdateUserRequest request)
+    {
+        var existingUser = await _userRepository.Get(request.Id);
+
+        if (existingUser == null)
+        {
+            return false;
+        }
+
+        existingUser.Username = request.Username ?? existingUser.Username;
+        existingUser.PasswordHash = request.PasswordHash ?? existingUser.PasswordHash;
+        existingUser.Name = request.Name ?? existingUser.Name;
+        existingUser.Surname = request.Surname ?? existingUser.Surname;
+        existingUser.Email = request.Email ?? existingUser.Email;
+        existingUser.PhoneNumber = request.PhoneNumber ?? existingUser.PhoneNumber;
+        existingUser.Role = request.Role;
+        existingUser.Status = request.Status;
+
+        await _userRepository.Update(existingUser);
+        await _unitOfWork.SaveChanges();
+
+        return true;
+    }
+
     public Task<GetAvailableRolesResponse> GetAvailableRoles()
     {
         return Task.FromResult(new GetAvailableRolesResponse
