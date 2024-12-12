@@ -183,11 +183,12 @@ export interface DiscountRequest {
     name: string;
     value: number;
     isPercentage: boolean;
-    amountAvailable: number;
-    validFrom: string;
-    validTo: string;
-    applicableItems: string[];
-    applicableGroups: string[];
+    amountAvailable?: number;
+    validFrom?: string;
+    validTo?: string;
+    applicableOrder?: string,
+    applicableItems?: string[];
+    applicableGroups?: string[];
 }
 
 export interface ServiceCharge {
@@ -213,6 +214,7 @@ export interface ItemGroup {
     id: string,
     name: string,
     description: string
+    discounts: Discount[]
 }
 
 export interface CreateItemGroupRequest {
@@ -240,6 +242,8 @@ export interface Item {
     stock: number,
     image: string,
     itemGroupId?: string,
+    itemGroup?: ItemGroup,
+    discounts: Discount[],
     taxIds: string[],
     taxes: Tax[]
 }
@@ -321,10 +325,10 @@ export interface Order {
     serviceCharge?: ServiceCharge,
     orderItems: OrderItem[],
     reservation?: Reservation,
+    discount?: Discount
 
     // add payments
     // add refund
-    // add discount
 }
 
 export interface GetOrderRespose {

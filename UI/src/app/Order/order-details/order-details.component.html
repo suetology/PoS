@@ -18,11 +18,12 @@
 		<h4 class="text-lg font-medium">General Info</h4>
 		<p>Status: {{ order?.status ?? 'N/A' }}</p>
 		<p>Created at: {{ order?.created ?? 'N/A' }}</p>
-		<p>Closed at: {{ order?.closed?? 'N/A' }}</p>
+		<p>Closed at: {{ order?.closed ?? 'N/A' }}</p>
 		<p>Service Charge: {{ order?.serviceCharge?.name ?? 'N/A' }} <span *ngIf="order?.serviceCharge">({{ order?.serviceCharge?.value }}{{ order?.serviceCharge?.isPercentage ? '%' : '' }})</span></p>
-		<p>Tip Amount: {{ order?.tipAmount?? 'N/A' }}</p>
-		<p>Total Amount: {{ order?.finalAmount?? 'N/A' }}</p>
-		<p>Paid Amount: {{ order?.paidAmount?? 'N/A' }}</p>
+		<p>Tip Amount: {{ order?.tipAmount ?? 'N/A' }}</p>
+		<p>Discount: {{ order?.discount?.name ?? 'N/A' }} <span *ngIf="order?.discount">({{ order?.discount?.value }}{{ order?.discount?.isPercentage ? '%' : '' }})</span></p>
+		<p>Total Amount: {{ order?.finalAmount ?? 'N/A' }}</p>
+		<p>Paid Amount: {{ order?.paidAmount ?? 'N/A' }}</p>
 	</div>
 
 	<div>
@@ -50,6 +51,7 @@
 					<th class="border border-gray-300 px-4 py-2 text-left">Price</th>
 					<th class="border border-gray-300 px-4 py-2 text-left">Taxes</th>
 					<th class="border border-gray-300 px-4 py-2 text-left">Variations</th>
+					<th class="border border-gray-300 px-4 py-2 text-left">Discounts</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -73,10 +75,50 @@
 								{{ itemVariation.name }} (+{{ itemVariation.addedPrice }})
 							</li>
 						</ul>
-						<p *ngIf="!orderItem.itemVariations || orderItem.itemVariations.length === 0">-</p>
+					</td>
+
+					<td class="border border-gray-300 px-4 py-2">
+						<ul *ngIf="orderItem && orderItem.item && orderItem.item.discounts && orderItem.item.discounts.length > 0">
+							<li *ngFor="let discount of orderItem?.item?.discounts">
+								{{ discount.name }} (+{{ discount.value }}{{ discount.isPercentage ? '%' : '' }})
+							</li>
+						</ul>
+						<ul *ngIf="orderItem && orderItem.item && orderItem.item.itemGroup && orderItem.item.itemGroup.discounts.length > 0">
+							<li *ngFor="let discount of orderItem?.item?.itemGroup?.discounts">
+								{{ discount.name }} (-{{ discount.value }}{{ discount.isPercentage ? '%' : '' }})
+							</li>
+						</ul>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+	</div>
+
+	<div *ngIf="!order?.discount">
+		<h4 class="text-lg font-medium">Discount</h4>
+		<form [formGroup]="discountForm" (ngSubmit)="addDiscount()" class="space-y-4">
+			<div class="grid grid-cols-4 gap-4 items-end">
+				<div class="col-span-1">
+					<label for="discountName" class="block text-sm font-medium text-gray-700">Name</label>
+					<input type="text" id="discountName" name="discountName" formControlName="discountName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm w-full block border border-gray-300 p-1.5">
+				</div>
+	
+				<div class="col-span-1">
+					<label for="discountValue" class="block text-sm font-medium text-gray-700">Value</label>
+					<input type="number" id="discountValue" name="discountValue" formControlName="discountValue" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm w-full block border border-gray-300 p-1.5">
+				</div>
+	
+				<div class="col-span-1 flex items-center">
+					<input type="checkbox" id="discountIsPercentage" name="discountIsPercentage" formControlName="discountIsPercentage" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 p-2.5">
+					<label for="discountIsPercentage" class="ml-2 block text-sm text-gray-900">Is Percentage</label>
+				</div>
+	
+				<div class="col-span-1 text-right">
+					<button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+						Add Discount
+					</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>

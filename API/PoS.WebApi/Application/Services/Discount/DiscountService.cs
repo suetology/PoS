@@ -3,6 +3,8 @@
 using Domain.Entities;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Discount.Contracts;
+using PoS.WebApi.Application.Services.Item.Contracts;
+using PoS.WebApi.Application.Services.ItemGroup.Contracts;
 using PoS.WebApi.Domain.Common;
 using System;
 using System.Collections.Generic;
@@ -13,17 +15,20 @@ public class DiscountService : IDiscountService
     private readonly IDiscountRepository _discountRepository;
     private readonly IItemRepository _itemRepository;
     private readonly IItemGroupRepository _itemGroupRepository;
+    private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public DiscountService(
         IDiscountRepository discountRepository, 
         IItemRepository itemRepository,
         IItemGroupRepository itemGroupRepository,
+        IOrderRepository orderRepository,
         IUnitOfWork unitOfWork)
     {
         _discountRepository = discountRepository;
         _itemRepository = itemRepository;
         _itemGroupRepository = itemGroupRepository;
+        _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -43,6 +48,7 @@ public class DiscountService : IDiscountService
         await _discountRepository.Create(discount);
         
         // del sito viso max nesu sure ar gerai veiks :P
+
         var items = await _itemRepository.GetAll();
         var applicableItems = items
             .Where(i => i.BusinessId == request.BusinessId && request.ApplicableItems.Contains(i.Id));
@@ -61,6 +67,14 @@ public class DiscountService : IDiscountService
         {
             itemGroup.Discounts.Add(discount);
             discount.ItemGroups.Add(itemGroup);
+        }
+
+        var order = await _orderRepository.Get(request.ApplicableOrder);
+        
+        if (order != null && order.BusinessId == request.BusinessId)
+        {
+            discount.Order = order;
+            order.Discount = discount;
         }
 
         await _unitOfWork.SaveChanges();

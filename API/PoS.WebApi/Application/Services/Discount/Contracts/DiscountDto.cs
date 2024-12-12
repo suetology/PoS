@@ -1,4 +1,7 @@
 ﻿namespace PoS.WebApi.Application.Services.Discount.Contracts;
+
+using PoS.WebApi.Application.Services.Item.Contracts;
+using PoS.WebApi.Application.Services.ItemGroup.Contracts;
 using PoS.WebApi.Domain.Entities;
 public class DiscountDto
 {

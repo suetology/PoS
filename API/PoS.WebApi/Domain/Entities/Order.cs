@@ -49,8 +49,11 @@ public class Order : Entity
 
     public decimal CalculateTotalAmout()
     {
-        // add discounts
         var totalAmount = OrderItems.Sum(o => o.CalculateTotalAmout()) + (Reservation?.Service.Price ?? 0);
+
+        totalAmount -= Discount == null ? 0 : (Discount.IsPercentage ? totalAmount * (Discount.Value / 100) : Discount.Value);
+        totalAmount = Math.Max(0, totalAmount);
+
         totalAmount += ServiceCharge == null ? 0 : (ServiceCharge.IsPercentage ? totalAmount * (ServiceCharge.Value / 100) : ServiceCharge.Value);
         totalAmount += TipAmount;
 

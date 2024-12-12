@@ -19,7 +19,9 @@ public class CreateDiscountRequest
 
     public DateTime ValidTo { get; set; }
 
-    public List<Guid> ApplicableItems { get; set; }
+    public List<Guid> ApplicableItems { get; set; } = new List<Guid>();
     
-    public List<Guid> ApplicableGroups { get; set; }
+    public List<Guid> ApplicableGroups { get; set; } = new List<Guid>();
+
+    public Guid ApplicableOrder { get; set; }
 }
