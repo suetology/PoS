@@ -15,7 +15,7 @@ import { ShiftService } from '../../../services/shift.service';
 })
 export class UserDetailsComponent implements OnInit {
   user: User | undefined;
-
+  
   shiftForm = new FormGroup({
     date: new FormControl<string>('', [Validators.required]),
     startTime: new FormControl<string>('', [Validators.required]),

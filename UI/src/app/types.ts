@@ -78,6 +78,17 @@ export interface CreateUserRequest {
     status: EmployeeStatus
 }
 
+export interface UpdateUserRequest {
+    username?: string,
+    passwordHash?: string,
+    name?: string,
+    surname?: string,
+    email?: string,
+    phoneNumber?: string,
+    role?: Role,
+    status?: EmployeeStatus
+}
+
 export interface GetAllUsersRequest {
 
 }

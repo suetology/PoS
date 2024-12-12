@@ -3,9 +3,13 @@
 
 		<form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
 
-			<label for="isExistingCustomer">Existing customer?</label>
-			<input type="checkbox" id="isExistingCustomer" name="isExistingCustomer" formControlName="isExistingCustomer"
-				(change)="toggleExistingCustomer()">
+			<div class="flex items-start mt-6">
+				<label for="isExistingCustomer" class="text-sm font-medium text-gray-900 mr-4">Existing customer?</label>
+				<div class="flex items-center h-5">
+					<input id="isExistingCustomer" type="checkbox" formControlName="isExistingCustomer" name="isExistingCustomer" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" 
+					(change)="toggleExistingCustomer()"/>
+				</div>
+			</div>
 
 			<div *ngIf="isExistingCustomer">
 

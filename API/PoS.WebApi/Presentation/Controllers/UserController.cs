@@ -89,6 +89,32 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
+    [Tags("User Management")]
+    [HttpPatch("{userId}", Name = nameof(UpdateUser))]
+    public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserRequest request)
+    {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.BusinessId = businessId.Value;
+        request.Id = userId;
+
+        var sucess = await _userService.UpdateUser(request);
+
+        if (!sucess)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpGet("roles", Name = nameof(GetAvailableRoles))]
     [Tags("User Management")]

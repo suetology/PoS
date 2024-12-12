@@ -52,4 +52,9 @@ export class UserComponent {
   goToUserDetails(id: string) {
     this.router.navigate([id], { relativeTo: this.route });
   }
+
+  editUser(userId: string) {
+    alert("Will be implemented later");
+    //this.router.navigate([`/user/${userId}/edit`]);
+  }
 }
