@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { CreateUserRequest, GetAllUsersResponse, Role, User } from '../types';
+import { CreateUserRequest, GetAllUsersResponse, Role, UpdateUserRequest, User } from '../types';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -33,6 +33,14 @@ export class UserService {
       map((tax) => {
         this.usersUpdated.next();
         return tax;
+      })
+    );
+  }
+
+  updateUser(userId: string, request: UpdateUserRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/business/${userId}`, request).pipe(
+      map(() => {
+        this.usersUpdated.next();
       })
     );
   }

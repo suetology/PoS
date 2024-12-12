@@ -1,7 +1,6 @@
 ﻿namespace PoS.WebApi.Application.Services.User;
 
 using PoS.WebApi.Application.Services.User.Contracts;
-using Domain.Entities;
 
 public interface IUserService
 {
@@ -9,4 +8,5 @@ public interface IUserService
     Task<GetAllUsersResponse> GetAllUsers(GetAllUsersRequest request);
     Task<GetUserResponse> GetUser(GetUserRequest request);
     Task<GetAvailableRolesResponse> GetAvailableRoles();
+    Task<bool> UpdateUser(UpdateUserRequest request);
 }

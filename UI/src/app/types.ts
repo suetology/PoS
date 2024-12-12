@@ -60,6 +60,13 @@ export interface Business {
     // employees: Employees;
 }
 
+export interface UpdateBusinessRequest  {
+    name?: string;
+    address?: string;
+    phoneNumber?: string;
+    email?: string;
+}
+
 export interface CreateUserRequest {
     username: string,
     passwordHash: string,
@@ -69,6 +76,17 @@ export interface CreateUserRequest {
     phoneNumber: string,
     role: Role,
     status: EmployeeStatus
+}
+
+export interface UpdateUserRequest {
+    username?: string,
+    passwordHash?: string,
+    name?: string,
+    surname?: string,
+    email?: string,
+    phoneNumber?: string,
+    role?: Role,
+    status?: EmployeeStatus
 }
 
 export interface GetAllUsersRequest {

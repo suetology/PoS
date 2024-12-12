@@ -1,0 +1,36 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg m-4">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col">
+                    Business name
+                </th>
+                <th scope="col"> Address </th>
+                <th scope="col"> Phone number </th>
+                <th scope="col"> Email </th>
+                <th scope="col"> Actions </th>
+            </tr>
+        </thead>
+        @for(bus of business$ | async ; track $index) 
+        {
+            <tbody>
+                <tr class="bg-white border-b hover:bg-gray-50">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {{ bus.name }}
+                    </th>
+                    <td> {{ bus.address }} </td>
+                    <td> {{ bus.phoneNumber }} </td>
+                    <td> {{ bus.email }} </td>
+                    <td
+                    class="font-medium text-cyan-600 hover:underline cursor-pointer"
+                    (click)="editBusiness(bus.id)"
+                    >
+                        Edit
+                    </td>
+                  
+                </tr>
+            </tbody>
+        }
+    </table>
+</div>
+<router-outlet></router-outlet>

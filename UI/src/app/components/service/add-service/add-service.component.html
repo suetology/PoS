@@ -1,0 +1,56 @@
+<div class="mx-auto px-4 lg:px-12 m-4">
+    <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden p-4">
+
+        <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+
+        <label for="name">Name</label>
+        <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            formControlName="name"
+        >
+
+        <label for="description">Description</label>
+        <input 
+            type="text" 
+            id="description" 
+            name="description" 
+            formControlName="description"
+        >
+
+        <label for="price">Price</label>
+        <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            formControlName="price"
+        >
+
+        <label for="duration">Duration</label>
+        <input 
+            type="number" 
+            id="duration" 
+            name="duration" 
+            formControlName="duration"
+        >
+
+        <div class="flex items-start mt-6">
+            <div class="flex items-center h-5">
+                <input id="isActive" type="checkbox" formControlName="isActive" name="isActive" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" />
+            </div>
+            <label for="isActive" class="ms-2 text-sm font-medium text-gray-900">Is this service active?</label>
+        </div>
+
+        <label for="employee">Employee</label>
+        <select id="employee" name="employeeId" formControlName="employeeId">
+          <option *ngFor="let employee of employees" [value]="employee.id">
+            {{ employee.username }}
+          </option>
+        </select>
+
+        <button type="submit" class=" mt-4 text-white bg-cyan-400 hover:bg-cyan-500 focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+            + Add</button>
+        </form>
+    </div>
+</div>
