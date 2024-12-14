@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Observable, Subscription } from 'rxjs';
 import { User } from '../../../types';
@@ -18,8 +18,6 @@ export class UserComponent {
   isModalOpen = false;
   private routeSub: Subscription;
   private updateSub: Subscription;
-
-  @Output() edit = new EventEmitter<string>();
 
   constructor(private userService : UserService, 
     private router: Router,
@@ -56,7 +54,6 @@ export class UserComponent {
   }
 
   editUser(userId: string) {
-    this.edit.emit(userId);
     this.router.navigate([`/user/${userId}/edit`]);
   }
 }

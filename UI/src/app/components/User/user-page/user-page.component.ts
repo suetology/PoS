@@ -10,10 +10,4 @@ import { UserComponent } from '../user/user.component';
   styleUrl: './user-page.component.css'
 })
 export class UserPageComponent {
-
-  selectedUserId: string | null = null;
-
-  onEditUser(userId: string) {
-    this.selectedUserId = userId;
-  }
 }
