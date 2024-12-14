@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { ReservationsComponent } from './components/reservations/reservations.component';
 import { BusinessComponent } from './components/business/business/business.component';
 import { LoginComponent } from './components/login/login.component';
 import { TaxDetailsComponent } from './components/Tax/tax-details/tax-details.component';
@@ -67,7 +66,6 @@ export const routes: Routes = [
             { path: ':id/edit', component: UpdateUserComponent, canActivate: [AuthGuard] } 
         ]
      },
-    { path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuard] },
     { path: 'order', component: OrderPageComponent, canActivate: [AuthGuard],
         children: [
             { path: 'add-items', component: AddItemsToOrderComponent, canActivate: [AuthGuard]},
