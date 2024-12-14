@@ -22,7 +22,7 @@ export class LoginComponent {
       next: (success) => {
         if (success) {
           console.log('Login successful', success);
-          this.router.navigate(['/business']);
+          this.router.navigate(['/order']);
         } else {
           this.loginError = 'Invalid username or password';
         }
