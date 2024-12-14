@@ -280,6 +280,16 @@ export interface CreateItemRequest {
     taxIds: string[]
 }
 
+export interface UpdateItemRequest {
+    name?: string,
+    description?: string,
+    price?: number, 
+    stock?: number,
+    image?: string,
+    itemGroupId?: string,
+    taxIds?: string[]
+}
+
 export interface GetItemResponse {
     item: Item
 }

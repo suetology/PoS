@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { CreateItemRequest, CreateItemVariationRequest, GetAllItemsResponse, GetAllItemVariationsResponse, Item, ItemVariation } from '../types';
+import { CreateItemRequest, CreateItemVariationRequest, GetAllItemsResponse, GetAllItemVariationsResponse, Item, ItemVariation, UpdateItemRequest } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,14 @@ export class ItemService {
       map((item) => {
         this.itemsUpdated.next();
         return item;
+      })
+    );
+  }
+
+  updateItem(itemId: string, request: UpdateItemRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/inventory/item/${itemId}`, request).pipe(
+      map(() => {
+        this.itemsUpdated.next();
       })
     );
   }

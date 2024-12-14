@@ -37,9 +37,9 @@ public class ItemRepository : IItemRepository
             .ToListAsync();
     }
 
-    public Task Update(Item entity)
+    public async Task Update(Item entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Items.Update(entity);
     }
 
     public async Task<IEnumerable<Item>> GetAllItemsByFiltering(QueryParameters parameters)
@@ -63,4 +63,10 @@ public class ItemRepository : IItemRepository
 
         return await allItems.ToListAsync();
     }
+
+    public async Task<IEnumerable<Tax>> GetTaxesByIds(IEnumerable<Guid> taxIds)
+    {
+        return await _dbContext.Taxes.Where(t => taxIds.Contains(t.Id)).ToListAsync();
+    }
+
 }

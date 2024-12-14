@@ -101,7 +101,36 @@ namespace PoS.WebApi.Application.Services.Item
                 }
             };
         }
-        
+
+        public async Task<bool> UpdateItem(UpdateItemRequest request)
+        {
+            var existingItem = await _itemRepository.Get(request.Id);
+
+            if (existingItem == null || existingItem.BusinessId != request.BusinessId)
+            {
+                return false;
+            }
+
+            existingItem.Name = request.Name ?? existingItem.Name;
+            existingItem.Description = request.Description ?? existingItem.Description;
+            existingItem.Price = request.Price == 0 ? existingItem.Price : request.Price;
+            existingItem.Stock = request.Stock == 0 ? existingItem.Stock : request.Stock;
+            existingItem.Image = request.Image ?? existingItem.Image;
+            existingItem.ItemGroupId = request.ItemGroupId ?? existingItem.ItemGroupId;
+
+            if (request.TaxIds != null && request.TaxIds.Count > 0)
+            {
+                var taxes = await _taxRepository.GetTaxesByIds(request.TaxIds);
+
+                existingItem.Taxes = taxes.ToList();
+            }
+
+            await _itemRepository.Update(existingItem);
+            await _unitOfWork.SaveChanges();
+
+            return true;
+        }
+
         public async Task<GetAllItemVariationsResponse> GetAllItemVariations(GetAllItemVariationsRequest request)
         {
             var itemVariations = await _itemVariationRepository.GetAllItemVariationByItemId(request.ItemId);

@@ -90,4 +90,25 @@ public class ItemController : ControllerBase
 
         return Ok(response);
     }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
+    [HttpPatch]
+    [Tags("Inventory")]
+    [Route("item/{itemID}", Name = nameof(UpdateItem))]
+    public async Task<IActionResult> UpdateItem([FromRoute] Guid itemID, [FromBody] UpdateItemRequest request)
+    {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.Id = itemID;
+
+        request.BusinessId = businessId.Value;
+
+        await _itemService.UpdateItem(request);
+        return NoContent();
+    }
 }
