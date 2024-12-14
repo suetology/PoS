@@ -134,6 +134,15 @@ export interface CreateServiceRequest {
     employeeId: string
 }
 
+export interface UpdateServiceRequest {
+    name?: string,
+    description?: string,
+    price?: number,
+    duration?: number,
+    isActive?: boolean,
+    employeeId?: string
+}
+
 export interface GetAllServicesRequest {
     
 }
