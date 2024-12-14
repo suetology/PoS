@@ -11,4 +11,9 @@ import { UserComponent } from '../user/user.component';
 })
 export class UserPageComponent {
 
+  selectedUserId: string | null = null;
+
+  onEditUser(userId: string) {
+    this.selectedUserId = userId;
+  }
 }

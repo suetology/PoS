@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { User } from '../../../types';
 
 @Component({
@@ -14,10 +14,12 @@ import { User } from '../../../types';
   styleUrl: './update-user.component.css'
 })
 export class UpdateUserComponent {
-  userForm: FormGroup;
-  userId: string;
 
-  isOpen$ = new BehaviorSubject<boolean>(false);
+  @Input() userId!: string;
+  @Output() closeEdit = new EventEmitter<void>();
+
+  userForm: FormGroup;
+
   user: User | undefined;
   private sub: Subscription | undefined = undefined;
   
@@ -32,9 +34,9 @@ export class UpdateUserComponent {
       name: ['', Validators.required],
       surname: [''],
       username: [''],
-      password: [''],
+      passwordHash: [''],
       phoneNumber: [''],
-      email: ['', [Validators.email]],
+      email: [''],
       role: [''],
       status: ['']
     });
@@ -65,26 +67,14 @@ export class UpdateUserComponent {
   }
 
   goBack() {
+    this.closeEdit.emit();
     this.router.navigate(['/user']);
   }
 
-  ngOnInit() {
-    this.sub = this.isOpen$.subscribe((isOpen) => {
-      if (isOpen) {
-        const userId = this.route.snapshot.paramMap.get('id');
-        if (userId) {
-          this.userService.getUser(userId).subscribe((user) => (this.user = user));
-        }
-      }
-    });
-  }
-
-  open(userId: string) {
-    this.isOpen$.next(true);
-  }
-
-  close() {
-    this.isOpen$.next(false);
+  ngOnChanges() {
+    if (this.userId) {
+      this.loadUser();
+    }
   }
 
   ngOnDestroy() {
