@@ -30,12 +30,12 @@
                     <td class="px-6 py-4">
                         {{ user.status }}
                     </td>
-                </tr>
                 <td class="px-6 py-4" (click)="$event.stopPropagation()">
-                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    <a class="font-medium text-cyan-400 hover:underline cursor-pointer"
                     (click)="editUser(user.id)"
                     > Edit user </a>
                   </td>
+                </tr>
             </tbody>
             }
         }

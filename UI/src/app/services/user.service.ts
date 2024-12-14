@@ -38,7 +38,7 @@ export class UserService {
   }
 
   updateUser(userId: string, request: UpdateUserRequest): Observable<void> {
-    return this.http.patch<void>(`${environment.API_URL}/business/${userId}`, request).pipe(
+    return this.http.patch<void>(`${environment.API_URL}/users/${userId}`, request).pipe(
       map(() => {
         this.usersUpdated.next();
       })

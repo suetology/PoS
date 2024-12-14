@@ -21,7 +21,7 @@ import { AddItemsToOrderComponent } from './components/Order/add-items-to-order/
 import { AddReservationToOrderComponent } from './components/Order/add-reservation-to-order/add-reservation-to-order.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UpdateBusinessComponent } from './components/business/update-business/update-business.component';
-// import { UpdateUserComponent } from './components/User/update-user/update-user.component';
+import { UpdateUserComponent } from './components/User/update-user/update-user.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -60,7 +60,7 @@ export const routes: Routes = [
     { path: 'user', component: UserPageComponent, canActivate: [AuthGuard],
         children: [
             { path: ':id', component: UserDetailsComponent, canActivate: [AuthGuard] },
-            // { path: 'edit', component: UpdateUserComponent, canActivate: [AuthGuard] } 
+            { path: ':id/edit', component: UpdateUserComponent, canActivate: [AuthGuard] } 
         ]
      },
     { path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuard] },
