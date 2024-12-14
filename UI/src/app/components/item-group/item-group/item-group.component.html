@@ -6,9 +6,7 @@
                     <tr>
                         <th scope="col" class="px-4 py-3">Name</th>
                         <th scope="col" class="px-4 py-3">Description</th>
-                        <!-- <th scope="col" class="px-4 py-3">
-                            <span class="sr-only">Actions</span>
-                        </th> -->
+                        <th scope="col" class="px-4 py-3">Actions</th>
                     </tr>
                 </thead>
                 @if(itemGroups$ | async; as itemGroup) {
@@ -20,6 +18,11 @@
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
                                 {{ itemGroup.name }}</th>
                             <td class="px-4 py-3">{{ itemGroup.description }}</td>
+                            <td class="font-medium text-cyan-600 px-4 py-3 hover:underline cursor-pointer"
+                            (click)="$event.stopPropagation(); editItemGroup(itemGroup.id)"
+                            >
+                                Edit
+                            </td>
                         </tr>
                     </tbody>
                     }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { CreateItemGroupRequest, GetAllItemGroupsResponse, ItemGroup } from '../types';
+import { CreateItemGroupRequest, GetAllItemGroupsResponse, ItemGroup, UpdateItemGroupRequest } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +34,14 @@ export class ItemGroupService {
       map((itemGroup) => {
         this.itemGroupsUpdated.next();
         return itemGroup;
+      })
+    );
+  }
+
+  updateItemGroup(id: string, request: UpdateItemGroupRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/inventory/item-Group/${id}`, request).pipe(
+      map(() => {
+        this.itemGroupsUpdated.next();
       })
     );
   }

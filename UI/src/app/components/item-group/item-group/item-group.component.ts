@@ -52,4 +52,8 @@ export class ItemGroupComponent {
   goToItemGroupDetails(id: string) {
     this.router.navigate([id], { relativeTo: this.route });
   }
+
+  editItemGroup(id: string) {
+    this.router.navigate([`/item-group/${id}/edit`]);
+  }
 }

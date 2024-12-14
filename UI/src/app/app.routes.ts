@@ -22,6 +22,7 @@ import { AddReservationToOrderComponent } from './components/Order/add-reservati
 import { AuthGuard } from './guards/auth.guard';
 import { UpdateBusinessComponent } from './components/business/update-business/update-business.component';
 import { UpdateUserComponent } from './components/User/update-user/update-user.component';
+import { UpdateItemGroupComponent } from './components/item-group/update-item-group/update-item-group.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -39,6 +40,7 @@ export const routes: Routes = [
     { path: 'item-group', component: ItemGroupPageComponent, canActivate: [AuthGuard],
         children: [
             { path: ':id', component: ItemGroupDetailsComponent, canActivate: [AuthGuard] },
+            { path: ':id/edit', component: UpdateItemGroupComponent, canActivate: [AuthGuard] } 
         ]
      },
     { path: 'item', component: ItemPageComponent, canActivate: [AuthGuard],

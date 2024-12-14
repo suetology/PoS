@@ -252,6 +252,11 @@ export interface GetAllItemGroupsResponse {
     itemGroups: ItemGroup[]    
 }
 
+export interface UpdateItemGroupRequest {
+    name?: string,
+    description?: string
+}
+
 export interface Item {
     id: string,
     name: string,
