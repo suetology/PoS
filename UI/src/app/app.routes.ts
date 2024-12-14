@@ -23,6 +23,7 @@ import { UpdateBusinessComponent } from './components/business/update-business/u
 import { UpdateUserComponent } from './components/User/update-user/update-user.component';
 import { UpdateItemGroupComponent } from './components/item-group/update-item-group/update-item-group.component';
 import { UpdateItemComponent } from './components/Item/update-item/update-item.component';
+import { UpdateServiceComponent } from './components/service/update-service/update-service.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -52,6 +53,7 @@ export const routes: Routes = [
     { path: 'services', component: ServicePageComponent, canActivate: [AuthGuard],
         children: [
             { path: ':id', component: ServiceDetailsComponent, canActivate: [AuthGuard] },
+            { path: ':id/edit', component: UpdateServiceComponent, canActivate: [AuthGuard] } 
         ]
      },
     { path: 'tax', component: TaxPageComponent, canActivate: [AuthGuard],
