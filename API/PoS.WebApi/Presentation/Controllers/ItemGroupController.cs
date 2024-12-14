@@ -103,6 +103,8 @@ public class ItemGroupController : ControllerBase
             return Unauthorized("Failed to retrieve Business ID");
         }
 
+        request.Id = groupID;
+
         request.BusinessId = businessId.Value;
         
         await _itemGroupService.UpdateItemGroup(request);
