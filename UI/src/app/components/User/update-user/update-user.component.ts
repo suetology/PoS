@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,9 +15,7 @@ import { User } from '../../../types';
 })
 export class UpdateUserComponent {
 
-  @Input() userId!: string;
-  @Output() closeEdit = new EventEmitter<void>();
-
+  userId: string;
   userForm: FormGroup;
 
   user: User | undefined;
@@ -67,7 +65,6 @@ export class UpdateUserComponent {
   }
 
   goBack() {
-    this.closeEdit.emit();
     this.router.navigate(['/user']);
   }
 

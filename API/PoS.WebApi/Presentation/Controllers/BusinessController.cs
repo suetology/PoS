@@ -27,7 +27,7 @@ public class BusinessController : ControllerBase
         return Ok(response);
     }
 
-    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet("{businessId}", Name = nameof(GetBusiness))]
     public async Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
     {
