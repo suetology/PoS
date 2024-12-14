@@ -21,11 +21,13 @@ using PoS.WebApi.Application.Services.Reservation.Contracts;
 using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.Tax.Contracts;
 using PoS.WebApi.Application.Services.Discount.Contracts;
+using PoS.WebApi.Application.Services.Notification;
 
 public class OrderService: IOrderService
 {
     private readonly IReservationService _reservationService;
     private readonly ICustomerService _customerService;
+    private readonly INotificationService _notificationService;
     private readonly IItemService _itemService;
     private readonly IOrderRepository _orderRepository;
     private readonly IItemRepository _itemRepository;
@@ -35,6 +37,7 @@ public class OrderService: IOrderService
     public OrderService(
         IReservationService reservationService, 
         ICustomerService customerService,
+        INotificationService notificationService,
         IItemService itemService,
         IOrderRepository orderRepository,
         IItemRepository itemRepository,
@@ -43,6 +46,7 @@ public class OrderService: IOrderService
     {
         _reservationService = reservationService;
         _customerService = customerService;
+        _notificationService = notificationService;
         _itemService = itemService;
         _orderRepository = orderRepository;
         _itemRepository = itemRepository;
@@ -115,6 +119,14 @@ public class OrderService: IOrderService
             request.Reservation.OrderId = order.Id;
         
             await _reservationService.CreateReservation(request.Reservation);
+
+            string message = string.Format(
+                "Hello, {0}. Your reservation has been scheduled for {1}.", 
+                request.Customer.Name, 
+                request.Reservation.AppointmentTime
+            );
+            
+            // await _notificationService.SendSMS(message, request.Customer.PhoneNumber);
         }
     }
 
