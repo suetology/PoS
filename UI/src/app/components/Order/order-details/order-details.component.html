@@ -20,7 +20,11 @@
 		<p>Created at: {{ order?.created ?? 'N/A' }}</p>
 		<p>Closed at: {{ order?.closed ?? 'N/A' }}</p>
 		<p>Service Charge: {{ order?.serviceCharge?.name ?? 'N/A' }} <span *ngIf="order?.serviceCharge">({{ order?.serviceCharge?.value }}{{ order?.serviceCharge?.isPercentage ? '%' : '' }})</span></p>
-		<p>Tip Amount: {{ order?.tipAmount ?? 'N/A' }}</p>
+		<form [formGroup]="tipForm" (ngSubmit)="addTip()" class="flex items-center">
+			<p>Tip Amount: {{ order?.tipAmount ?? 'N/A' }}</p>
+			<input type="number" id="tipAmount" name="tipAmount" formControlName="tipAmount" placeholder="Enter tip" class="ml-2 p-1 border rounded" />
+			<button type="submit" class="ml-2 px-3 py-1 bg-blue-500 text-white rounded">Change</button>
+		</form>
 		<p>Discount: {{ order?.discount?.name ?? 'N/A' }} <span *ngIf="order?.discount">({{ order?.discount?.value }}{{ order?.discount?.isPercentage ? '%' : '' }})</span></p>
 		<p>Total Amount: {{ order?.finalAmount ?? 'N/A' }}</p>
 		<p>Paid Amount: {{ order?.paidAmount ?? 'N/A' }}</p>

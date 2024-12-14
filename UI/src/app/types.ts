@@ -349,6 +349,10 @@ export interface Order {
     // add refund
 }
 
+export interface AddTipRequest {
+    tipAmount: number
+}
+
 export interface GetOrderRespose {
     order: Order
 }

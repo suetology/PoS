@@ -96,8 +96,6 @@ public class OrderController : ControllerBase
     [HttpPost("{orderId}/cancel")]
     public async Task<IActionResult> CancelOrder([FromRoute] Guid orderId)
     {
-        Console.WriteLine("JKDSHFLIDSHFLKJHRKNFSLJKFHSLKJFHSKLFJHSKL (((((())))))))))))))");
-
         var businessId = User.GetBusinessId();
 
         if (businessId == null)
@@ -112,6 +110,25 @@ public class OrderController : ControllerBase
         };
 
         await _orderService.CancelOrder(request);
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpPost("{orderId}/tip")]
+    public async Task<IActionResult> AddTip([FromRoute] Guid orderId, [FromBody] AddTipRequest request)
+    {        
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.OrderId = orderId;
+        request.BusinessId = businessId.Value;
+
+        await _orderService.AddTip(request);
 
         return NoContent();
     }

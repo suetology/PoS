@@ -2,7 +2,7 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Order, DiscountRequest, OrderStatus } from '../../../types';
+import { Order, DiscountRequest, OrderStatus, AddTipRequest } from '../../../types';
 import { OrderService } from '../../../services/order.service';
 import { DiscountService } from '../../../services/discount.service';
 
@@ -20,6 +20,10 @@ export class OrderDetailsComponent {
     discountName: new FormControl<string>('', Validators.required),
     discountValue: new FormControl<number>(0, Validators.required),
     discountIsPercentage: new FormControl<boolean>(false, Validators.required),
+  });
+
+  tipForm = new FormGroup({
+    tipAmount: new FormControl<number>(0, Validators.required)
   });
 
   constructor(
@@ -57,6 +61,41 @@ export class OrderDetailsComponent {
     this.discountService.addDiscount(request).subscribe({
       next: () => {
         this.discountForm.reset();
+
+        const id = this.route.snapshot.paramMap.get('id');
+        if (id) {
+          this.orderService.getOrder(id).subscribe(
+            (order) => {
+              this.order = order;
+
+            },
+            (error) => {
+              console.error('Error fetching order details:', error);
+              this.close();
+            }
+          );
+        }
+      },
+      error: (err) => {
+        console.error('Error creating discount:', err);
+      }
+    });
+  }
+
+  addTip() {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (!id) {
+      return;
+    }
+
+    const request: AddTipRequest = {
+      tipAmount: this.tipForm.value.tipAmount || 0
+    };
+
+    this.orderService.addTip(id, request).subscribe({
+      next: () => {
+        this.tipForm.reset();
 
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {

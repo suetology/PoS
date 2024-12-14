@@ -9,4 +9,5 @@ public interface IOrderService
     Task<GetAllOrdersResponse> GetAllOrders(GetAllOrdersRequest request);
     Task<GetOrderResponse> GetOrder(GetOrderRequest request);
     Task CancelOrder(CancelOrderRequest request);
+    Task AddTip(AddTipRequest request);
 }

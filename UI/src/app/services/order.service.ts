@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { CreateOrderRequest, GetAllOrdersResponse, Order } from '../types';
+import { AddTipRequest, CreateOrderRequest, GetAllOrdersResponse, Order } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +40,14 @@ export class OrderService {
 
   cancelOrder(id: string) {
     return this.http.post(`${environment.API_URL}/orders/${id}/cancel`, {}).pipe(
+      tap(() => {
+        this.ordersUpdated.next();
+      })
+    );
+  }
+
+  addTip(id: string, request: AddTipRequest) {
+    return this.http.post(`${environment.API_URL}/orders/${id}/tip`, request).pipe(
       tap(() => {
         this.ordersUpdated.next();
       })

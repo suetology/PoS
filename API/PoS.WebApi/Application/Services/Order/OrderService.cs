@@ -380,4 +380,18 @@ public class OrderService: IOrderService
 
         await _unitOfWork.SaveChanges();
     }
+
+    public async Task AddTip(AddTipRequest request)
+    {
+        var order = await _orderRepository.Get(request.OrderId);
+
+        if (order == null || order.BusinessId != request.BusinessId || order.Status != OrderStatus.Open)
+        {
+            return;
+        }
+
+        order.TipAmount = request.TipAmount;
+
+        await _unitOfWork.SaveChanges();
+    } 
 }
