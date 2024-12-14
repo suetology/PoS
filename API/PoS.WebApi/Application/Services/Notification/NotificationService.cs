@@ -7,6 +7,10 @@ using Amazon.SimpleNotificationService.Model;
 public class NotificationService : INotificationService
 {
     private readonly IAmazonSimpleNotificationService _snsClient;
+
+    public NotificationService(IAmazonSimpleNotificationService snsClient) {
+        _snsClient = snsClient;
+    }
     
     public async Task SendSMS(string message, string phoneNumber)
     {
