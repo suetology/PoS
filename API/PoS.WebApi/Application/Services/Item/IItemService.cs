@@ -1,7 +1,6 @@
 ﻿namespace PoS.WebApi.Application.Services.Item;
 
 using PoS.WebApi.Application.Services.Item.Contracts;
-using Domain.Entities;
 
 public interface IItemService
 {
@@ -9,9 +8,9 @@ public interface IItemService
     Task<GetItemResponse> GetItem(GetItemRequest request);
     Task CreateItem(CreateItemRequest request);
     Task ChangeItemStock(ChangeItemStockRequest request);
-    
     Task<GetAllItemVariationsResponse> GetAllItemVariations(GetAllItemVariationsRequest request);
     Task<GetItemVariationResponse> GetItemVariation(GetItemVariationRequest request);
     Task CreateItemVariation(CreateItemVariationRequest request);
     Task ChangeItemVariationStock(ChangeItemVariationStockRequest request);
+    Task<bool> UpdateItem(UpdateItemRequest request);
 }
