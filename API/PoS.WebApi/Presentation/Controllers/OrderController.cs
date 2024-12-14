@@ -91,4 +91,28 @@ public class OrderController : ControllerBase
         }
         return Ok(response);
     }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpPost("{orderId}/cancel")]
+    public async Task<IActionResult> CancelOrder([FromRoute] Guid orderId)
+    {
+        Console.WriteLine("JKDSHFLIDSHFLKJHRKNFSLJKFHSLKJFHSKLFJHSKL (((((())))))))))))))");
+
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new CancelOrderRequest
+        {
+            Id = orderId,
+            BusinessId = businessId.Value
+        };
+
+        await _orderService.CancelOrder(request);
+
+        return NoContent();
+    }
 }

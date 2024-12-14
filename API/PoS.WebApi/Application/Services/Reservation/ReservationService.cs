@@ -127,62 +127,17 @@ public class ReservationService : IReservationService
         return true;
     }
     
-    /*public async Task<IEnumerable<DateTime>> GetAvailableTimesForEmployee(Guid employeeId, DateTime date)
+    public async Task CancelReservation(CancelReservationRequest request)
     {
-        var existingReservations = await _reservationRepository.GetReservationsByEmployeeAndDate(employeeId, date);
-        
-        var businessStart = new TimeSpan(9, 0, 0); // 9 AM
-        var businessEnd = new TimeSpan(17, 0, 0); // 5 PM
-        var appointmentDuration = TimeSpan.FromHours(1);
-        
-        var availableTimes = new List<DateTime>();
-        var currentTime = date.Date + businessStart;
-        var endTime = date.Date + businessEnd;
+        var reservation = await _reservationRepository.GetById(request.ReservationId);
 
-        while (currentTime + appointmentDuration <= endTime)
+        if (reservation == null || reservation.BusinessId != request.BusinessId)
         {
-            var timeSlotEnd = currentTime + appointmentDuration;
-            var isSlotAvailable = !existingReservations.Any(r => 
-                (r.AppointmentTime >= currentTime && r.AppointmentTime < timeSlotEnd) ||
-                r.Status == AppointmentStatus.Booked);
-
-            if (isSlotAvailable)
-            {
-                availableTimes.Add(currentTime);
-            }
-            
-            currentTime = currentTime.AddHours(1);
+            return;
         }
 
-        return availableTimes;
-    }*/
-
-    /*public async Task<bool> CancelReservation(Guid reservationId)
-    {
-        var reservation = await _reservationRepository.GetById(reservationId);
-        if (reservation == null)
-            return false;
-
         reservation.Status = AppointmentStatus.Cancelled;
-        await _reservationRepository.Update(reservation);
+
         await _unitOfWork.SaveChanges();
-        return true;
-    }*/
-
-    /*public async Task<IEnumerable<Reservation>> GetUpcomingReservations(DateTime startDate, DateTime endDate)
-    {
-        return await _reservationRepository.GetReservationsInRange(startDate, endDate);
-    }*/
-
-    /*public async Task<bool> UpdateReservationStatus(Guid reservationId, AppointmentStatus status)
-    {
-        var reservation = await _reservationRepository.GetById(reservationId);
-        if (reservation == null)
-            return false;
-
-        reservation.Status = status;
-        await _reservationRepository.Update(reservation);
-        await _unitOfWork.SaveChanges();
-        return true;
-    }*/
+    }
 }

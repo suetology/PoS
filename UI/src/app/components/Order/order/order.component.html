@@ -9,6 +9,7 @@
                         <th scope="col" class="px-4 py-3">Reservation</th>
                         <th scope="col" class="px-4 py-3">Customer</th>
                         <th scope="col" class="px-4 py-3">Total</th>
+                        <th scope="col" class="px-6 py-4">Actions</th>
                         <!-- <th scope="col" class="px-4 py-3">
                             <span class="sr-only">Actions</span>
                         </th> -->
@@ -26,6 +27,12 @@
                             <td class="px-4 py-3">{{ order.reservation?.service?.name ?? '-' }}</td>
                             <td class="px-4 py-3">{{ order.customer.email }}</td>
                             <td class="px-4 py-3">{{ order.finalAmount }}</td>
+                            <td class="px-6 py-3">
+                                <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                (click)="cancelOrder(order.id)"
+                                > Cancel </a>
+                            </td>
+
                         </tr>
                     </tbody>
                     }

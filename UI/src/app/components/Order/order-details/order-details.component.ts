@@ -2,7 +2,7 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Order, DiscountRequest } from '../../../types';
+import { Order, DiscountRequest, OrderStatus } from '../../../types';
 import { OrderService } from '../../../services/order.service';
 import { DiscountService } from '../../../services/discount.service';
 
@@ -35,9 +35,6 @@ export class OrderDetailsComponent {
       this.orderService.getOrder(id).subscribe(
         (order) => {
           this.order = order;
-
-          
-          console.log(order);
         },
         (error) => {
           console.error('Error fetching order details:', error);

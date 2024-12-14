@@ -52,4 +52,10 @@ export class OrderComponent {
   goToOrderDetails(id: string) {
     this.router.navigate([id], { relativeTo: this.route });
   }
+
+  cancelOrder(id: string) {
+    this.orderService.cancelOrder(id).subscribe(() => {
+      this.orders$ = this.orderService.getOrders();
+    });
+  }
 }

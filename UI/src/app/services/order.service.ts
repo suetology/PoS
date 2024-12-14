@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { CreateOrderRequest, GetAllOrdersResponse, Order } from '../types';
 
 @Injectable({
@@ -34,6 +34,14 @@ export class OrderService {
       map((order) => {
         this.ordersUpdated.next();
         return order;
+      })
+    );
+  }
+
+  cancelOrder(id: string) {
+    return this.http.post(`${environment.API_URL}/orders/${id}/cancel`, {}).pipe(
+      tap(() => {
+        this.ordersUpdated.next();
       })
     );
   }

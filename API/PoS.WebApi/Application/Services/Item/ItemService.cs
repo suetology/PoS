@@ -125,7 +125,7 @@ namespace PoS.WebApi.Application.Services.Item
 
         public async Task<GetItemVariationResponse> GetItemVariation(GetItemVariationRequest request)
         {
-            var itemVariation = await _itemVariationRepository.Get(request.ItemId);
+            var itemVariation = await _itemVariationRepository.Get(request.Id);
 
             if (itemVariation?.BusinessId != request.BusinessId)
             {
@@ -159,6 +159,34 @@ namespace PoS.WebApi.Application.Services.Item
             };
             
             await _itemVariationRepository.Create(itemVariation);
+            await _unitOfWork.SaveChanges();
+        }
+
+        public async Task ChangeItemStock(ChangeItemStockRequest request)
+        {
+            var item = await _itemRepository.Get(request.ItemId);
+
+            if (item == null || item.BusinessId != request.BusinessId)
+            {
+                return;
+            }
+
+            item.Stock += request.StockChange;
+
+            await _unitOfWork.SaveChanges();
+        }
+
+        public async Task ChangeItemVariationStock(ChangeItemVariationStockRequest request)
+        {
+            var itemVariation = await _itemVariationRepository.Get(request.ItemVariationId);
+
+            if (itemVariation == null || itemVariation.BusinessId != request.BusinessId)
+            {
+                return;
+            }
+
+            itemVariation.Stock += request.StockChange;
+
             await _unitOfWork.SaveChanges();
         }
     }

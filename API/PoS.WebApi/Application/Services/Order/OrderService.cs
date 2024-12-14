@@ -26,20 +26,26 @@ public class OrderService: IOrderService
 {
     private readonly IReservationService _reservationService;
     private readonly ICustomerService _customerService;
+    private readonly IItemService _itemService;
     private readonly IOrderRepository _orderRepository;
+    private readonly IItemRepository _itemRepository;
     private readonly IItemVariationRepository _itemVariationRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public OrderService(
         IReservationService reservationService, 
         ICustomerService customerService,
+        IItemService itemService,
         IOrderRepository orderRepository,
+        IItemRepository itemRepository,
         IItemVariationRepository itemVariationRepository, 
         IUnitOfWork unitOfWork) 
     {
         _reservationService = reservationService;
         _customerService = customerService;
+        _itemService = itemService;
         _orderRepository = orderRepository;
+        _itemRepository = itemRepository;
         _itemVariationRepository = itemVariationRepository;
         _unitOfWork = unitOfWork;
     }
@@ -62,11 +68,27 @@ public class OrderService: IOrderService
                     ItemId = o.ItemId
                 };
 
+                var item = await _itemRepository.Get(o.ItemId);
+
+                await _itemService.ChangeItemStock(new ChangeItemStockRequest
+                {
+                    ItemId = item.Id,
+                    BusinessId = request.BusinessId,
+                    StockChange = -o.Quantity
+                });
+
                 foreach (var itemVariationId in o.ItemVariationsIds)
                 {
                     var itemVariation = await _itemVariationRepository.Get(itemVariationId);
                     
                     orderItem.ItemVariations.Add(itemVariation);
+
+                    await _itemService.ChangeItemVariationStock(new ChangeItemVariationStockRequest
+                    {
+                        ItemVariationId = itemVariation.Id,
+                        BusinessId = request.BusinessId,
+                        StockChange = -o.Quantity
+                    });
                 }
 
                 return orderItem;
@@ -314,5 +336,48 @@ public class OrderService: IOrderService
                 // add refundDto
             }
         };
+    }
+
+    public async Task CancelOrder(CancelOrderRequest request)
+    {
+        var order = await _orderRepository.Get(request.Id);
+
+        if (order == null || order.BusinessId != request.BusinessId || order.Status != OrderStatus.Open)
+        {
+            return;
+        }
+
+        foreach (var orderItem in order.OrderItems)
+        {
+            await _itemService.ChangeItemStock(new ChangeItemStockRequest
+            {
+                ItemId = orderItem.Item.Id,
+                BusinessId = request.BusinessId,
+                StockChange = orderItem.Quantity
+            });
+
+            foreach (var itemVariation in orderItem.ItemVariations)
+            {
+                await _itemService.ChangeItemVariationStock(new ChangeItemVariationStockRequest
+                {
+                    ItemVariationId = itemVariation.Id,
+                    BusinessId = request.BusinessId,
+                    StockChange = orderItem.Quantity
+                });
+            }
+        }
+
+        if (order.Reservation != null)
+        {
+            await _reservationService.CancelReservation(new CancelReservationRequest
+            {
+                ReservationId = order.Reservation.Id,
+                BusinessId = request.BusinessId
+            });
+        }
+
+        order.Status = OrderStatus.Canceled;
+
+        await _unitOfWork.SaveChanges();
     }
 }

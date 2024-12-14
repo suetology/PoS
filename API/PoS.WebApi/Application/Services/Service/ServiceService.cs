@@ -1,4 +1,6 @@
-﻿namespace PoS.WebApi.Application.Services.Service;
+﻿using PoS.WebApi.Domain.Enums;
+
+namespace PoS.WebApi.Application.Services.Service;
 
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Service.Contracts;
@@ -109,7 +111,7 @@ public class ServiceService : IServiceService
         }
 
         var reservations = service.Reservations
-            .Where(r => r.AppointmentTime.Date == request.Date.Date)
+            .Where(r => r.AppointmentTime.Date == request.Date.Date && r.Status == AppointmentStatus.Booked)
             .OrderBy(r => r.AppointmentTime.TimeOfDay)
             .ToList();
 
