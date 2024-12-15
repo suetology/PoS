@@ -46,9 +46,9 @@
         <div class="mt-4">
             <label for="image">Image</label>
             <input
-              type="text"
+              type="file"
               id="image"
-              formControlName="image"
+              (change)="onFileSelected($event)"
               class="form-input"
             />
         </div>

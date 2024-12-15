@@ -1,4 +1,4 @@
-<div class="mx-auto px-4 lg:px-12 m-4">
+<div class="mx-auto px-4 lg:px-12 mt-4">
     <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden p-4">
 
         <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
@@ -37,10 +37,10 @@
         
         <label for="image">Image</label>
         <input 
-            type="text" 
+            type="file" 
             id="image" 
             name="image" 
-            formControlName="image"
+            (change)="onFileSelected($event)"
         >
 
         <label for="itemGroup">Item group</label>
