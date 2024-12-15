@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Shift.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -46,6 +47,7 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet("{shiftId}")]
+
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
