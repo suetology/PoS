@@ -71,7 +71,7 @@ public class DiscountService : IDiscountService
 
         var order = await _orderRepository.Get(request.ApplicableOrder);
         
-        if (order != null && order.BusinessId == request.BusinessId)
+        if (order != null && order.BusinessId == request.BusinessId && order.Status == Domain.Enums.OrderStatus.Open)
         {
             discount.Order = order;
             order.Discount = discount;
