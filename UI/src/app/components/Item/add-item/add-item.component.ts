@@ -53,12 +53,27 @@ export class AddItemComponent {
     )
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+  
+    const file = input.files[0];
+    const reader = new FileReader();
+  
+    reader.onload = (e: any) => {
+      const base64Only = e.target.result.split(',')[1];
+      this.itemForm.patchValue({ image: base64Only });
+    };
+    reader.readAsDataURL(file);
+  }
+
   onSubmit() {
     const request: CreateItemRequest = {
       name: this.itemForm.value.name || '',
       description: this.itemForm.value.description || '',
       price: this.itemForm.value.price || 0,
       stock: this.itemForm.value.stock || 0,
+      image: this.itemForm.value.image!,
       itemGroupId: this.itemForm.value.itemGroupId || undefined,
       taxIds: this.itemForm.value.taxIds || []
     }

@@ -18,7 +18,7 @@ public class UpdateItemRequest
 
     public int Stock { get; set; }
 
-    public byte[] Image { get; set; }
+    public string Image { get; set; }
 
     public Guid? ItemGroupId { get; set; }
 

@@ -31,10 +31,13 @@ namespace PoS.WebApi.Application.Services.Item
                 BusinessId = request.BusinessId,
                 Name = request.Name,
                 Description = request.Description,
-                Image = new byte[0],
                 Price = request.Price,
                 Stock = request.Stock,
-                ItemGroupId = request.ItemGroupId
+                ItemGroupId = request.ItemGroupId,
+                // Convert base64 string to bytes
+                Image = !string.IsNullOrEmpty(request.Image)
+                ? Convert.FromBase64String(request.Image)
+                : Array.Empty<byte>()
             };
 
             var taxes = await _taxRepository.GetTaxesByIds(request.TaxIds);
@@ -115,7 +118,10 @@ namespace PoS.WebApi.Application.Services.Item
             existingItem.Description = request.Description ?? existingItem.Description;
             existingItem.Price = request.Price == 0 ? existingItem.Price : request.Price;
             existingItem.Stock = request.Stock == 0 ? existingItem.Stock : request.Stock;
-            existingItem.Image = request.Image ?? existingItem.Image;
+            if (!string.IsNullOrEmpty(request.Image))
+            {
+                existingItem.Image = Convert.FromBase64String(request.Image);
+            }
             existingItem.ItemGroupId = request.ItemGroupId ?? existingItem.ItemGroupId;
 
             if (request.TaxIds != null && request.TaxIds.Count > 0)
