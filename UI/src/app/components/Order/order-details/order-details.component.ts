@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,7 +9,7 @@ import { DiscountService } from '../../../services/discount.service';
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [AsyncPipe, NgIf, NgFor, FormsModule, ReactiveFormsModule],
+  imports: [AsyncPipe, NgIf, NgFor, FormsModule, ReactiveFormsModule, DatePipe],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css'
 })

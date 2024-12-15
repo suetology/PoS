@@ -2,7 +2,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Observable, Subscription } from 'rxjs';
-import { Order } from '../../../types';
+import { Order, OrderStatus } from '../../../types';
 import { OrderService } from '../../../services/order.service';
 
 @Component({
@@ -58,4 +58,8 @@ export class OrderComponent {
       this.orders$ = this.orderService.getOrders();
     });
   }
+
+  getStatusLabel(status: string | OrderStatus): string {
+    return typeof status === 'string' ? status : OrderStatus[status];
+  }  
 }
