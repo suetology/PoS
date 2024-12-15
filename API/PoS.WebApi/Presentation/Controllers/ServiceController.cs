@@ -20,6 +20,11 @@ namespace PoS.WebApi.Presentation.Controllers
         
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet("{serviceId}")]
+        [ProducesResponseType(typeof(GetServiceResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetService(Guid serviceId)
         {
             var businessId = User.GetBusinessId();
@@ -45,6 +50,11 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet]
+        [ProducesResponseType(typeof(GetAllServicesResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetServices([FromQuery] string sort = "name", [FromQuery] string order = "desc", [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
             var businessId = User.GetBusinessId();
@@ -70,6 +80,13 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
         [HttpPost]
+        [ProducesResponseType(typeof(ServiceDto),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+
+
+
         public async Task<IActionResult> CreateService([FromBody] CreateServiceRequest request)
         {
             var businessId = User.GetBusinessId();
@@ -88,6 +105,11 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
         [HttpPatch("{serviceId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateService(Guid serviceId, [FromBody] UpdateServiceRequest request)
         {
             var businessId = User.GetBusinessId();

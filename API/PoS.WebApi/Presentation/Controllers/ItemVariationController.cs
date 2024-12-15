@@ -22,6 +22,10 @@ public class ItemVariationController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPost]
     [Tags("Inventory")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateItemVariation([FromRoute] Guid itemId, [FromBody] CreateItemVariationRequest request)
     {
         var businessId = User.GetBusinessId();
@@ -42,6 +46,9 @@ public class ItemVariationController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [Tags("Inventory")]
+    [ProducesResponseType(typeof(GetAllItemVariationsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllItemVariations([FromRoute] Guid itemId)
     {
         var businessId = User.GetBusinessId();
@@ -65,6 +72,9 @@ public class ItemVariationController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet("{itemVariationId}")]
     [Tags("Inventory")]
+    [ProducesResponseType(typeof(GetItemVariationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetItemVariation([FromRoute] Guid itemId, [FromRoute] Guid itemVariationId)
     {
         var businessId = User.GetBusinessId();

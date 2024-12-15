@@ -22,6 +22,10 @@ public class OrderController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost]
+    [ProducesResponseType(typeof(OrderDto),StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
         var businessId = User.GetBusinessId();
@@ -48,6 +52,11 @@ public class OrderController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
+    [ProducesResponseType(typeof(GetAllOrdersResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllOrders([FromQuery] OrderQueryParameters parameters)
     {
         var businessId = User.GetBusinessId();
@@ -70,6 +79,10 @@ public class OrderController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet("{orderId}")]
+    [ProducesResponseType(typeof(GetOrderResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetOrder([FromRoute] Guid orderId)
     {
         var businessId = User.GetBusinessId();
@@ -94,6 +107,10 @@ public class OrderController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost("{orderId}/cancel")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CancelOrder([FromRoute] Guid orderId)
     {
         var businessId = User.GetBusinessId();
@@ -116,6 +133,10 @@ public class OrderController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost("{orderId}/tip")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> AddTip([FromRoute] Guid orderId, [FromBody] AddTipRequest request)
     {        
         var businessId = User.GetBusinessId();
