@@ -22,6 +22,9 @@ public class ItemGroupController : ControllerBase
     [HttpGet]
     [Route("item-Group")]
     [Tags("Inventory")]
+    [ProducesResponseType(typeof(GetAllItemGroupsResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllItemGroups([FromQuery] QueryParameters parameters)
     {
         var businessId = User.GetBusinessId();
@@ -46,6 +49,8 @@ public class ItemGroupController : ControllerBase
     [HttpGet]
     [Tags("Inventory")]
     [Route("item-Group/{groupId}", Name = nameof(GetItemGroupById))]
+    [ProducesResponseType(typeof(GetItemGroupResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetItemGroupById([FromRoute] Guid groupId)
     {
         var businessId = User.GetBusinessId();
@@ -75,6 +80,10 @@ public class ItemGroupController : ControllerBase
     [HttpPost]
     [Route("item-Group")]
     [Tags("Inventory")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateItemGroup([FromBody] CreateItemGroupRequest request)
     {
         var businessId = User.GetBusinessId();
@@ -94,6 +103,11 @@ public class ItemGroupController : ControllerBase
     [HttpPatch]
     [Route("item-Group/{groupID}", Name = nameof(UpdateItemGroup))]
     [Tags("Inventory")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateItemGroup([FromRoute] Guid groupID, [FromBody] UpdateItemGroupRequest request)
     {
         var businessId = User.GetBusinessId();

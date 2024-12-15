@@ -20,6 +20,9 @@ public class BusinessController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)}")]
     [HttpGet]
+    [ProducesResponseType(typeof(GetAllBusinessesResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllBusinesses()
     {
         var response = await _businessService.GetAllBusiness();
@@ -29,6 +32,10 @@ public class BusinessController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet("{businessId}", Name = nameof(GetBusiness))]
+    [ProducesResponseType(typeof(GetBusinessResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+
     public async Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
     {
         if (User.GetBusinessId() != businessId)
@@ -48,6 +55,11 @@ public class BusinessController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)}")]
     [HttpPost(Name = nameof(CreateBusiness))]
+    [ProducesResponseType(typeof(BusinessDto),StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+
     public async Task<IActionResult> CreateBusiness([FromBody] CreateBusinessRequest request)
     {
         await _businessService.CreateBusiness(request);
@@ -57,6 +69,11 @@ public class BusinessController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPatch("{businessId}", Name = nameof(UpdateBusiness))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateBusiness([FromRoute] Guid businessId, [FromBody] UpdateBusinessRequest request)
     {
         var businessIdClaim = User.GetBusinessId();

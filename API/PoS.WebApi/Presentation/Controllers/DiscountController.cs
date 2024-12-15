@@ -20,6 +20,10 @@ public class DiscountController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPost(Name = nameof(CreateDiscount))]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateDiscount([FromBody] CreateDiscountRequest request)
     {
         var businessId = User.GetBusinessId();
@@ -38,6 +42,9 @@ public class DiscountController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
+    [ProducesResponseType(typeof(GetAllDiscountsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllDiscounts([FromQuery] QueryParameters parameters)
     {
         var businessId = User.GetBusinessId();
@@ -60,6 +67,9 @@ public class DiscountController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
+    [ProducesResponseType(typeof(GetDiscountResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Route("{discountId}", Name = nameof(GetDiscount))]
     public async Task<IActionResult> GetDiscount([FromRoute] Guid discountId)
     {
@@ -88,6 +98,10 @@ public class DiscountController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpDelete]
     [Route("{discountId}", Name = nameof(DeleteDiscount))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDiscount([FromRoute] Guid discountId)
     {
         var businessId = User.GetBusinessId();
