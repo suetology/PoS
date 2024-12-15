@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.Shift;
 using PoS.WebApi.Application.Services.Shift.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -21,7 +20,6 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet]
-        [ProducesResponseType(typeof(GetAllShiftsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -48,11 +46,11 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet("{shiftId}")]
-        [ProducesResponseType(typeof(GetShiftResponse),StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
         public async Task<IActionResult> GetShiftById(Guid shiftId)
         {
             var businessId = User.GetBusinessId();
