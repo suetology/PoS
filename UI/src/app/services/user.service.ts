@@ -44,4 +44,10 @@ export class UserService {
       })
     );
   }
+
+  setBusiness(userId: string, businessId: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/users/${userId}/set-business`, { businessId: businessId }).pipe(
+      map((response) => response)
+    );
+  }
 }

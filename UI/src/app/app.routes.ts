@@ -24,10 +24,12 @@ import { UpdateUserComponent } from './components/User/update-user/update-user.c
 import { UpdateItemGroupComponent } from './components/item-group/update-item-group/update-item-group.component';
 import { UpdateItemComponent } from './components/Item/update-item/update-item.component';
 import { UpdateServiceComponent } from './components/service/update-service/update-service.component';
+import { BusinessesComponent } from './components/businesses/businesses/businesses.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginComponent },
+    { path: 'businesses', component: BusinessesComponent, canActivate: [AuthGuard] },
     { path: 'business', component: BusinessComponent, canActivate: [AuthGuard], 
         children: [
             { path: ':id/edit', component: UpdateBusinessComponent }

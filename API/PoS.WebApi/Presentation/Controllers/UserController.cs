@@ -124,4 +124,16 @@ public class UserController : ControllerBase
 
         return Ok(roles);
     }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)}")]
+    [HttpPatch("{userId}/set-business", Name = nameof(SetBusiness))]
+    [Tags("User Management")]
+    public async Task<IActionResult> SetBusiness([FromRoute] Guid userId, [FromBody] SetBusinessRequest request)
+    {
+        request.UserId = userId;
+
+        await _userService.SetBusiness(request);
+
+        return NoContent();
+    }
 }

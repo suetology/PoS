@@ -3,7 +3,10 @@ export interface LoginRequest {
     password: string
 }
 
-export interface LoginResponse { 
+export interface LoginResponse {
+    userId: string,
+    businessId: string,
+    role: string,
     accessToken: string, 
     refreshToken: string
 }
@@ -58,6 +61,13 @@ export interface Business {
     phoneNumber: string;
     email: string;
     // employees: Employees;
+}
+
+export interface CreateBusinessRequest {
+    name: string;
+    address: string;
+    phoneNumber: string;
+    email: string;
 }
 
 export interface UpdateBusinessRequest  {

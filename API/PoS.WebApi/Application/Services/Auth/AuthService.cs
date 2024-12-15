@@ -44,6 +44,9 @@ public class AuthService : IAuthService
         
         return new LoginResponse
         {
+            UserId = user.Id,
+            BusinessId = user.BusinessId.Value,
+            Role = user.Role,
             AccessToken = accessToken,
             RefreshToken = refreshToken
         };

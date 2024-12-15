@@ -1,4 +1,6 @@
-﻿using PoS.WebApi.Domain.Enums;
+﻿using Microsoft.EntityFrameworkCore;
+using PoS.WebApi.Domain.Enums;
+using PoS.WebApi.Infrastructure.Persistence;
 
 namespace PoS.WebApi.Application.Services.User;
 
@@ -9,6 +11,8 @@ using PoS.WebApi.Domain.Common;
 
 public class UserService : IUserService
 {
+    private readonly DatabaseContext _dbContext;
+    
     private readonly IUserRepository _userRepository;
 
     private readonly IShiftRepository _shiftRepository;
@@ -16,10 +20,12 @@ public class UserService : IUserService
     private readonly IUnitOfWork _unitOfWork;
 
     public UserService(
+        DatabaseContext dbContext,
         IUserRepository userRepository,
         IShiftRepository shiftRepository,
         IUnitOfWork unitOfWork)
     {
+        _dbContext = dbContext;
         _userRepository = userRepository;
         _shiftRepository = shiftRepository;
         _unitOfWork = unitOfWork;
@@ -148,5 +154,19 @@ public class UserService : IUserService
         {
             Roles = Enum.GetNames(typeof(Role))
         });
+    }
+
+    public async Task SetBusiness(SetBusinessRequest request)
+    {
+        var user = await _userRepository.Get(request.UserId);
+
+        if (user == null)
+        {
+            return;
+        }
+        
+        user.BusinessId = request.BusinessId;
+        
+        await _unitOfWork.SaveChanges();
     }
 }

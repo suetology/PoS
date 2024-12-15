@@ -32,6 +32,18 @@ export class AuthService {
     return localStorage.getItem('refreshToken');
   }
 
+  getRole(): string | null {
+    return localStorage.getItem('role');
+  }
+
+  getBusinessId(): string | null {
+    return localStorage.getItem('businessId');
+  }
+
+  getUserId(): string | null {
+    return localStorage.getItem('userId');
+  }
+
   login(username: string, password: string): Observable<boolean> {
     const payload: LoginRequest = { username, password };
 
@@ -42,8 +54,11 @@ export class AuthService {
             this.loggedIn.next(true);
             this.username.next(username); 
 
+            localStorage.setItem('userId', response.userId);
+            localStorage.setItem('businessId', response.businessId);
             localStorage.setItem('accessToken', response.accessToken);
             localStorage.setItem('refreshToken', response.refreshToken);
+            localStorage.setItem('role', response.role);
             localStorage.setItem('username', username);
 
             return true;
@@ -65,8 +80,11 @@ export class AuthService {
 
     const refreshToken = this.getRefreshToken();
 
+    localStorage.removeItem('userId');
+    localStorage.removeItem('businessId');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('role');
     localStorage.removeItem('username');
 
     if (!refreshToken) {
@@ -99,7 +117,7 @@ export class AuthService {
         map(response => {
           if (response && response.accessToken && response.refreshToken) {
             this.loggedIn.next(true);
-
+            
             localStorage.setItem('accessToken', response.accessToken);
             localStorage.setItem('refreshToken', response.refreshToken);
 
