@@ -3,11 +3,11 @@ p {
 }
 
 dd {
-    @apply mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2;
+    @apply text-sm text-gray-900 sm:mt-0 sm:col-span-2;
 }
 
 dt {
-    @apply text-sm font-medium text-gray-500;
+    @apply mb-2 text-sm font-medium text-gray-500;
 }
 
 h3 {
