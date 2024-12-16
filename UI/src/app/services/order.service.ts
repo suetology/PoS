@@ -67,4 +67,10 @@ export class OrderService {
       tap(() => this.ordersUpdated.next())
     );
   }
+
+  deleteItem(orderId: string, itemId: string): Observable<void> {
+    return this.http.delete<void>(`${environment.API_URL}/orders/${orderId}/items/${itemId}`).pipe(
+      tap(() => this.ordersUpdated.next())
+    );
+  };
 }

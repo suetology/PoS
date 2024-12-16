@@ -224,7 +224,11 @@ export class OrderDetailsComponent {
     });
   }
 
-  // deleteOrderItem(orderId: string, itemId: string) {
-  // }
-  
+  deleteOrderItem(orderId: string, itemId: string) {
+
+    this.orderService.deleteItem(orderId, itemId).subscribe({
+      next: () => this.loadOrderDetails(),
+      error: (err) => console.error('Error deleting item:', err)
+    })
+  }
 }
