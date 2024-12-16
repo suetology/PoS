@@ -22,6 +22,9 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet("{customerId}")]
+        [ProducesResponseType(typeof(GetCustomerResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetCustomer([FromRoute] Guid customerId)
         {
             var businessId = User.GetBusinessId();
@@ -46,6 +49,9 @@ namespace PoS.WebApi.Presentation.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(GetAllCustomersResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll()
         {
             var businessId = User.GetBusinessId();
@@ -66,6 +72,10 @@ namespace PoS.WebApi.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerRequest request)
         {
             var businessId = User.GetBusinessId();

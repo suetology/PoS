@@ -464,3 +464,17 @@ export interface CreateOrderRequest {
     reservation?: CreateReservationRequest
     orderItems: CreateOrderItemRequest[]
 }
+
+export interface UpdateOrderRequest {
+    orderItems: {
+        itemId: string;
+        itemVariationsIds: string[];
+        quantity: number;
+      }[];
+}
+
+export interface AddItemInOrderRequest {
+    itemId?: string;
+    itemVariationsIds?: string[];
+    quantity?: number;
+}

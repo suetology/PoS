@@ -69,6 +69,8 @@ export class AddItemsToOrderComponent implements OnInit {
         .filter(variationId => this.itemVariationControls[variationId]?.value)
     }
 
+    this.orderItemsAdded.emit([addedOrderItem]);
+
     const currentItem = this.items.find(i => i.id === this.itemForm.value.itemId);
     const currentItemVariations = this.itemVariations.filter(variation => this.itemVariationControls[variation.id]?.value);
 

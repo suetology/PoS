@@ -3,6 +3,7 @@ namespace PoS.WebApi.Infrastructure.Repositories;
 
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Repositories;
+using PoS.WebApi.Application.Services.Item.Contracts;
 using PoS.WebApi.Application.Services.Order;
 using PoS.WebApi.Domain.Entities;
 using PoS.WebApi.Domain.Enums;
@@ -76,9 +77,9 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
     }
 
-    public Task Update(Order entity)
+    public async Task Update(Order entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Orders.Update(entity);
     }
 
     public async Task<IEnumerable<Order>> GetAllFiltered(OrderQueryParameters parameters)

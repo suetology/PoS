@@ -22,6 +22,7 @@ using PoS.WebApi.Application.Services.Discount;
 using PoS.WebApi.Application.Services.Order;
 using PoS.WebApi.Application.Services.ItemGroup;
 using PoS.WebApi.Application.Services.Item;
+using PoS.WebApi.Application.Services.Notification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -123,6 +124,9 @@ builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
 builder.Services.AddTransient<IItemVariationRepository, ItemVariationRepository>();
 
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+
+builder.Services.AddTransient<INotificationService, NotificationService>();
+
 
 
 // Adding controllers
