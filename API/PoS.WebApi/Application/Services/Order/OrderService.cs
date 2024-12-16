@@ -456,4 +456,35 @@ public async Task<bool> UpdateOrder(UpdateOrderRequest request)
 
         await _unitOfWork.SaveChanges();
     }
+    public async Task RemoveItemFromOrder(RemoveItemFromOrderRequest request)
+    {
+        var order = await _orderRepository.Get(request.OrderId);
+
+        if (order == null || order.BusinessId != request.BusinessId)
+        {
+            throw new KeyNotFoundException("Order not found or unauthorized.");
+        }
+
+        var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == request.ItemId);
+
+
+        if (orderItem == null)
+        {
+            throw new KeyNotFoundException("Item not found in the order.");
+        }
+
+        await _itemService.ChangeItemStock(new ChangeItemStockRequest
+        {
+            ItemId = request.ItemId,
+            BusinessId = request.BusinessId,
+            StockChange = orderItem.Quantity
+        });
+
+        order.OrderItems.Remove(orderItem);
+
+        await _orderRepository.Update(order);
+        await _unitOfWork.SaveChanges();
+    }
+
+
 }
