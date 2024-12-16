@@ -18,11 +18,13 @@ using PoS.WebApi.Application.Services.Reservation.Contracts;
 using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.Tax.Contracts;
 using PoS.WebApi.Application.Services.Discount.Contracts;
+using PoS.WebApi.Application.Services.Notification;
 
 public class OrderService: IOrderService
 {
     private readonly IReservationService _reservationService;
     private readonly ICustomerService _customerService;
+    private readonly INotificationService _notificationService;
     private readonly IItemService _itemService;
     private readonly IOrderRepository _orderRepository;
     private readonly IItemRepository _itemRepository;
@@ -32,6 +34,7 @@ public class OrderService: IOrderService
     public OrderService(
         IReservationService reservationService, 
         ICustomerService customerService,
+        INotificationService notificationService,
         IItemService itemService,
         IOrderRepository orderRepository,
         IItemRepository itemRepository,
@@ -40,6 +43,7 @@ public class OrderService: IOrderService
     {
         _reservationService = reservationService;
         _customerService = customerService;
+        _notificationService = notificationService;
         _itemService = itemService;
         _orderRepository = orderRepository;
         _itemRepository = itemRepository;
@@ -56,6 +60,11 @@ public class OrderService: IOrderService
             var customerResponse = await _customerService.CreateCustomer(request.Customer);
             request.CustomerId = customerResponse.Id;
         }
+
+        var customer = await _customerService.GetCustomer(new GetCustomerRequest{
+            Id = (Guid)request.CustomerId,
+            BusinessId = request.BusinessId,
+        });
 
         var orderItems = await Task.WhenAll(request.OrderItems.Select(async o => {
                 var orderItem = new OrderItem
@@ -110,8 +119,13 @@ public class OrderService: IOrderService
         {
             request.Reservation.BusinessId = order.BusinessId;
             request.Reservation.OrderId = order.Id;
-        
+
             await _reservationService.CreateReservation(request.Reservation);
+            
+            string message = $"Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
+            if(message.Length < 100 && customer.Customer.PhoneNumber.Length < 16) { // Just in case we fuck something up
+                Task.Run(() => _notificationService.SendSMS(message, customer.Customer.PhoneNumber));
+            }
         }
     }
 
