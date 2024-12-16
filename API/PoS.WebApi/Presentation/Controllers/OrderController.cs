@@ -115,7 +115,29 @@ public class OrderController : ControllerBase
         request.Id = orderId;
         request.BusinessId = businessId.Value;
 
-        var success = await _orderService.UpdateOrder(request);
+        var success = await _orderService.UpdateItemQuantityInOrder(request);
+        if (!success)
+        {
+            return NotFound("Order not found");
+        }
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpPatch("{orderId}/add-item")]
+    public async Task<IActionResult> AddItemToOrder([FromRoute] Guid orderId, [FromBody] AddItemToUpdateOrderRequest request)
+    {
+        var businessId = User.GetBusinessId();
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.Id = orderId;
+        request.BusinessId = businessId.Value;
+
+        var success = await _orderService.AddItemToOrder(request);
         if (!success)
         {
             return NotFound("Order not found");

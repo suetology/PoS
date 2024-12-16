@@ -99,6 +99,9 @@
 	</div>
   
       <div class="space-y-6 mr-4">
+		<app-add-items-to-order
+			(orderItemsAdded)="handleOrderItemsAdded($event)">
+		</app-add-items-to-order>
 		@if(order && order.orderItems.length > 0){
 			<div class="flex flex-col space-y-4">
             	<div *ngFor="let orderItem of order?.orderItems" class="p-4 bg-gray-50 rounded-lg relative flex items-center">
@@ -154,8 +157,6 @@
               		</div>
             	</div>
         	</div>
-		} @else {
-			<div class="flex items-center justify-center h-full text-m text-gray-500">No items added.</div>
 		}
     </div>
   </div>
