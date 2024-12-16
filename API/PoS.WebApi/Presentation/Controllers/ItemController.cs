@@ -22,6 +22,10 @@ public class ItemController : ControllerBase
     [HttpPost]
     [Route("item")]
     [Tags("Inventory")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateItem([FromBody] CreateItemRequest request)
     {
         var businessId = User.GetBusinessId();
@@ -42,6 +46,9 @@ public class ItemController : ControllerBase
     [HttpGet]
     [Route("item")]
     [Tags("Inventory")]
+    [ProducesResponseType(typeof(GetAllItemsResponse),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllItems([FromQuery] QueryParameters parameters)
     {
         //if (!QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
@@ -71,6 +78,9 @@ public class ItemController : ControllerBase
     [HttpGet]
     [Tags("Inventory")]
     [Route("item/{itemId}", Name = nameof(GetItem))]
+    [ProducesResponseType(typeof(GetItemResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetItem([FromRoute] Guid itemId)
     {
         var businessId = User.GetBusinessId();
@@ -95,6 +105,11 @@ public class ItemController : ControllerBase
     [HttpPatch]
     [Tags("Inventory")]
     [Route("item/{itemID}", Name = nameof(UpdateItem))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateItem([FromRoute] Guid itemID, [FromBody] UpdateItemRequest request)
     {
         var businessId = User.GetBusinessId();

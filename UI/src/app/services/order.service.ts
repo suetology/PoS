@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { AddTipRequest, CreateOrderRequest, GetAllOrdersResponse, Order } from '../types';
+import { AddItemInOrderRequest, AddTipRequest, CreateOrderRequest, GetAllOrdersResponse, Order, UpdateOrderRequest } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +46,14 @@ export class OrderService {
     );
   }
 
+  updateOrder(id: string, request: UpdateOrderRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/orders/${id}/quantity`, request).pipe(
+      map(() => {
+        this.ordersUpdated.next();
+      })
+    );
+  }
+
   addTip(id: string, request: AddTipRequest) {
     return this.http.post(`${environment.API_URL}/orders/${id}/tip`, request).pipe(
       tap(() => {
@@ -53,4 +61,16 @@ export class OrderService {
       })
     );
   }
+
+  addItemToOrder(orderId: string, request: AddItemInOrderRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/orders/${orderId}/add-item`, request).pipe(
+      tap(() => this.ordersUpdated.next())
+    );
+  }
+
+  deleteItem(orderId: string, itemId: string): Observable<void> {
+    return this.http.delete<void>(`${environment.API_URL}/orders/${orderId}/items/${itemId}`).pipe(
+      tap(() => this.ordersUpdated.next())
+    );
+  };
 }

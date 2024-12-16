@@ -24,6 +24,7 @@ using PoS.WebApi.Application.Services.ItemGroup;
 using PoS.WebApi.Application.Services.Item;
 using PoS.WebApi.Application.Services.Payments;
 using PoS.WebApi.Infrastructure.Payments.Extensions;
+using PoS.WebApi.Application.Services.Notification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -128,6 +129,9 @@ builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
+
+
 
 // Adding controllers
 builder.Services.AddControllers()

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoS.WebApi.Application.Services.Discount.Contracts;
 using PoS.WebApi.Application.Services.ServiceCharge;
 using PoS.WebApi.Application.Services.ServiceCharge.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -22,6 +23,10 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateServiceCharge([FromBody] CreateServiceChargeRequest request)
         {
             var businessId = User.GetBusinessId();
@@ -40,6 +45,9 @@ namespace PoS.WebApi.Presentation.Controllers
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
         [HttpGet]
+        [ProducesResponseType(typeof(GetAllServiceChargesResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<ServiceChargeDto>>> GetServiceCharges()
         {
             var businessId = User.GetBusinessId();

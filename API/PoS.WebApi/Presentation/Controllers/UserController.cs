@@ -21,6 +21,10 @@ public class UserController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPost(Name = nameof(CreateUser))]
     [Tags("User Management")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         var businessId = User.GetBusinessId();
@@ -40,9 +44,14 @@ public class UserController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet]
     [Tags("User Management")]
-    public async Task<IActionResult> GetAllUsers([FromQuery] QueryParameters parameters)
+    [ProducesResponseType(typeof(GetAllUsersResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllUsers([FromQuery] Application.Services.User.QueryParameters parameters)
     {
-        if (!QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
+        if (!Application.Services.User.QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
         {
             return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
         }
@@ -69,6 +78,11 @@ public class UserController : ControllerBase
     [HttpGet]
     [Tags("User Management")]
     [Route("{userId}", Name = nameof(GetUser))]
+    [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUser([FromRoute] Guid userId)
     {
         var businessId = User.GetBusinessId();
@@ -93,6 +107,11 @@ public class UserController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [Tags("User Management")]
     [HttpPatch("{userId}", Name = nameof(UpdateUser))]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserRequest request)
     {
         var businessId = User.GetBusinessId();
@@ -118,6 +137,9 @@ public class UserController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpGet("roles", Name = nameof(GetAvailableRoles))]
     [Tags("User Management")]
+    [ProducesResponseType(typeof(GetAvailableRolesResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetAvailableRoles()
     {
         var roles = await _userService.GetAvailableRoles();
@@ -128,6 +150,11 @@ public class UserController : ControllerBase
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)}")]
     [HttpPatch("{userId}/set-business", Name = nameof(SetBusiness))]
     [Tags("User Management")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SetBusiness([FromRoute] Guid userId, [FromBody] SetBusinessRequest request)
     {
         request.UserId = userId;
