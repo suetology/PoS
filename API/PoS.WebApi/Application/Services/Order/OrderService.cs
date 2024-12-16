@@ -1,9 +1,6 @@
-
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Services.Reservation;
 using PoS.WebApi.Domain.Enums;
-using PoS.WebApi.Infrastructure.Persistence;
-
 namespace PoS.WebApi.Application.Services.Order;
 
 using PoS.WebApi.Domain.Entities;
@@ -338,6 +335,71 @@ public class OrderService: IOrderService
         };
     }
 
+public async Task<bool> UpdateOrder(UpdateOrderRequest request)
+{
+    var existingOrder = await _orderRepository.Get(request.Id);
+
+    if (existingOrder == null || existingOrder.BusinessId != request.BusinessId)
+    {
+        throw new KeyNotFoundException("Order not found.");
+    }
+
+    var oldItemsDict = existingOrder.OrderItems.ToDictionary(oi => oi.ItemId);
+
+    var newOrderItems = new List<OrderItem>();
+
+    foreach (var requestOrderItem in request.OrderItems)
+    {
+        var itemId = requestOrderItem.ItemId;
+        var quantity = requestOrderItem.Quantity;
+
+        var item = await _itemRepository.Get(itemId);
+
+        var oldOrderItem = oldItemsDict.GetValueOrDefault(itemId);
+        var currentOrderQuantity = oldOrderItem?.Quantity ?? 0;
+        var quantityDifference = quantity - currentOrderQuantity;
+
+        if (quantityDifference != 0)
+        {
+            if (quantityDifference > 0 && item.Stock < quantityDifference)
+            {
+                throw new InvalidOperationException($"Not enough stock for item {item.Name}. Available: {item.Stock}");
+            }
+
+            await _itemService.ChangeItemStock(new ChangeItemStockRequest
+            {
+                BusinessId = request.BusinessId,
+                ItemId = itemId,
+                StockChange = -quantityDifference
+            });
+        }
+
+        if (quantity > 0)
+        {
+            if (oldOrderItem != null)
+            {
+                oldOrderItem.Quantity = quantity;
+                newOrderItems.Add(oldOrderItem);
+            }
+            else
+            {
+                newOrderItems.Add(new OrderItem
+                {
+                    BusinessId = request.BusinessId,
+                    ItemId = itemId,
+                    Quantity = quantity
+                });
+            }
+        }
+    }
+
+    existingOrder.OrderItems = newOrderItems;
+    await _orderRepository.Update(existingOrder);
+    await _unitOfWork.SaveChanges();
+
+    return true;
+}
+
     public async Task CancelOrder(CancelOrderRequest request)
     {
         var order = await _orderRepository.Get(request.Id);
@@ -393,5 +455,5 @@ public class OrderService: IOrderService
         order.TipAmount = request.TipAmount;
 
         await _unitOfWork.SaveChanges();
-    } 
+    }
 }
