@@ -447,6 +447,19 @@ public class OrderService: IOrderService
         return true;
     }
 
+    public async Task<bool> UpdateReservation(UpdateOrderReservationRequest request) {
+        
+        var existingOrder = await _orderRepository.Get(request.Id);
+        if (existingOrder == null || existingOrder.BusinessId != request.Reservation.BusinessId) {
+            throw new KeyNotFoundException("Order not found.");
+        }
+
+        await _reservationService.UpdateReservation(request.Reservation);
+        await _unitOfWork.SaveChanges();
+
+        return true;
+    }
+
     public async Task CancelOrder(CancelOrderRequest request)
     {
         var order = await _orderRepository.Get(request.Id);

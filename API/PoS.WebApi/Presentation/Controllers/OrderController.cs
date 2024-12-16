@@ -146,6 +146,24 @@ public class OrderController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpPatch("{orderId}/reservation")]
+    public async Task<IActionResult> UpdateReservation([FromRoute] Guid orderId, [FromBody] UpdateOrderReservationRequest request) {
+        var businessId = User.GetBusinessId();
+        if (businessId == null) {
+            return Unauthorized("No Business ID");
+        }
+
+        request.Id = orderId;
+        request.Reservation.BusinessId = businessId.Value;
+
+        bool success = await _orderService.UpdateReservation(request);
+        if (!success) {
+            return NotFound("Order not found");
+        }
+
+        return NoContent();
+    }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost("{orderId}/cancel")]
