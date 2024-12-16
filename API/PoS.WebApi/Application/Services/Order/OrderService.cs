@@ -61,6 +61,11 @@ public class OrderService: IOrderService
             request.CustomerId = customerResponse.Id;
         }
 
+        var customer = await _customerService.GetCustomer(new GetCustomerRequest{
+            Id = (Guid)request.CustomerId,
+            BusinessId = request.BusinessId,
+        });
+
         var orderItems = await Task.WhenAll(request.OrderItems.Select(async o => {
                 var orderItem = new OrderItem
                 {
@@ -115,10 +120,12 @@ public class OrderService: IOrderService
             request.Reservation.BusinessId = order.BusinessId;
             request.Reservation.OrderId = order.Id;
 
-            string message = $"Hello, {request.Customer.Name}. Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
-            
             await _reservationService.CreateReservation(request.Reservation);
-            // await _notificationService.SendSMS("Help", "+37062532236");
+            
+            string message = $"Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
+            if(message.Length < 100 && customer.Customer.PhoneNumber.Length < 16) { // Just in case we fuck something up
+                Task.Run(() => _notificationService.SendSMS(message, customer.Customer.PhoneNumber));
+            }
         }
     }
 

@@ -23,7 +23,6 @@ using PoS.WebApi.Application.Services.Order;
 using PoS.WebApi.Application.Services.ItemGroup;
 using PoS.WebApi.Application.Services.Item;
 using PoS.WebApi.Application.Services.Notification;
-using Amazon.SimpleNotificationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,10 +77,6 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-
-// SNS
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
 // Registering dependencies
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
