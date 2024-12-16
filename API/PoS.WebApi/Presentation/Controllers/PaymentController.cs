@@ -31,9 +31,9 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("complete-checkout")]
-    public async Task<IActionResult> CompleteCheckout()
+    public async Task<IActionResult> CompleteCheckout([FromBody] object obj)
     {
-        Console.WriteLine("\n\n\n Hook triggered \n\n\n");
+        Console.WriteLine("\n\n\n obj \n\n\n");
         
         return Ok();
     }
