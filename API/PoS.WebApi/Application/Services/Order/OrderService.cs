@@ -114,16 +114,11 @@ public class OrderService: IOrderService
         {
             request.Reservation.BusinessId = order.BusinessId;
             request.Reservation.OrderId = order.Id;
-        
-            await _reservationService.CreateReservation(request.Reservation);
 
-            string message = string.Format(
-                "Hello, {0}. Your reservation has been scheduled for {1}.", 
-                request.Customer.Name, 
-                request.Reservation.AppointmentTime
-            );
+            string message = $"Hello, {request.Customer.Name}. Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
             
-            // await _notificationService.SendSMS(message, request.Customer.PhoneNumber);
+            await _reservationService.CreateReservation(request.Reservation);
+            // await _notificationService.SendSMS("Help", "+37062532236");
         }
     }
 
