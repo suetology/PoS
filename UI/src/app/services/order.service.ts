@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { AddTipRequest, CreateOrderRequest, GetAllOrdersResponse, Order, UpdateOrderRequest } from '../types';
+import { AddItemInOrderRequest, AddTipRequest, CreateOrderRequest, GetAllOrdersResponse, Order, UpdateOrderRequest } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +59,12 @@ export class OrderService {
       tap(() => {
         this.ordersUpdated.next();
       })
+    );
+  }
+
+  addItemToOrder(orderId: string, request: AddItemInOrderRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/orders/${orderId}/add-item`, request).pipe(
+      tap(() => this.ordersUpdated.next())
     );
   }
 }
