@@ -51,4 +51,8 @@ export class ItemComponent {
   goToItemDetails(id: string) {
     this.router.navigate([id], { relativeTo: this.route });
   }
+
+  editItem(id: string) {
+    this.router.navigate([`/item/${id}/edit`]);
+  }
 }

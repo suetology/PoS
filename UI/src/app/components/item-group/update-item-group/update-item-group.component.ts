@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ItemGroupService } from '../../../services/item-group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ItemGroup } from '../../../types';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -17,7 +16,6 @@ export class UpdateItemGroupComponent {
   itemGroupForm: FormGroup;
   itemGroupId: string;
 
-  user: ItemGroup | undefined;
   private sub: Subscription | undefined = undefined;
 
   constructor(

@@ -35,7 +35,9 @@ public class UserRepository : IUserRepository
 
     public async Task<User> Get(Guid id)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(i => i.Id == id);
+        return await _dbContext.Users
+            .Include(x => x.Shifts)
+            .FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<IEnumerable<User>> GetAllUsersByFiltering(QueryParameters parameters)

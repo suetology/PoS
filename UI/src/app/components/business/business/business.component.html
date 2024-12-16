@@ -11,26 +11,23 @@
                 <th scope="col"> Actions </th>
             </tr>
         </thead>
-        @for(bus of business$ | async ; track $index) 
-        {
-            <tbody>
-                <tr class="bg-white border-b hover:bg-gray-50">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ bus.name }}
-                    </th>
-                    <td> {{ bus.address }} </td>
-                    <td> {{ bus.phoneNumber }} </td>
-                    <td> {{ bus.email }} </td>
-                    <td
-                    class="font-medium text-cyan-600 hover:underline cursor-pointer"
-                    (click)="editBusiness(bus.id)"
-                    >
-                        Edit
-                    </td>
-                  
-                </tr>
-            </tbody>
-        }
+        <tbody>
+            <tr class="bg-white border-b hover:bg-gray-50">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    {{ business?.name }}
+                </th>
+                <td> {{ business?.address }} </td>
+                <td> {{ business?.phoneNumber }} </td>
+                <td> {{ business?.email }} </td>
+                <td
+                class="font-medium text-cyan-500 hover:underline cursor-pointer"
+                (click)="editBusiness(business?.id || '')"
+                >
+                    Edit
+                </td>
+                
+            </tr>
+        </tbody>
     </table>
 </div>
 <router-outlet></router-outlet>

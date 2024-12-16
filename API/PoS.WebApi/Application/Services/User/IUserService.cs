@@ -9,4 +9,5 @@ public interface IUserService
     Task<GetUserResponse> GetUser(GetUserRequest request);
     Task<GetAvailableRolesResponse> GetAvailableRoles();
     Task<bool> UpdateUser(UpdateUserRequest request);
+    Task SetBusiness(SetBusinessRequest request);
 }

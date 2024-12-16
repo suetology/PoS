@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Observable, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { Business } from '../../../types';
 import { BusinessService } from '../../../services/business.service';
 import { Router, RouterLink, RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-business',
@@ -14,12 +15,16 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 })
 export class BusinessComponent {
 
-  business$: Observable<Business[]>;
+  business: Business | undefined;
 
-  constructor(private businessService : BusinessService, private router: Router){
-    this.business$ = this.businessService.getBusinessUpdated().pipe(
-      switchMap(() => this.businessService.getBusiness())
-    );
+  constructor(
+    private businessService: BusinessService, 
+    private authService: AuthService,
+    private router: Router){
+      const id = authService.getBusinessId() || '';
+        this.businessService.getBusinessById(id).subscribe(
+          (response) => this.business = response
+        );
   }
 
   editBusiness(businessId: string) {

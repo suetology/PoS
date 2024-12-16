@@ -22,7 +22,11 @@ export class LoginComponent {
       next: (success) => {
         if (success) {
           console.log('Login successful', success);
-          this.router.navigate(['/business']);
+          if (this.authService.getRole() === "SuperAdmin") {
+            this.router.navigate(['/businesses']);
+          } else {
+            this.router.navigate(['/business']);
+          }
         } else {
           this.loginError = 'Invalid username or password';
         }

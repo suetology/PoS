@@ -7,9 +7,7 @@
                         <th scope="col" class="px-4 py-3">Name</th>
                         <th scope="col" class="px-4 py-3">Price</th>
                         <th scope="col" class="px-4 py-3">Duration</th>
-                        <th scope="col" class="px-4 py-3">
-                            <span class="sr-only">Actions</span>
-                        </th>
+                        <th scope="col" class="px-4 py-3">Actions</th>
                     </tr>
                 </thead>
                 @if(services$ | async; as service) {
@@ -22,6 +20,11 @@
                                 {{ service.name }}</th>
                             <td class="px-4 py-3">{{ service.price }}</td>
                             <td class="px-4 py-3">{{ service.duration }}</td>
+                            <td class="px-6 py-4" (click)="$event.stopPropagation()">
+                                <a class="font-medium text-cyan-500 hover:underline cursor-pointer"
+                                (click)="editService(service.id)"
+                                > Edit </a>
+                            </td>
                         </tr>
                     </tbody>
                     }

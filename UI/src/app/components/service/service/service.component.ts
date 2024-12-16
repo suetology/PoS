@@ -51,4 +51,8 @@ export class ServiceComponent {
   goToServiceDetails(id: string) {
     this.router.navigate([id], { relativeTo: this.route });
   }
+
+  editService(serviceId: string) {
+    this.router.navigate([`/services/${serviceId}/edit`]);
+  }
 }

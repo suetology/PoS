@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Business, BusinessResponse, UpdateBusinessRequest } from '../types';
+import { Business, BusinessResponse, CreateBusinessRequest, UpdateBusinessRequest } from '../types';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -29,6 +29,15 @@ export class BusinessService {
     return this.http.patch<void>(`${environment.API_URL}/business/${businessId}`, request).pipe(
       map(() => {
         this.businessUpdated.next();
+      })
+    );
+  }
+
+  createBusiness(request: CreateBusinessRequest) : Observable<Business[]> {
+    return this.http.post<Business[]>(`${environment.API_URL}/business`, request).pipe(
+      map((business) => {
+        this.businessUpdated.next();
+        return business;
       })
     );
   }

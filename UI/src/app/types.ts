@@ -3,7 +3,10 @@ export interface LoginRequest {
     password: string
 }
 
-export interface LoginResponse { 
+export interface LoginResponse {
+    userId: string,
+    businessId: string,
+    role: string,
     accessToken: string, 
     refreshToken: string
 }
@@ -58,6 +61,13 @@ export interface Business {
     phoneNumber: string;
     email: string;
     // employees: Employees;
+}
+
+export interface CreateBusinessRequest {
+    name: string;
+    address: string;
+    phoneNumber: string;
+    email: string;
 }
 
 export interface UpdateBusinessRequest  {
@@ -132,6 +142,15 @@ export interface CreateServiceRequest {
     duration: number,
     isActive: boolean,
     employeeId: string
+}
+
+export interface UpdateServiceRequest {
+    name?: string,
+    description?: string,
+    price?: number,
+    duration?: number,
+    isActive?: boolean,
+    employeeId?: string
 }
 
 export interface GetAllServicesRequest {
@@ -276,8 +295,19 @@ export interface CreateItemRequest {
     description: string,
     price: number,
     stock: number,
+    image: string,
     itemGroupId?: string,
     taxIds: string[]
+}
+
+export interface UpdateItemRequest {
+    name?: string,
+    description?: string,
+    price?: number, 
+    stock?: number,
+    image?: string,
+    itemGroupId?: string,
+    taxIds?: string[]
 }
 
 export interface GetItemResponse {
@@ -433,4 +463,18 @@ export interface CreateOrderRequest {
     serviceChargeId?: string,
     reservation?: CreateReservationRequest
     orderItems: CreateOrderItemRequest[]
+}
+
+export interface UpdateOrderRequest {
+    orderItems: {
+        itemId: string;
+        itemVariationsIds: string[];
+        quantity: number;
+      }[];
+}
+
+export interface AddItemInOrderRequest {
+    itemId?: string;
+    itemVariationsIds?: string[];
+    quantity?: number;
 }

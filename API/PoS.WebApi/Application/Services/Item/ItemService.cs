@@ -31,10 +31,13 @@ namespace PoS.WebApi.Application.Services.Item
                 BusinessId = request.BusinessId,
                 Name = request.Name,
                 Description = request.Description,
-                Image = new byte[0],
                 Price = request.Price,
                 Stock = request.Stock,
-                ItemGroupId = request.ItemGroupId
+                ItemGroupId = request.ItemGroupId,
+                // Convert base64 string to bytes
+                Image = !string.IsNullOrEmpty(request.Image)
+                ? Convert.FromBase64String(request.Image)
+                : Array.Empty<byte>()
             };
 
             var taxes = await _taxRepository.GetTaxesByIds(request.TaxIds);
@@ -101,7 +104,39 @@ namespace PoS.WebApi.Application.Services.Item
                 }
             };
         }
-        
+
+        public async Task<bool> UpdateItem(UpdateItemRequest request)
+        {
+            var existingItem = await _itemRepository.Get(request.Id);
+
+            if (existingItem == null || existingItem.BusinessId != request.BusinessId)
+            {
+                return false;
+            }
+
+            existingItem.Name = request.Name ?? existingItem.Name;
+            existingItem.Description = request.Description ?? existingItem.Description;
+            existingItem.Price = request.Price == 0 ? existingItem.Price : request.Price;
+            existingItem.Stock = request.Stock == 0 ? existingItem.Stock : request.Stock;
+            if (!string.IsNullOrEmpty(request.Image))
+            {
+                existingItem.Image = Convert.FromBase64String(request.Image);
+            }
+            existingItem.ItemGroupId = request.ItemGroupId ?? existingItem.ItemGroupId;
+
+            if (request.TaxIds != null && request.TaxIds.Count > 0)
+            {
+                var taxes = await _taxRepository.GetTaxesByIds(request.TaxIds);
+
+                existingItem.Taxes = taxes.ToList();
+            }
+
+            await _itemRepository.Update(existingItem);
+            await _unitOfWork.SaveChanges();
+
+            return true;
+        }
+
         public async Task<GetAllItemVariationsResponse> GetAllItemVariations(GetAllItemVariationsRequest request)
         {
             var itemVariations = await _itemVariationRepository.GetAllItemVariationByItemId(request.ItemId);

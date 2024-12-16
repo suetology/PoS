@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { ReservationsComponent } from './components/reservations/reservations.component';
 import { BusinessComponent } from './components/business/business/business.component';
 import { LoginComponent } from './components/login/login.component';
 import { TaxDetailsComponent } from './components/Tax/tax-details/tax-details.component';
@@ -23,10 +22,14 @@ import { AuthGuard } from './guards/auth.guard';
 import { UpdateBusinessComponent } from './components/business/update-business/update-business.component';
 import { UpdateUserComponent } from './components/User/update-user/update-user.component';
 import { UpdateItemGroupComponent } from './components/item-group/update-item-group/update-item-group.component';
+import { UpdateItemComponent } from './components/Item/update-item/update-item.component';
+import { UpdateServiceComponent } from './components/service/update-service/update-service.component';
+import { BusinessesComponent } from './components/businesses/businesses/businesses.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginComponent },
+    { path: 'businesses', component: BusinessesComponent, canActivate: [AuthGuard] },
     { path: 'business', component: BusinessComponent, canActivate: [AuthGuard], 
         children: [
             { path: ':id/edit', component: UpdateBusinessComponent }
@@ -45,12 +48,14 @@ export const routes: Routes = [
      },
     { path: 'item', component: ItemPageComponent, canActivate: [AuthGuard],
         children: [
-            { path: ':id', component: ItemDetailsComponent, canActivate: [AuthGuard], }
+            { path: ':id', component: ItemDetailsComponent, canActivate: [AuthGuard], },
+            { path: ':id/edit', component: UpdateItemComponent, canActivate: [AuthGuard] } 
         ]
      },
     { path: 'services', component: ServicePageComponent, canActivate: [AuthGuard],
         children: [
             { path: ':id', component: ServiceDetailsComponent, canActivate: [AuthGuard] },
+            { path: ':id/edit', component: UpdateServiceComponent, canActivate: [AuthGuard] } 
         ]
      },
     { path: 'tax', component: TaxPageComponent, canActivate: [AuthGuard],
@@ -65,7 +70,6 @@ export const routes: Routes = [
             { path: ':id/edit', component: UpdateUserComponent, canActivate: [AuthGuard] } 
         ]
      },
-    { path: 'reservations', component: ReservationsComponent, canActivate: [AuthGuard] },
     { path: 'order', component: OrderPageComponent, canActivate: [AuthGuard],
         children: [
             { path: 'add-items', component: AddItemsToOrderComponent, canActivate: [AuthGuard]},

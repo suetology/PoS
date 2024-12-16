@@ -1,9 +1,6 @@
-
 using Microsoft.EntityFrameworkCore;
 using PoS.WebApi.Application.Services.Reservation;
 using PoS.WebApi.Domain.Enums;
-using PoS.WebApi.Infrastructure.Persistence;
-
 namespace PoS.WebApi.Application.Services.Order;
 
 using PoS.WebApi.Domain.Entities;
@@ -350,6 +347,131 @@ public class OrderService: IOrderService
         };
     }
 
+    public async Task<bool> UpdateItemQuantityInOrder(UpdateOrderRequest request)
+    {
+        var existingOrder = await _orderRepository.Get(request.Id);
+
+        if (existingOrder == null || existingOrder.BusinessId != request.BusinessId)
+            throw new KeyNotFoundException("Order not found.");
+
+        foreach (var requestOrderItem in request.OrderItems)
+        {
+            var existingOrderItem = existingOrder.OrderItems
+                .FirstOrDefault(oi => oi.ItemId == requestOrderItem.ItemId);
+
+            if (existingOrderItem != null)
+            {
+                int quantityDifference = requestOrderItem.Quantity - existingOrderItem.Quantity;
+
+                if (quantityDifference != 0)
+                {
+                    // update quantity if the exact same item already exist
+                    var item = await _itemRepository.Get(requestOrderItem.ItemId);
+
+                    if (quantityDifference > 0 && item.Stock < quantityDifference)
+                        throw new InvalidOperationException($"Not enough stock for item {item.Name}. Available: {item.Stock}");
+
+                    await _itemService.ChangeItemStock(new ChangeItemStockRequest
+                    {
+                        BusinessId = request.BusinessId,
+                        ItemId = requestOrderItem.ItemId,
+                        StockChange = -quantityDifference
+                    });
+
+                    existingOrderItem.Quantity = requestOrderItem.Quantity;
+                }
+            }
+            else
+            {
+                //add as a new item
+                var item = await _itemRepository.Get(requestOrderItem.ItemId);
+                if (item.Stock < requestOrderItem.Quantity)
+                    throw new InvalidOperationException($"Not enough stock for item {item.Name}.");
+
+                var newOrderItem = new OrderItem
+                {
+                    BusinessId = request.BusinessId,
+                    ItemId = requestOrderItem.ItemId,
+                    Quantity = requestOrderItem.Quantity
+                };
+
+                existingOrder.OrderItems.Add(newOrderItem);
+                await _itemService.ChangeItemStock(new ChangeItemStockRequest
+                {
+                    BusinessId = request.BusinessId,
+                    ItemId = requestOrderItem.ItemId,
+                    StockChange = -requestOrderItem.Quantity
+                });
+            }
+        }
+
+        await _orderRepository.Update(existingOrder);
+        await _unitOfWork.SaveChanges();
+
+        return true;
+    }
+
+    public async Task<bool> AddItemToOrder(AddItemToUpdateOrderRequest request)
+    {
+        var order = await _orderRepository.Get(request.Id);
+
+        if (order == null || order.BusinessId != request.BusinessId)
+            throw new KeyNotFoundException("Order not found.");
+
+        var item = await _itemRepository.Get(request.ItemId);
+
+        if (item.Stock < request.Quantity)
+            throw new InvalidOperationException($"Not enough stock for item {item.Name}.");
+
+        await _itemService.ChangeItemStock(new ChangeItemStockRequest
+        {
+            BusinessId = request.BusinessId,
+            ItemId = request.ItemId,
+            StockChange = -request.Quantity
+        });
+
+        var orderItem = new OrderItem
+        {
+            BusinessId = request.BusinessId,
+            ItemId = request.ItemId,
+            Quantity = request.Quantity,
+            OrderId = order.Id
+        };
+
+        foreach (var itemVariationId in request.ItemVariationsIds)
+        {
+            var itemVariation = await _itemVariationRepository.Get(itemVariationId);
+
+            orderItem.ItemVariations.Add(itemVariation);
+
+            await _itemService.ChangeItemVariationStock(new ChangeItemVariationStockRequest
+            {
+                ItemVariationId = itemVariation.Id,
+                BusinessId = request.BusinessId,
+                StockChange = -request.Quantity
+            });
+        }
+
+        order.OrderItems.Add(orderItem);
+        await _orderRepository.Update(order);
+        await _unitOfWork.SaveChanges();
+
+        return true;
+    }
+
+    public async Task<bool> UpdateReservation(UpdateOrderReservationRequest request) {
+        
+        var existingOrder = await _orderRepository.Get(request.Id);
+        if (existingOrder == null || existingOrder.BusinessId != request.Reservation.BusinessId) {
+            throw new KeyNotFoundException("Order not found.");
+        }
+
+        await _reservationService.UpdateReservation(request.Reservation);
+        await _unitOfWork.SaveChanges();
+
+        return true;
+    }
+
     public async Task CancelOrder(CancelOrderRequest request)
     {
         var order = await _orderRepository.Get(request.Id);
@@ -405,5 +527,36 @@ public class OrderService: IOrderService
         order.TipAmount = request.TipAmount;
 
         await _unitOfWork.SaveChanges();
-    } 
+    }
+    public async Task RemoveItemFromOrder(RemoveItemFromOrderRequest request)
+    {
+        var order = await _orderRepository.Get(request.OrderId);
+
+        if (order == null || order.BusinessId != request.BusinessId)
+        {
+            throw new KeyNotFoundException("Order not found or unauthorized.");
+        }
+
+        var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == request.ItemId);
+
+
+        if (orderItem == null)
+        {
+            throw new KeyNotFoundException("Item not found in the order.");
+        }
+
+        await _itemService.ChangeItemStock(new ChangeItemStockRequest
+        {
+            ItemId = request.ItemId,
+            BusinessId = request.BusinessId,
+            StockChange = orderItem.Quantity
+        });
+
+        order.OrderItems.Remove(orderItem);
+
+        await _orderRepository.Update(order);
+        await _unitOfWork.SaveChanges();
+    }
+
+
 }
