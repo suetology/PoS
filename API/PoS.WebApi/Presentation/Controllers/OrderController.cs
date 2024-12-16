@@ -106,6 +106,26 @@ public class OrderController : ControllerBase
     }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpPatch("{orderId}/quantity")]
+    public async Task<IActionResult> UpdateOrder([FromRoute] Guid orderId, [FromBody] UpdateOrderRequest request)
+    {
+        var businessId = User.GetBusinessId();
+        if (businessId == null) return Unauthorized("No Business ID");
+
+        request.Id = orderId;
+        request.BusinessId = businessId.Value;
+
+        var success = await _orderService.UpdateOrder(request);
+        if (!success)
+        {
+            return NotFound("Order not found");
+        }
+
+        return NoContent();
+    }
+
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost("{orderId}/cancel")]
     [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

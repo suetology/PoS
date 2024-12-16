@@ -10,4 +10,5 @@ public interface IOrderService
     Task<GetOrderResponse> GetOrder(GetOrderRequest request);
     Task CancelOrder(CancelOrderRequest request);
     Task AddTip(AddTipRequest request);
+    Task<bool> UpdateOrder(UpdateOrderRequest request);
 }
