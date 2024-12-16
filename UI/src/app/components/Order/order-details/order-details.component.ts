@@ -2,14 +2,15 @@ import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Order, DiscountRequest, AddTipRequest, UpdateOrderRequest } from '../../../types';
+import { Order, DiscountRequest, AddTipRequest, UpdateOrderRequest, CreateOrderItemRequest, AddItemInOrderRequest } from '../../../types';
 import { OrderService } from '../../../services/order.service';
 import { DiscountService } from '../../../services/discount.service';
+import { AddItemsToOrderComponent } from '../add-items-to-order/add-items-to-order.component';
 
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [AsyncPipe, NgIf, NgFor, FormsModule, ReactiveFormsModule, DatePipe],
+  imports: [AsyncPipe, NgIf, NgFor, FormsModule, ReactiveFormsModule, DatePipe, AddItemsToOrderComponent],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css'
 })
@@ -48,8 +49,67 @@ export class OrderDetailsComponent {
     } else {
       this.close();
     }
+    this.loadOrderDetails();
+  }
+  
+  private loadOrderDetails() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
+      this.close();
+      return;
+    }
+
+    this.orderService.getOrder(id).subscribe({
+      next: (order) => (this.order = order),
+      error: (err) => {
+        console.error('Error fetching order details:', err);
+        this.close();
+      }
+    });
   }
 
+  handleOrderItemsAdded(orderItems: CreateOrderItemRequest[]) {
+    const orderId = this.route.snapshot.paramMap.get('id');
+    if (!orderId || orderItems.length === 0) return;
+  
+    orderItems.forEach((orderItem) => {
+      const existingOrderItem = this.order?.orderItems.find(
+        (oi) =>
+          oi.item.id === orderItem.itemId &&
+          this.areItemVariationsEqual(oi.itemVariations, orderItem.itemVariationsIds)
+      );
+  
+      if (existingOrderItem) {
+        const updatedQuantity = existingOrderItem.quantity + orderItem.quantity;
+        this.updateOrderItem(orderItem.itemId, updatedQuantity, orderItem.itemVariationsIds);
+      } else {
+        const request: AddItemInOrderRequest = {
+          itemId: orderItem.itemId,
+          quantity: orderItem.quantity,
+          itemVariationsIds: orderItem.itemVariationsIds || []
+        };
+  
+        this.orderService.addItemToOrder(orderId, request).subscribe({
+          next: () => this.loadOrderDetails(),
+          error: (err) => console.error('Error adding item:', err)
+        });
+      }
+    });
+  }  
+  
+  areItemVariationsEqual(
+    existingVariations: { id: string }[],
+    newVariations: string[]
+  ): boolean {
+    if (!existingVariations || !newVariations) return false;
+    if (existingVariations.length !== newVariations.length) return false;
+  
+    const existingIds = existingVariations.map((v) => v.id).sort();
+    const newIds = newVariations.sort();
+  
+    return JSON.stringify(existingIds) === JSON.stringify(newIds);
+  }
+  
   addDiscount() {
     const request: DiscountRequest = {
       name: this.discountForm.value.discountName || '',

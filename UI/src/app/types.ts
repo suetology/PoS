@@ -472,3 +472,9 @@ export interface UpdateOrderRequest {
         quantity: number;
       }[];
 }
+
+export interface AddItemInOrderRequest {
+    itemId?: string;
+    itemVariationsIds?: string[];
+    quantity?: number;
+}
