@@ -195,4 +195,31 @@ public class OrderController : ControllerBase
 
         return NoContent();
     }
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpDelete("{orderId}/items/{itemId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> RemoveItemFromOrder([FromRoute] Guid orderId, [FromRoute] Guid itemId)
+    {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new RemoveItemFromOrderRequest
+        {
+            OrderId = orderId,
+            ItemId = itemId,
+            BusinessId = businessId.Value
+        };
+
+        await _orderService.RemoveItemFromOrder(request);
+
+        return NoContent();
+    }
+
 }
