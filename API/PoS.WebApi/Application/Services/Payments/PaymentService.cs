@@ -54,8 +54,8 @@ public class PaymentService : IPaymentService
                 }
             },
             Mode = "payment",
-            SuccessUrl = "http://localhost:4242/success",
-            CancelUrl = "http://localhost:4242/cancel",
+            SuccessUrl = $"http://localhost:4200/order/{request.OrderId}",
+            CancelUrl = $"http://localhost:4200/order/{request.OrderId}",
         };
 
         var service = new SessionService();
@@ -108,6 +108,11 @@ public class PaymentService : IPaymentService
         var orderPaid = order.CalculatePaidAmount();
 
         order.Status = orderPaid >= orderTotal ? OrderStatus.Closed : OrderStatus.PartiallyPaid;
+
+        if (order.Status == OrderStatus.Closed)
+        {
+            order.Closed = DateTime.UtcNow;
+        }
         
         await _unitOfWork.SaveChanges();
     }
@@ -138,6 +143,11 @@ public class PaymentService : IPaymentService
         var orderPaid = order.CalculatePaidAmount();
 
         order.Status = orderPaid >= orderTotal ? OrderStatus.Closed : OrderStatus.PartiallyPaid;
+
+        if (order.Status == OrderStatus.Closed)
+        {
+            order.Closed = DateTime.UtcNow;
+        }
 
         await _orderRepository.Update(order);
         await _paymentRepository.Update(payment);

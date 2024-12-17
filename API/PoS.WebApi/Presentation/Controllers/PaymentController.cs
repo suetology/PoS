@@ -42,9 +42,7 @@ public class PaymentController : ControllerBase
         
         var response = await _paymentService.CreateCardPayment(request);
 
-        Response.Headers.Location = response.SessionUrl;
-
-        return Ok(response.SessionUrl);
+        return Ok(response);
     }
     
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]   

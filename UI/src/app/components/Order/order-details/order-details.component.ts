@@ -2,10 +2,11 @@ import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Order, DiscountRequest, AddTipRequest, UpdateOrderRequest, CreateOrderItemRequest, AddItemInOrderRequest } from '../../../types';
+import { Order, DiscountRequest, AddTipRequest, UpdateOrderRequest, CreateOrderItemRequest, AddItemInOrderRequest, PaymentMethod, OrderStatus, CreateCardPaymentRequest, CreateCashOrGiftCardPaymentRequest } from '../../../types';
 import { OrderService } from '../../../services/order.service';
 import { DiscountService } from '../../../services/discount.service';
 import { AddItemsToOrderComponent } from '../add-items-to-order/add-items-to-order.component';
+import { PaymentService } from '../../../services/payment.service';
 
 @Component({
   selector: 'app-order-details',
@@ -27,11 +28,17 @@ export class OrderDetailsComponent {
     tipAmount: new FormControl<number>(0, Validators.required)
   });
 
+  paymentForm = new FormGroup({
+    paymentAmount: new FormControl<number>(0, Validators.required),
+    paymentMethod: new FormControl<number>(0, Validators.required),
+  });
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private orderService: OrderService,
-    private discountService: DiscountService
+    private discountService: DiscountService,
+    private paymentService: PaymentService
   ) {}
 
   ngOnInit() {
@@ -175,6 +182,55 @@ export class OrderDetailsComponent {
         console.error('Error creating discount:', err);
       }
     });
+  }
+
+  pay() {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (!id) {
+      return;
+    }
+
+    const paymentAmount = this.paymentForm.value.paymentAmount || 0;
+    const paymentMethod = (this.paymentForm.value.paymentMethod as PaymentMethod) || 0;
+
+    if (paymentMethod == PaymentMethod.Cash || paymentMethod == PaymentMethod.GiftCard) {
+      const request: CreateCashOrGiftCardPaymentRequest = {
+        paymentAmount: paymentAmount,
+        paymentMethod: paymentMethod,
+        orderId: id
+      };
+
+      this.paymentService.createCashOrGiftCardPayment(request).subscribe({
+        next: () => {
+          this.orderService.getOrder(id).subscribe({
+            next: (order) => this.order = order
+          });
+        }
+      })
+    } else {
+      const request: CreateCardPaymentRequest = {
+        paymentAmount: paymentAmount,
+        orderId: id
+      };
+
+      this.paymentService.createCardPayment(request).subscribe({
+        next: (sessionUrl) => {
+          console.log(sessionUrl);
+          if (sessionUrl) {
+            window.location.href = sessionUrl;
+          }
+        }
+      });
+    }
+  }
+
+  isOrderOpen() {
+    return this.order?.status.toString() == OrderStatus[OrderStatus.Open];
+  }
+
+  isOrderPartiallyPaid() {
+    return this.order?.status.toString() == OrderStatus[OrderStatus.PartiallyPaid];
   }
 
   close() {
