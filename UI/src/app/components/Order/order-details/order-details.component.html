@@ -162,7 +162,7 @@
   </div>
 </div>
 
-@if(!order?.discount){
+@if(!order?.discount && isOrderOpen()){
 <div class="p-4 md:p-5 space-y-4">
 	<h4 class="text-lg font-medium mb-4">Discount</h4>
 	<form [formGroup]="discountForm" (ngSubmit)="addDiscount()" class="space-y-4">
@@ -185,6 +185,35 @@
 			<div class="col-span-1 text-right">
 				<button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-cyan-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
 					Add Discount
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
+}
+
+@if(isOrderOpen() || isOrderPartiallyPaid()) {
+<div class="p-4 md:p-5 space-y-4">
+	<h4 class="text-lg font-medium mb-4">Pay</h4>
+	<form [formGroup]="paymentForm" (ngSubmit)="pay()" class="space-y-4">
+		<div class="grid grid-cols-4 gap-4 items-end">
+			<div class="col-span-1">
+				<label for="paymentAmount" class="block text-sm font-medium text-gray-700">Payment Amount</label>
+				<input type="number" id="paymentAmount" name="paymentAmount" formControlName="paymentAmount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm w-full block border border-gray-300 p-1.5">
+			</div>
+
+			<div class="col-span-1 flex items-center">
+				<label for="paymentMethod" class="block text-sm font-medium text-gray-700">Payment Method</label>
+				<select id="paymentMethod" name="paymentMethod" formControlName="paymentMethod" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm w-full block border border-gray-300 p-1.5">
+					<option [value]="1">Cash</option>
+					<option [value]="2">Card</option>
+					<option [value]="3">GiftCard</option>
+				</select>
+			</div>
+
+			<div class="col-span-1 text-right">
+				<button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-cyan-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+					Pay
 				</button>
 			</div>
 		</div>

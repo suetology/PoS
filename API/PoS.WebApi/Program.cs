@@ -22,6 +22,8 @@ using PoS.WebApi.Application.Services.Discount;
 using PoS.WebApi.Application.Services.Order;
 using PoS.WebApi.Application.Services.ItemGroup;
 using PoS.WebApi.Application.Services.Item;
+using PoS.WebApi.Application.Services.Payments;
+using PoS.WebApi.Infrastructure.Payments.Extensions;
 using PoS.WebApi.Application.Services.Notification;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -125,6 +127,8 @@ builder.Services.AddTransient<IItemVariationRepository, ItemVariationRepository>
 
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
+builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
+builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<INotificationService, NotificationService>();
 
 
@@ -137,6 +141,7 @@ builder.Services.AddControllers()
     });
 
 builder.ConfigureAuthentication();
+builder.ConfigureStripe();
 
 // Building app
 var app = builder.Build();

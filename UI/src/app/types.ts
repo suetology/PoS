@@ -353,7 +353,7 @@ export interface GetAllItemVariationsResponse {
 export enum OrderStatus {
     Open = 1,
     Closed,
-    Paid,
+    PartiallyPaid,
     Canceled,
     Refunded
 }
@@ -477,4 +477,25 @@ export interface AddItemInOrderRequest {
     itemId?: string;
     itemVariationsIds?: string[];
     quantity?: number;
+}
+
+export enum PaymentMethod {
+    Cash = 1,
+    CreditOrDebitCard,
+    GiftCard
+}
+
+export interface CreateCardPaymentRequest {
+    orderId: string,
+    paymentAmount: number
+}
+
+export interface CreateCardPaymentResponse {
+    sessionUrl: string
+}
+
+export interface CreateCashOrGiftCardPaymentRequest {
+    orderId: string,
+    paymentAmount: number,
+    paymentMethod: PaymentMethod
 }

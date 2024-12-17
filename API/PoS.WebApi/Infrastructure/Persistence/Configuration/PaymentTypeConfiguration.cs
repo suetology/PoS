@@ -13,13 +13,17 @@ public class PaymentTypeConfiguration : BaseEntityTypeConfiguration<Payment>
             .HasConversion<int>()
             .IsRequired();
 
-        builder.Property(p => p.Amount)
+        builder.Property(p => p.State)
+            .HasConversion<int>()
             .IsRequired();
         
-        builder.Property(p => p.StripeTransactionId)
+        builder.Property(p => p.Amount)
             .IsRequired();
         
         builder.Property(p => p.Date)
             .IsRequired();
-    }
+
+        builder.Property(p => p.StripeCheckoutSessionId)
+            .IsRequired(false);
+    } 
 }
