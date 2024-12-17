@@ -90,4 +90,28 @@ public class TaxController : ControllerBase
 
         return NoContent();
     }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
+    [HttpPatch("{taxId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateTax(Guid taxId, [FromBody] UpdateTaxRequest request)
+    {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.Id = taxId;
+        request.BusinessId = businessId.Value;
+
+        await _taxService.UpdateTax(request);
+
+        return NoContent();
+    }
 }
