@@ -353,8 +353,8 @@ public class OrderService: IOrderService
     {
         var existingOrder = await _orderRepository.Get(request.Id);
 
-        if (existingOrder == null || existingOrder.BusinessId != request.BusinessId)
-            throw new KeyNotFoundException("Order not found.");
+        if (existingOrder == null || existingOrder.BusinessId != request.BusinessId || OrderStatus.Open != existingOrder.Status)
+            throw new KeyNotFoundException("Order not found or unauthorised.");
 
         foreach (var requestOrderItem in request.OrderItems)
         {
@@ -417,7 +417,7 @@ public class OrderService: IOrderService
     {
         var order = await _orderRepository.Get(request.Id);
 
-        if (order == null || order.BusinessId != request.BusinessId)
+        if (order == null || order.BusinessId != request.BusinessId || OrderStatus.Open != order.Status)
             throw new KeyNotFoundException("Order not found.");
 
         var item = await _itemRepository.Get(request.ItemId);
@@ -464,7 +464,7 @@ public class OrderService: IOrderService
     public async Task<bool> UpdateReservation(UpdateOrderReservationRequest request) {
         
         var existingOrder = await _orderRepository.Get(request.Id);
-        if (existingOrder == null || existingOrder.BusinessId != request.Reservation.BusinessId) {
+        if (existingOrder == null || existingOrder.BusinessId != request.Reservation.BusinessId || OrderStatus.Open != existingOrder.Status) {
             throw new KeyNotFoundException("Order not found.");
         }
 
@@ -530,11 +530,12 @@ public class OrderService: IOrderService
 
         await _unitOfWork.SaveChanges();
     }
+    
     public async Task RemoveItemFromOrder(RemoveItemFromOrderRequest request)
     {
         var order = await _orderRepository.Get(request.OrderId);
 
-        if (order == null || order.BusinessId != request.BusinessId)
+        if (order == null || order.BusinessId != request.BusinessId || OrderStatus.Open != order.Status)
         {
             throw new KeyNotFoundException("Order not found or unauthorized.");
         }
@@ -559,6 +560,4 @@ public class OrderService: IOrderService
         await _orderRepository.Update(order);
         await _unitOfWork.SaveChanges();
     }
-
-
 }

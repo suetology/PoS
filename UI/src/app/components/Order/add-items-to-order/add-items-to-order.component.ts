@@ -61,6 +61,10 @@ export class AddItemsToOrderComponent implements OnInit {
   }
 
   addItem() {
+    if (!this.itemForm.value.itemId) {
+      return;
+    }
+
     const addedOrderItem: CreateOrderItemRequest = {
       itemId: this.itemForm.value.itemId || '',
       quantity: this.itemForm.value.quantity || 0,
