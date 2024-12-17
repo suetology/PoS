@@ -27,9 +27,9 @@ namespace PoS.WebApi.Infrastructure.Repositories
             return await _dbContext.ServiceCharges.ToListAsync();
         }
 
-        public Task Update(ServiceCharge entity)
+        public async Task Update(ServiceCharge serviceCharge)
         {
-            throw new NotImplementedException();
+            _dbContext.ServiceCharges.Update(serviceCharge);
         }
 
         public async Task Create(ServiceCharge serviceCharge)

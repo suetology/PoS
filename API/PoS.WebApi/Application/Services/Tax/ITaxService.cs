@@ -1,7 +1,6 @@
 ﻿namespace PoS.WebApi.Application.Services.Tax;
 
 using Application.Services.Tax.Contracts;
-using Domain.Entities;
 
 public interface ITaxService
 {
@@ -10,4 +9,5 @@ public interface ITaxService
     Task<GetTaxResponse> GetTax(GetTaxRequest request);
     
     Task CreateTax(CreateTaxRequest request);
+    Task UpdateTax(UpdateTaxRequest request);
 }

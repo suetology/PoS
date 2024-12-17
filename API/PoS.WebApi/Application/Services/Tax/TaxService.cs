@@ -4,6 +4,7 @@ namespace PoS.WebApi.Application.Services.Tax;
 
 using Contracts;
 using Domain.Entities;
+using PoS.WebApi.Infrastructure.Repositories;
 using Repositories;
 
 public class TaxService : ITaxService
@@ -72,6 +73,24 @@ public class TaxService : ITaxService
         };
         
         await _taxRepository.Create(tax);
+        await _unitOfWork.SaveChanges();
+    }
+
+    public async Task UpdateTax(UpdateTaxRequest request)
+    {
+        var existingTax = await _taxRepository.Get(request.Id);
+
+        if (existingTax == null || existingTax.BusinessId != request.BusinessId)
+        {
+            throw new KeyNotFoundException("Service not found.");
+        }
+
+        existingTax.Name = request.Name ?? existingTax.Name;
+        existingTax.Type = request.Type ?? existingTax.Type;
+        existingTax.Value = request.Value ?? existingTax.Value;
+        existingTax.IsPercentage = request.IsPercentage ?? existingTax.IsPercentage;
+      
+        await _taxRepository.Update(existingTax);
         await _unitOfWork.SaveChanges();
     }
 }

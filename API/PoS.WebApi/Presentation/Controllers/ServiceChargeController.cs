@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PoS.WebApi.Application.Services.Discount.Contracts;
 using PoS.WebApi.Application.Services.ServiceCharge;
 using PoS.WebApi.Application.Services.ServiceCharge.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -65,6 +64,30 @@ namespace PoS.WebApi.Presentation.Controllers
             var response = await _serviceChargeService.GetServiceCharges(request);
             return Ok(response);
         }
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
+        [HttpPatch("{serviceChargeId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateServiceCharge([FromRoute] Guid serviceChargeId, [FromBody] UpdateServiceChargeRequest request)
+        {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            request.Id = serviceChargeId;
+            request.BusinessId = businessId.Value;
+
+            await _serviceChargeService.UpdateServiceCharge(request);
+
+            return NoContent();
+        }
+
     }
 }
     

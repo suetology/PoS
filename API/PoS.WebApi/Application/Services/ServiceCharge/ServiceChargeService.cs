@@ -51,5 +51,23 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
             await _unitOfWork.SaveChanges();
         }
 
+        public async Task UpdateServiceCharge(UpdateServiceChargeRequest request)
+        {
+            var existingServiceCharge = await _serviceChargeRepository.Get(request.Id);
+
+            if (existingServiceCharge == null || existingServiceCharge.BusinessId != request.BusinessId)
+            {
+                throw new KeyNotFoundException("Service charge not found.");
+            }
+
+            existingServiceCharge.Name = request.Name ?? existingServiceCharge.Name;
+            existingServiceCharge.Description = request.Description ?? existingServiceCharge.Description;
+            existingServiceCharge.Value = request.Value ?? existingServiceCharge.Value;
+            existingServiceCharge.IsPercentage = request.IsPercentage ?? existingServiceCharge.IsPercentage;
+
+            await _serviceChargeRepository.Update(existingServiceCharge);
+            await _unitOfWork.SaveChanges();
+        }
+
     }
 }
