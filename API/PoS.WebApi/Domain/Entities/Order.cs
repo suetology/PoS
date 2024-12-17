@@ -57,11 +57,13 @@ public class Order : Entity
         totalAmount += ServiceCharge == null ? 0 : (ServiceCharge.IsPercentage ? totalAmount * (ServiceCharge.Value / 100) : ServiceCharge.Value);
         totalAmount += TipAmount;
 
-        return totalAmount;
+        return Math.Round(totalAmount, 2);
     }
 
     public decimal CalculatePaidAmount()
     {
-        return Payments.Sum(p => p.Amount);
+        return Math.Round(Payments
+            .Where(p => p.State == PaymentState.Succeeded)
+            .Sum(p => p.Amount), 2);
     }
 }

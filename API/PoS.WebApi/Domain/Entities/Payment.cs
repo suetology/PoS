@@ -9,9 +9,11 @@ public class Payment : Entity
     
     public PaymentMethod Method { get; set; }
     
+    public PaymentState State { get; set; }
+    
     public decimal Amount { get; set; }
     
-    public string StripeTransactionId { get; set; }
+    public string StripeCheckoutSessionId { get; set; }
     
     public DateTime Date { get; set; }
     

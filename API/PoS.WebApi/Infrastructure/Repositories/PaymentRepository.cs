@@ -35,4 +35,9 @@ public class PaymentRepository : IPaymentRepository
 
         await Task.CompletedTask;
     }
+
+    public async Task<Payment> GetByCheckoutSessionId(string checkoutSessionId)
+    {
+        return await _dbContext.Payments.FirstOrDefaultAsync(p => p.StripeCheckoutSessionId == checkoutSessionId);
+    }
 }
