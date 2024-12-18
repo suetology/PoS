@@ -14,6 +14,8 @@ public class Tax : Entity
     public decimal Value { get; set; }
 
     public bool IsPercentage { get; set; } = true;
+
+    public bool Retired { get; set; } = false;
     
     public DateTime LastUpdated { get; set; }
 }
