@@ -12,7 +12,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
   templateUrl: './service-charge.component.html',
   styleUrl: './service-charge.component.css'
 })
-export class ServiceChargeListComponent {
+export class ServiceChargeComponent {
 
   serviceCharges$: Observable<ServiceCharge[]>;
   isModalOpen = false;

@@ -241,6 +241,7 @@ export interface ServiceCharge {
     description: string;
     value: number;
     isPercentage: boolean;
+    retired: boolean;
 }
 
 export interface ServiceChargeResponse {
