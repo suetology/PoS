@@ -16,6 +16,17 @@ import { PaymentService } from '../../../services/payment.service';
   styleUrl: './order-details.component.css'
 })
 export class OrderDetailsComponent {
+
+  isAddItemModalOpen = false;
+
+  openAddItemModal() {
+    this.isAddItemModalOpen = true;
+  }
+
+  closeAddItemModal() {
+    this.isAddItemModalOpen = false;
+  }
+
   order: Order | undefined;
 
   discountForm = new FormGroup({
@@ -79,6 +90,8 @@ export class OrderDetailsComponent {
     const orderId = this.route.snapshot.paramMap.get('id');
     if (!orderId || orderItems.length === 0) return;
   
+    const requests: AddItemInOrderRequest[] = [];
+    
     orderItems.forEach((orderItem) => {
       const existingOrderItem = this.order?.orderItems.find(
         (oi) =>
