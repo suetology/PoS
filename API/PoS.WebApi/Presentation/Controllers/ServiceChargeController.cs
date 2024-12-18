@@ -64,6 +64,30 @@ namespace PoS.WebApi.Presentation.Controllers
             var response = await _serviceChargeService.GetServiceCharges(request);
             return Ok(response);
         }
+
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+        [HttpGet("valid")]
+        [ProducesResponseType(typeof(GetAllServiceChargesResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<ServiceChargeDto>>> GetValidServiceCharges()
+        {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new GetAllServiceChargesRequest
+            {
+                BusinessId = businessId.Value
+            };
+            
+            var response = await _serviceChargeService.GetValidServiceCharges(request);
+            return Ok(response);
+        }
+
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
         [HttpPatch("{serviceChargeId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

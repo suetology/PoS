@@ -37,6 +37,27 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
             };
         }
 
+        public async Task<GetAllServiceChargesResponse> GetValidServiceCharges(GetAllServiceChargesRequest request)
+        {
+            var serviceCharges = await _serviceChargeRepository.GetAll();
+            var serviceChargesDtos = serviceCharges
+                .Where(s => s.BusinessId == request.BusinessId && false == s.Retired)
+                .Select(s => new ServiceChargeDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Description = s.Description,
+                    Value = s.Value,
+                    IsPercentage = s.IsPercentage,
+                    Retired = s.Retired
+                });
+
+            return new GetAllServiceChargesResponse
+            {
+                ServiceCharges = serviceChargesDtos
+            };
+        }
+
         public async Task CreateServiceCharge(CreateServiceChargeRequest request)
         {
             var serviceCharge = new Domain.Entities.ServiceCharge
