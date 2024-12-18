@@ -14,7 +14,7 @@ export class TaxService {
   constructor(private http : HttpClient) { }
 
   getTaxes(): Observable<Tax[]> {
-    return this.http.get<TaxResponse>(`${environment.API_URL}/tax`).pipe(
+    return this.http.get<TaxResponse>(`${environment.API_URL}/tax/valid`).pipe(
       map(response => response.taxes)
     );
   }

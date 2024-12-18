@@ -40,6 +40,27 @@ public class TaxService : ITaxService
         };
     }
 
+    public async Task<GetAllTaxesResponse> GetAllValidTaxes(GetAllTaxesRequest request)
+    {
+        var taxes = await _taxRepository.GetAll();
+        var taxesDtos = taxes
+            .Where(t => t.BusinessId == request.BusinessId && false == t.Retired)
+            .Select(t => new TaxDto
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Type = t.Type,
+                Value = t.Value,
+                IsPercentage = t.IsPercentage,
+                Retired = t.Retired
+            });
+        
+        return new GetAllTaxesResponse
+        {
+            Taxes = taxesDtos
+        };
+    }
+
     public async Task<GetTaxResponse> GetTax(GetTaxRequest request)
     {
         var tax = await _taxRepository.Get(request.Id);
