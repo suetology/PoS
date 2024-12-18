@@ -21,6 +21,9 @@ public class ServiceChargeTypeConfiguration : BaseEntityTypeConfiguration<Servic
 
         builder.Property(s => s.IsPercentage)
             .IsRequired();
+
+        builder.Property(s => s.Retired)
+            .IsRequired();
         
         builder.Property(s => s.LastUpdated)
             .IsRequired();
