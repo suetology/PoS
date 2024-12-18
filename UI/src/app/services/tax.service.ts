@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Tax, TaxRequest, TaxResponse } from '../types';
+import { Tax, TaxRequest, TaxResponse, UpdateTaxRequest } from '../types';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
@@ -34,6 +34,14 @@ export class TaxService {
       map((tax) => {
         this.taxesUpdated.next();
         return tax;
+      })
+    );
+  }
+
+  updateTax(id: string, request: UpdateTaxRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/tax/${id}`, request).pipe(
+      map(() => {
+        this.taxesUpdated.next();
       })
     );
   }
