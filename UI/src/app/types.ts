@@ -47,6 +47,7 @@ export interface Tax {
     type: TaxType;
     value: number;
     isPercentage: boolean;
+    retired: boolean;
     lastUpdated?: Date;
 }
 
