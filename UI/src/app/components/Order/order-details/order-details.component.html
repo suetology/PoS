@@ -99,9 +99,12 @@
 	</div>
   
       <div class="space-y-6 mr-4">
+		<button class="bg-blue-500 text-white px-4 py-2 rounded" (click)="openAddItemModal()">Add Items</button>
+		@if(isAddItemModalOpen){
 		<app-add-items-to-order
-			(orderItemsAdded)="handleOrderItemsAdded($event)">
+			(orderItemsAdded)="handleOrderItemsAdded($event); closeAddItemModal()">
 		</app-add-items-to-order>
+		}
 		@if(order && order.orderItems.length > 0){
 			<div class="flex flex-col space-y-4">
             	<div *ngFor="let orderItem of order?.orderItems" class="p-4 bg-gray-50 rounded-lg relative flex items-center">
