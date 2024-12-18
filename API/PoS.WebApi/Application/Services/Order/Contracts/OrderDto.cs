@@ -3,6 +3,7 @@ namespace PoS.WebApi.Application.Services.Order.Contracts;
 
 using PoS.WebApi.Application.Services.Customer.Contracts;
 using PoS.WebApi.Application.Services.Discount.Contracts;
+using PoS.WebApi.Application.Services.Refund.Contracts;
 using PoS.WebApi.Application.Services.Reservation.Contracts;
 using PoS.WebApi.Application.Services.ServiceCharge.Contracts;
 using PoS.WebApi.Application.Services.User.Contracts;
@@ -36,6 +37,5 @@ public class OrderDto
 
     public DiscountDto Discount { get; set; }
     
-    // add paymentDtos
-    // add refundDto
+    public RefundDto Refund { get; set; }
 }
