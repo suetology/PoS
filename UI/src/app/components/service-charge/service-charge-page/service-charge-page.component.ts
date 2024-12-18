@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ServiceChargeListComponent } from '../service-charge-list/service-charge-list.component';
+import { ServiceChargeListComponent } from '../service-charge/service-charge.component';
 import { AddServiceChargeComponent } from '../add-service-charge/add-service-charge.component';
 
 @Component({

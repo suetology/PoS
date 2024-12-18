@@ -254,6 +254,13 @@ export interface ServiceChargeRequest {
     isPercentage: boolean;
 }
 
+export interface UpdateServiceChargeRequest {
+    name?: string;
+    description?: string;
+    value?: number;
+    isPercentage?: boolean;
+}
+
 export interface ItemGroup {
     id: string,
     name: string,
