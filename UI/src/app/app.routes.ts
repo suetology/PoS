@@ -25,6 +25,7 @@ import { UpdateItemGroupComponent } from './components/item-group/update-item-gr
 import { UpdateItemComponent } from './components/Item/update-item/update-item.component';
 import { UpdateServiceComponent } from './components/service/update-service/update-service.component';
 import { BusinessesComponent } from './components/businesses/businesses/businesses.component';
+import { UpdateTaxComponent } from './components/Tax/update-tax/update-tax.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -61,6 +62,7 @@ export const routes: Routes = [
     { path: 'tax', component: TaxPageComponent, canActivate: [AuthGuard],
         children: [
             { path: ':id', component: TaxDetailsComponent, canActivate: [AuthGuard] },
+            { path: ':id/edit', component: UpdateTaxComponent, canActivate: [AuthGuard] },
         ]
      },
     { path: 'service-charge', component: ServiceChargePageComponent, canActivate: [AuthGuard] },

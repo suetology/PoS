@@ -35,12 +35,19 @@ export interface TaxRequest {
     isPercentage: boolean;
 }
 
+export interface UpdateTaxRequest {
+    name?: string;
+    value?: number;
+    isPercentage?: boolean;
+}
+
 export interface Tax {
     id: string;
     name: string;
     type: TaxType;
     value: number;
     isPercentage: boolean;
+    retired: boolean;
     lastUpdated?: Date;
 }
 
