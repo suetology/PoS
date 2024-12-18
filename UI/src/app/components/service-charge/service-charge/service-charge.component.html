@@ -15,7 +15,8 @@
                     @for(serviceCharge of serviceCharges$ | async ; track serviceCharge.id) 
                     {
                     <tbody>
-                        <tr class="border-b cursor-pointer hover:bg-gray-100">
+                        <tr class="border-b cursor-pointer hover:bg-gray-100"
+                        (click)="goToServiceChargeDetails(serviceCharge.id)">
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
                                 {{ serviceCharge.name }}</th>
                             <td class="px-4 py-3">{{ serviceCharge.description }}</td>

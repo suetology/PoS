@@ -53,6 +53,6 @@ export class ServiceChargeComponent {
   }
 
   editServiceCharge(serviceChargeId: string) {
-    this.router.navigate([`/service-charge/${serviceChargeId}/edit`]);
+    this.router.navigate([`/serviceCharge/${serviceChargeId}/edit`]);
   }
 }

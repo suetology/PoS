@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ServiceChargeService } from '../../../services/service-charge.service';
 
 @Component({
-  selector: 'app-update-tax',
+  selector: 'app-update-service-charge',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, AsyncPipe, NgIf],
   templateUrl: './update-service-charge.component.html',
@@ -52,7 +52,7 @@ export class UpdateServiceChargeComponent {
     this.serviceChargeService.updateServiceCharge(this.serviceChargeId, request)
       .subscribe({
         next: () => {
-          this.router.navigate(['/service-charge']);
+          this.router.navigate(['/serviceCharge']);
         },
         error: (error) => {
           console.error('Error updating tax:', error);
@@ -65,6 +65,6 @@ export class UpdateServiceChargeComponent {
   }
 
   goBack() {
-    this.router.navigate(['/service-charge']);
+    this.router.navigate(['/serviceCharge']);
   }
 }
