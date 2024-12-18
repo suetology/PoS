@@ -9,5 +9,6 @@ using Domain.Entities;
         public string Description { get; set; }
         public decimal Value { get; set; }
         public bool IsPercentage { get; set; }
+        public bool Retired { get; set; } = false;
     }
 

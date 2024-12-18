@@ -30,7 +30,8 @@ public class TaxService : ITaxService
                 Name = t.Name,
                 Type = t.Type,
                 Value = t.Value,
-                IsPercentage = t.IsPercentage
+                IsPercentage = t.IsPercentage,
+                Retired = t.Retired
             });
 
         return new GetAllTaxesResponse
@@ -56,7 +57,8 @@ public class TaxService : ITaxService
                 Name = tax.Name,
                 Type = tax.Type,
                 Value = tax.Value,
-                IsPercentage = tax.IsPercentage
+                IsPercentage = tax.IsPercentage,
+                Retired = tax.Retired,
             }
         };
     }
@@ -69,7 +71,8 @@ public class TaxService : ITaxService
             Name = request.Name,
             Type = request.Type,
             Value = request.Value,
-            IsPercentage = request.IsPercentage
+            IsPercentage = request.IsPercentage,
+            Retired = false,
         };
         
         await _taxRepository.Create(tax);
@@ -80,17 +83,25 @@ public class TaxService : ITaxService
     {
         var existingTax = await _taxRepository.Get(request.Id);
 
-        if (existingTax == null || existingTax.BusinessId != request.BusinessId)
+        if (existingTax == null || existingTax.BusinessId != request.BusinessId || true == existingTax.Retired)
         {
-            throw new KeyNotFoundException("Service not found.");
+            throw new KeyNotFoundException("Tax not found or unauthorised.");
         }
 
-        existingTax.Name = request.Name ?? existingTax.Name;
-        existingTax.Type = request.Type ?? existingTax.Type;
-        existingTax.Value = request.Value ?? existingTax.Value;
-        existingTax.IsPercentage = request.IsPercentage ?? existingTax.IsPercentage;
-      
+        var updatedTax = new Tax
+        {
+            BusinessId = existingTax.BusinessId,
+            Name = request.Name,
+            Type = existingTax.Type,
+            Value = request.Value ?? existingTax.Value,
+            IsPercentage = request.IsPercentage ?? existingTax.IsPercentage,
+            Retired = false,
+        };
+        await _taxRepository.Create(updatedTax);    
+
+        existingTax.Retired = true;
         await _taxRepository.Update(existingTax);
+        
         await _unitOfWork.SaveChanges();
     }
 }
