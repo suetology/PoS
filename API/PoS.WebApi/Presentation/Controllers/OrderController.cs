@@ -167,7 +167,7 @@ public class OrderController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost("{orderId}/cancel")]
-    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -193,7 +193,7 @@ public class OrderController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpPost("{orderId}/tip")]
-    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -213,6 +213,7 @@ public class OrderController : ControllerBase
 
         return NoContent();
     }
+
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpDelete("{orderId}/items/{itemId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -239,5 +240,4 @@ public class OrderController : ControllerBase
 
         return NoContent();
     }
-
 }

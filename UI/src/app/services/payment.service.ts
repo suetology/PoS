@@ -12,7 +12,7 @@ export class PaymentService {
   constructor(private http: HttpClient) { }
 
 	createCashOrGiftCardPayment(request: CreateCashOrGiftCardPaymentRequest) {
-		return this.http.post(`${environment.API_URL}/payments/cash`, request);
+		return this.http.post(`${environment.API_URL}/payments/cash-giftcard`, request);
 	}
 
 	createCardPayment(request: CreateCardPaymentRequest) {

@@ -2,11 +2,12 @@ import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Order, DiscountRequest, AddTipRequest, UpdateOrderRequest, CreateOrderItemRequest, AddItemInOrderRequest, PaymentMethod, OrderStatus, CreateCardPaymentRequest, CreateCashOrGiftCardPaymentRequest } from '../../../types';
+import { Order, DiscountRequest, AddTipRequest, UpdateOrderRequest, CreateOrderItemRequest, AddItemInOrderRequest, PaymentMethod, OrderStatus, CreateCardPaymentRequest, CreateCashOrGiftCardPaymentRequest, CreateRefundRequest } from '../../../types';
 import { OrderService } from '../../../services/order.service';
 import { DiscountService } from '../../../services/discount.service';
 import { AddItemsToOrderComponent } from '../add-items-to-order/add-items-to-order.component';
 import { PaymentService } from '../../../services/payment.service';
+import { RefundService } from '../../../services/refund.service';
 
 @Component({
   selector: 'app-order-details',
@@ -33,12 +34,17 @@ export class OrderDetailsComponent {
     paymentMethod: new FormControl<number>(0, Validators.required),
   });
 
+  refundForm = new FormGroup({
+    refundReason: new FormControl<string>('', Validators.required)
+  })
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private orderService: OrderService,
     private discountService: DiscountService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private refundService: RefundService
   ) {}
 
   ngOnInit() {
@@ -225,12 +231,37 @@ export class OrderDetailsComponent {
     }
   }
 
+  refund() {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (!id) {
+      return;
+    }
+
+    const request: CreateRefundRequest = {
+      orderId: id,
+      reason: this.refundForm.value.refundReason || ''
+    };
+
+    this.refundService.createRefund(request).subscribe({
+      next: () => {
+        this.orderService.getOrder(id).subscribe({
+          next: (order) => this.order = order
+        });
+      }
+    });
+  }
+
   isOrderOpen() {
     return this.order?.status.toString() == OrderStatus[OrderStatus.Open];
   }
 
   isOrderPartiallyPaid() {
     return this.order?.status.toString() == OrderStatus[OrderStatus.PartiallyPaid];
+  }
+
+  isOrderClosed() {
+    return this.order?.status.toString() == OrderStatus[OrderStatus.Closed];
   }
 
   close() {
