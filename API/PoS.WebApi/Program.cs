@@ -26,6 +26,9 @@ using PoS.WebApi.Application.Services.Payments;
 using PoS.WebApi.Infrastructure.Payments.Extensions;
 using PoS.WebApi.Application.Services.Notification;
 using PoS.WebApi.Application.Services.Refund;
+using PoS.WebApi.Infrastructure.Security.Exceptions;
+using PoS.WebApi.Application.Services.Reservation.Exceptions;
+using PoS.WebApi.Application.Services.Order.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -158,7 +161,13 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandling(
     new Dictionary<Type, HttpStatusCode>
     {
-        { typeof(InvalidCredentialException), HttpStatusCode.Unauthorized }
+        { typeof(InvalidCredentialException), HttpStatusCode.Unauthorized },
+        { typeof(InvalidRefreshTokenException), HttpStatusCode.Forbidden },
+        { typeof(ExpiredRefreshTokenException), HttpStatusCode.Forbidden },
+        { typeof(KeyNotFoundException), HttpStatusCode.NotFound },
+        { typeof(TimeNotAvailableException), HttpStatusCode.BadRequest },
+        { typeof(InvalidOrderStateException), HttpStatusCode.BadRequest },
+        { typeof(InvalidUserRoleException), HttpStatusCode.BadRequest }
     });
 
 //app.UseHttpsRedirection();

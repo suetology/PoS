@@ -38,7 +38,7 @@ public class ItemVariationController : ControllerBase
         request.ItemId = itemId;
         request.BusinessId = businessId.Value;
 
-        _itemService.CreateItemVariation(request);
+        await _itemService.CreateItemVariation(request);
 
         return NoContent();
     }
@@ -91,7 +91,7 @@ public class ItemVariationController : ControllerBase
             BusinessId = businessId.Value,
         };
         
-        var response = _itemService.GetItemVariation(request);
+        var response = await _itemService.GetItemVariation(request);
         
         return Ok(response);
     }

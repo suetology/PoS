@@ -1,5 +1,5 @@
-using Amazon.SimpleNotificationService.Model;
 using PoS.WebApi.Application.Repositories;
+using PoS.WebApi.Application.Services.Order.Exceptions;
 using PoS.WebApi.Application.Services.Refund.Contracts;
 using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Domain.Entities;
@@ -31,12 +31,12 @@ public class RefundService : IRefundService
 
         if (order == null || order.BusinessId != request.BusinessId)
         {
-            throw new NotFoundException("Order not found");
+            throw new KeyNotFoundException("Order not found");
         }
 
         if (order.Status != OrderStatus.PartiallyPaid && order.Status != OrderStatus.Closed)
         {
-            throw new ArgumentException("To refund an order it should be either Closed or PartiallyPaid");
+            throw new InvalidOrderStateException("To refund an order it should be either Closed or PartiallyPaid");
         }
 
         var succeededPayments = order.Payments.Where(p => p.State == PaymentState.Succeeded);

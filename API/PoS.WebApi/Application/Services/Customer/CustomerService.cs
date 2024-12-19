@@ -4,7 +4,6 @@ namespace PoS.WebApi.Application.Services.Customer;
 
 using Contracts;
 using Domain.Entities;
-using PoS.WebApi.Infrastructure.Repositories;
 using Repositories;
 public class CustomerService : ICustomerService
 {
@@ -20,9 +19,9 @@ public class CustomerService : ICustomerService
     {
         var customer = await _customerRepository.Get(request.Id);
 
-        if (customer.BusinessId != request.BusinessId)
+        if (customer == null || customer.BusinessId != request.BusinessId)
         {
-            return null;
+            throw new KeyNotFoundException("Customer is not found");
         }
 
         return new GetCustomerResponse

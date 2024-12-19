@@ -23,6 +23,7 @@ using Amazon.SimpleNotificationService.Model;
 using PoS.WebApi.Application.Services.Payments;
 using PoS.WebApi.Application.Services.Payments.Contracts;
 using PoS.WebApi.Application.Services.Refund.Contracts;
+using PoS.WebApi.Application.Services.Order.Exceptions;
 
 public class OrderService: IOrderService
 {
@@ -73,6 +74,11 @@ public class OrderService: IOrderService
             BusinessId = request.BusinessId,
         });
 
+        if (customer == null) 
+        {
+            throw new KeyNotFoundException("Unable to find a customer");
+        }
+
         var orderItems = await Task.WhenAll(request.OrderItems.Select(async o => {
                 var orderItem = new OrderItem
                 {
@@ -118,20 +124,33 @@ public class OrderService: IOrderService
             OrderItems = orderItems,
             TipAmount = 0
         };
-        
-        await _orderRepository.Create(order);
-        await _unitOfWork.SaveChanges();
-        
-        if (request.Reservation != null)
-        {
-            request.Reservation.BusinessId = order.BusinessId;
-            request.Reservation.OrderId = order.Id;
 
-            await _reservationService.CreateReservation(request.Reservation);
-            
-            string message = $"Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
-            if(message.Length < 100 && customer.Customer.PhoneNumber.Length < 16) { // Just in case we fuck something up
-                Task.Run(() => _notificationService.SendSMS(message, customer.Customer.PhoneNumber));
+        using (var transaction = await _unitOfWork.BeginTransaction())
+        {
+            try
+            {
+                await _orderRepository.Create(order);
+                await _unitOfWork.SaveChanges();
+                
+                if (request.Reservation != null)
+                {
+                    request.Reservation.BusinessId = order.BusinessId;
+                    request.Reservation.OrderId = order.Id;
+
+                    await _reservationService.CreateReservation(request.Reservation);
+                    
+                    string message = $"Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
+                    if(message.Length < 100 && customer.Customer.PhoneNumber.Length < 16) { // Just in case we fuck something up
+                        Task.Run(() => _notificationService.SendSMS(message, customer.Customer.PhoneNumber));
+                    }
+                }
+
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
     }
@@ -256,7 +275,7 @@ public class OrderService: IOrderService
 
         if (order.BusinessId != request.BusinessId)
         {
-            return null;
+            throw new KeyNotFoundException("Order is not found");
         }
 
         return new GetOrderResponse
@@ -370,8 +389,15 @@ public class OrderService: IOrderService
     {
         var existingOrder = await _orderRepository.Get(request.Id);
 
-        if (existingOrder == null || existingOrder.BusinessId != request.BusinessId || OrderStatus.Open != existingOrder.Status)
-            throw new KeyNotFoundException("Order not found or unauthorised.");
+        if (existingOrder == null || existingOrder.BusinessId != request.BusinessId)
+        {
+            throw new KeyNotFoundException("Order not found");
+        } 
+        
+        if (OrderStatus.Open != existingOrder.Status)
+        {
+            throw new InvalidOrderStateException("Only open orders can be modified");
+        }
 
         foreach (var requestOrderItem in request.OrderItems)
         {
@@ -434,8 +460,15 @@ public class OrderService: IOrderService
     {
         var order = await _orderRepository.Get(request.Id);
 
-        if (order == null || order.BusinessId != request.BusinessId || OrderStatus.Open != order.Status)
-            throw new KeyNotFoundException("Order not found.");
+        if (order == null || order.BusinessId != request.BusinessId)
+        {
+            throw new KeyNotFoundException("Order not found");
+        } 
+        
+        if (OrderStatus.Open != order.Status)
+        {
+            throw new InvalidOrderStateException("Only open orders can be modified");
+        }
 
         var item = await _itemRepository.Get(request.ItemId);
 
@@ -481,8 +514,15 @@ public class OrderService: IOrderService
     public async Task<bool> UpdateReservation(UpdateOrderReservationRequest request) {
         
         var existingOrder = await _orderRepository.Get(request.Id);
-        if (existingOrder == null || existingOrder.BusinessId != request.Reservation.BusinessId || OrderStatus.Open != existingOrder.Status) {
-            throw new KeyNotFoundException("Order not found.");
+
+        if (existingOrder == null || existingOrder.BusinessId != request.Reservation.BusinessId)
+        {
+            throw new KeyNotFoundException("Order not found");
+        } 
+        
+        if (OrderStatus.Open != existingOrder.Status)
+        {
+            throw new InvalidOrderStateException("Only open orders can be modified");
         }
 
         await _reservationService.UpdateReservation(request.Reservation);
@@ -495,9 +535,14 @@ public class OrderService: IOrderService
     {
         var order = await _orderRepository.Get(request.Id);
 
-        if (order == null || order.BusinessId != request.BusinessId || order.Status != OrderStatus.Open)
+        if (order == null || order.BusinessId != request.BusinessId)
         {
-            return;
+            throw new KeyNotFoundException("Order not found");
+        } 
+        
+        if (order.Status != OrderStatus.Open)
+        {
+            throw new InvalidOrderStateException("Only open orders can be canceled");
         }
 
         foreach (var orderItem in order.OrderItems)
@@ -538,9 +583,14 @@ public class OrderService: IOrderService
     {
         var order = await _orderRepository.Get(request.OrderId);
 
-        if (order == null || order.BusinessId != request.BusinessId || order.Status != OrderStatus.Open)
+        if (order == null || order.BusinessId != request.BusinessId)
         {
-            return;
+            throw new KeyNotFoundException("Order not found");
+        } 
+        
+        if (OrderStatus.Open != order.Status)
+        {
+            throw new InvalidOrderStateException("Only open orders can be modified");
         }
 
         order.TipAmount = request.TipAmount;
@@ -552,9 +602,14 @@ public class OrderService: IOrderService
     {
         var order = await _orderRepository.Get(request.OrderId);
 
-        if (order == null || order.BusinessId != request.BusinessId || OrderStatus.Open != order.Status)
+        if (order == null || order.BusinessId != request.BusinessId)
         {
-            throw new KeyNotFoundException("Order not found or unauthorized.");
+            throw new KeyNotFoundException("Order not found");
+        } 
+        
+        if (OrderStatus.Open != order.Status)
+        {
+            throw new InvalidOrderStateException("Only open orders can be modified");
         }
 
         var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == request.ItemId);

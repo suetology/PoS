@@ -67,7 +67,7 @@ public class TaxService : ITaxService
 
         if (tax == null || tax.BusinessId != request.BusinessId)
         {
-            return null;
+            throw new KeyNotFoundException("Tax is not found");
         }
 
         return new GetTaxResponse

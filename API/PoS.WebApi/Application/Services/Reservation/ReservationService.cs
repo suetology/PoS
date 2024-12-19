@@ -7,6 +7,7 @@ using Domain.Entities;
 using PoS.WebApi.Domain.Enums;
 using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.Service;
+using PoS.WebApi.Application.Services.Reservation.Exceptions;
 
 public class ReservationService : IReservationService
 {
@@ -48,7 +49,7 @@ public class ReservationService : IReservationService
 
         if (!isAvailable) 
         {
-            throw new Exception("Requested appointment time is not avaiable");
+            throw new TimeNotAvailableException("Requested appointment time is not avaiable");
         }
 
         var reservation = new Reservation
@@ -100,9 +101,9 @@ public class ReservationService : IReservationService
     {
         var reservation = await _reservationRepository.GetById(request.Id);
 
-        if (reservation.BusinessId != request.BusinessId)
+        if (reservation == null || reservation.BusinessId != request.BusinessId)
         {
-            return null;
+            throw new KeyNotFoundException("Reservation is not found");
         }
         
         return new GetReservationResponse
@@ -134,7 +135,7 @@ public class ReservationService : IReservationService
 
         if (reservation == null || reservation.BusinessId != request.BusinessId)
         {
-            return false;
+            throw new KeyNotFoundException("Reservation is not found");
         }
         
         reservation.AppointmentTime = request.AppointmentTime ?? reservation.AppointmentTime;
@@ -152,7 +153,7 @@ public class ReservationService : IReservationService
 
         if (reservation == null || reservation.BusinessId != request.BusinessId)
         {
-            return;
+            throw new KeyNotFoundException("Reservation is not found");
         }
 
         reservation.Status = AppointmentStatus.Cancelled;

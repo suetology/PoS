@@ -22,7 +22,7 @@ namespace PoS.WebApi.Application.Services.Shift
 
             if (shift == null || shift.BusinessId != request.BusinessId)
             {
-                return null;
+                throw new KeyNotFoundException("Shift is not found");
             }
 
             return new GetShiftResponse
@@ -78,7 +78,7 @@ namespace PoS.WebApi.Application.Services.Shift
 
             if (shift == null || shift.BusinessId != request.BusinessId)
             {
-                return;
+                throw new KeyNotFoundException("Shift is not found");
             }
             
             await _shiftRepository.Delete(request.Id);

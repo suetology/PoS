@@ -39,7 +39,7 @@ public class ItemGroupService : IItemGroupService
 
         if (itemGroup.BusinessId != request.BusinessId)
         {
-            return null;
+            throw new KeyNotFoundException("Item Group is not found");
         }
         
         return new GetItemGroupResponse
@@ -72,7 +72,7 @@ public class ItemGroupService : IItemGroupService
         
         if (existingItemGroup == null || existingItemGroup.BusinessId != request.BusinessId)
         {
-            throw new KeyNotFoundException("ItemGroup not found.");
+            throw new KeyNotFoundException("ItemGroup is not found.");
         }
 
         if (!string.IsNullOrEmpty(request.Name))
