@@ -534,6 +534,26 @@ public class OrderService: IOrderService
         await _unitOfWork.SaveChanges();
     }
 
+    public async Task RetireOpenOrders(RetireOpenOrdersRequest request)
+    {
+        var orders = await _orderRepository.GetAll();
+        var orderIds = orders
+            .Where(o => o.BusinessId == request.BusinessId && o.CustomerId == request.CustomerId && OrderStatus.Open == o.Status)
+            .Select(o => o.Id)
+            .ToArray();
+
+        foreach (var Id in orderIds)
+        {
+            var cancelOrderRequest = new CancelOrderRequest
+            {
+                Id = Id,
+                BusinessId = request.BusinessId
+            };
+
+            await CancelOrder(cancelOrderRequest);
+        }
+    }
+
     public async Task AddTip(AddTipRequest request)
     {
         var order = await _orderRepository.Get(request.OrderId);

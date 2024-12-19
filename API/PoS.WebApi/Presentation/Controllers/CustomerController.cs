@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoS.WebApi.Application.Services.Customer;
 using PoS.WebApi.Application.Services.Customer.Contracts;
+using PoS.WebApi.Application.Services.Order;
+using PoS.WebApi.Application.Services.Order.Contracts;
 using PoS.WebApi.Domain.Enums;
 using PoS.WebApi.Infrastructure.Security.Extensions;
 
@@ -14,10 +16,12 @@ namespace PoS.WebApi.Presentation.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IOrderService _orderService;
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, IOrderService orderService)
         {
             _customerService = customerService;
+            _orderService = orderService;
         }
 
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
@@ -155,8 +159,17 @@ namespace PoS.WebApi.Presentation.Controllers
 
             request.Id = customerId;
             request.BusinessId = businessId.Value;
+            
 
             await _customerService.RetireCustomer(request);
+
+            var retireOpenOrdersRequest = new RetireOpenOrdersRequest
+            {
+                BusinessId = request.BusinessId,
+                CustomerId = customerId
+            };
+
+            await _orderService.RetireOpenOrders(retireOpenOrdersRequest);
 
             return NoContent();
         }

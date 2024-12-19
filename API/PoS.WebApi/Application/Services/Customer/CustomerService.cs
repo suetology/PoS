@@ -4,13 +4,16 @@ namespace PoS.WebApi.Application.Services.Customer;
 
 using Contracts;
 using Domain.Entities;
+using PoS.WebApi.Application.Services.Order;
+using PoS.WebApi.Application.Services.Order.Contracts;
 using PoS.WebApi.Infrastructure.Repositories;
 using Repositories;
 public class CustomerService : ICustomerService
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IUnitOfWork _unitOfWork;
-    public CustomerService(ICustomerRepository customerRepository, IUnitOfWork unitOfWork)
+    public CustomerService(
+    ICustomerRepository customerRepository, IUnitOfWork unitOfWork)
     {
         _customerRepository = customerRepository;
         _unitOfWork = unitOfWork;
@@ -121,11 +124,9 @@ public class CustomerService : ICustomerService
         {
             throw new KeyNotFoundException("Customer not found or unauthorised.");
         }
-
+        
         existingCustomer.Retired = true;
-
-        // TODO: Cancel all open orders.
-
+        
         await _customerRepository.Update(existingCustomer);
         await _unitOfWork.SaveChanges();
     }
