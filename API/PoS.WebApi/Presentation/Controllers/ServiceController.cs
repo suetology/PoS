@@ -75,6 +75,36 @@ namespace PoS.WebApi.Presentation.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+        [HttpGet("active")]
+        [ProducesResponseType(typeof(GetAllServicesResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetActiveServices([FromQuery] string sort = "name", [FromQuery] string order = "desc", [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new GetAllServicesRequest
+            {
+                BusinessId = businessId.Value,
+                Sort = sort,
+                Order = order,
+                Page = page,
+                PageSize = pageSize
+            };
+            
+            var response = await _serviceService.GetActiveServices(request);
+            
+            return Ok(response);
+        }
+
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
         [HttpPost]
         [ProducesResponseType(typeof(ServiceDto),StatusCodes.Status200OK)]

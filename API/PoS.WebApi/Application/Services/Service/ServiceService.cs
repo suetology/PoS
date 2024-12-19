@@ -66,6 +66,28 @@ public class ServiceService : IServiceService
         };
     }
 
+    public async Task<GetAllServicesResponse> GetActiveServices(GetAllServicesRequest request)
+    {
+        var services = await _serviceRepository.GetServices(request.Sort, request.Order, request.Page, request.PageSize);
+        var serviceDtos = services
+            .Where(s => s.BusinessId == request.BusinessId && true == s.IsActive)
+            .Select(s => new ServiceDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Description = s.Description,
+                Price = s.Price,
+                Duration = s.Duration,
+                IsActive = s.IsActive,
+                EmployeeId = s.EmployeeId
+            });
+
+        return new GetAllServicesResponse
+        {
+            Services = serviceDtos
+        };
+    }
+
     public async Task CreateService(CreateServiceRequest request)
     {
         var service = new Service
