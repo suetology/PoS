@@ -97,8 +97,8 @@ public class ServiceService : IServiceService
             Description = request.Description,
             Price = request.Price,
             Duration = request.Duration,
-            IsActive = request.IsActive,
-            EmployeeId = request.EmployeeId
+            EmployeeId = request.EmployeeId,
+            IsActive = true
         };
         
         await _serviceRepository.Create(service);
@@ -118,7 +118,6 @@ public class ServiceService : IServiceService
         existingService.Description = request.Description ?? existingService.Description;
         existingService.Price = request.Price ?? existingService.Price;
         existingService.Duration = request.Duration ?? existingService.Duration;
-        existingService.IsActive = request.IsActive ?? existingService.IsActive;
         existingService.EmployeeId = request.EmployeeId ?? existingService.EmployeeId;
 
         await _serviceRepository.Update(existingService);

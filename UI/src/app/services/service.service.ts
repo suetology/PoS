@@ -52,4 +52,12 @@ export class ServiceService {
       })
     );
   }
+
+  retireService(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/services/${id}/retire`, {}).pipe(
+      map(() => {
+        this.servicesUpdated.next();
+      })
+    );
+  }
 }

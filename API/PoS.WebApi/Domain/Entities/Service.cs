@@ -14,7 +14,7 @@ public class Service : Entity
     
     public int Duration { get; set; }
     
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
     
     public Guid EmployeeId { get; set; }
     

@@ -145,7 +145,6 @@ export interface CreateServiceRequest {
     description: string,
     price: number,
     duration: number,
-    isActive: boolean,
     employeeId: string
 }
 
@@ -154,7 +153,6 @@ export interface UpdateServiceRequest {
     description?: string,
     price?: number,
     duration?: number,
-    isActive?: boolean,
     employeeId?: string
 }
 

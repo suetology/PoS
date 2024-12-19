@@ -18,7 +18,5 @@ public class UpdateServiceRequest
 
     public int? Duration { get; set; }
 
-    public bool? IsActive { get; set; }
-
     public Guid? EmployeeId { get; set; }
 }
