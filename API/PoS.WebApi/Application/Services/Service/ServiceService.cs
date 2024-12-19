@@ -66,6 +66,28 @@ public class ServiceService : IServiceService
         };
     }
 
+    public async Task<GetAllServicesResponse> GetActiveServices(GetAllServicesRequest request)
+    {
+        var services = await _serviceRepository.GetServices(request.Sort, request.Order, request.Page, request.PageSize);
+        var serviceDtos = services
+            .Where(s => s.BusinessId == request.BusinessId && true == s.IsActive)
+            .Select(s => new ServiceDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Description = s.Description,
+                Price = s.Price,
+                Duration = s.Duration,
+                IsActive = s.IsActive,
+                EmployeeId = s.EmployeeId
+            });
+
+        return new GetAllServicesResponse
+        {
+            Services = serviceDtos
+        };
+    }
+
     public async Task CreateService(CreateServiceRequest request)
     {
         var service = new Service
@@ -75,8 +97,8 @@ public class ServiceService : IServiceService
             Description = request.Description,
             Price = request.Price,
             Duration = request.Duration,
-            IsActive = request.IsActive,
-            EmployeeId = request.EmployeeId
+            EmployeeId = request.EmployeeId,
+            IsActive = true
         };
         
         await _serviceRepository.Create(service);
@@ -87,16 +109,15 @@ public class ServiceService : IServiceService
     {
         var existingService = await _serviceRepository.Get(request.Id);
 
-        if (existingService == null || existingService.BusinessId != request.BusinessId)
+        if (existingService == null || existingService.BusinessId != request.BusinessId || false == existingService.IsActive)
         {
-            throw new KeyNotFoundException("Service not found.");
+            throw new KeyNotFoundException("Service not found or unauthorised.");
         }
         
         existingService.Name = request.Name ?? existingService.Name;
         existingService.Description = request.Description ?? existingService.Description;
         existingService.Price = request.Price ?? existingService.Price;
         existingService.Duration = request.Duration ?? existingService.Duration;
-        existingService.IsActive = request.IsActive ?? existingService.IsActive;
         existingService.EmployeeId = request.EmployeeId ?? existingService.EmployeeId;
 
         await _serviceRepository.Update(existingService);
@@ -178,5 +199,21 @@ public class ServiceService : IServiceService
         {
             AvailableTimes = availableTimes
         };
+    }
+
+    public async Task RetireService(RetireServiceRequest request)
+    {
+        var existingService = await _serviceRepository.Get(request.Id);
+        if (existingService == null || existingService.BusinessId != request.BusinessId || false == existingService.IsActive)
+        {
+            throw new KeyNotFoundException("Service not found or unauthorised.");
+        }
+
+        existingService.IsActive = false;
+
+        // TODO: see how other entities could change.
+
+        await _serviceRepository.Update(existingService);
+        await _unitOfWork.SaveChanges();
     }
 }

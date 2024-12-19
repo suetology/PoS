@@ -13,7 +13,7 @@ export class ServiceService {
   constructor(private http: HttpClient) { }
   
   getServices(): Observable<Service[]> {
-    return this.http.get<GetAllServicesResponse>(`${environment.API_URL}/services`).pipe(
+    return this.http.get<GetAllServicesResponse>(`${environment.API_URL}/services/active`).pipe(
       map(response => response.services)
     );
   }
@@ -49,6 +49,14 @@ export class ServiceService {
     return this.http.get<GetAvailableTimesResponse>(`${environment.API_URL}/services/${serviceId}/available-times?date=${date}`).pipe(
       map(response => {
         return response.availableTimes
+      })
+    );
+  }
+
+  retireService(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/services/${id}/retire`, {}).pipe(
+      map(() => {
+        this.servicesUpdated.next();
       })
     );
   }

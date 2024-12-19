@@ -35,7 +35,6 @@ export class UpdateServiceComponent {
       description: [''],
       price: [''],
       duration: [''],
-      isActive: [''],
       employeeId: [[]]
     });
 
@@ -61,7 +60,6 @@ export class UpdateServiceComponent {
         description: service.description,
         price: service.price,
         duration: service.duration,
-        isActive: service.isActive,
         employeeId: service.employeeId || []
       });
     });

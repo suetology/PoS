@@ -55,4 +55,15 @@ export class ServiceComponent {
   editService(serviceId: string) {
     this.router.navigate([`/services/${serviceId}/edit`]);
   }
+
+  retireService(serviceId: string) {
+    this.serviceService.retireService(serviceId).subscribe({
+      next: () => {
+        this.router.navigate(['/services']);
+      },
+      error: (error) => {
+        console.error('Error retiring service:', error);
+      },
+    });
+  }
 }

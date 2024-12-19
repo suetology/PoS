@@ -46,7 +46,6 @@ export class AddServiceComponent implements OnInit {
       description: this.serviceForm.value.description || '',
       price: this.serviceForm.value.price || 0,
       duration: this.serviceForm.value.price || 0,
-      isActive: this.serviceForm.value.isActive || true,
       employeeId: this.serviceForm.value.employeeId || ''
     }
 
