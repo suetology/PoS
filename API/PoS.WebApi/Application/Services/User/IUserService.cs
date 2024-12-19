@@ -9,5 +9,6 @@ public interface IUserService
     Task<GetUserResponse> GetUser(GetUserRequest request);
     Task<GetAvailableRolesResponse> GetAvailableRoles();
     Task<bool> UpdateUser(UpdateUserRequest request);
+    Task RetireUser(RetireUserRequest request);
     Task SetBusiness(SetBusinessRequest request);
 }

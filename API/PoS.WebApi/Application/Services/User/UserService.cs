@@ -6,6 +6,7 @@ namespace PoS.WebApi.Application.Services.User;
 
 using Domain.Entities;
 using PoS.WebApi.Application.Repositories;
+using PoS.WebApi.Application.Services.Customer.Contracts;
 using PoS.WebApi.Application.Services.User.Contracts;
 using PoS.WebApi.Domain.Common;
 
@@ -167,6 +168,20 @@ public class UserService : IUserService
         
         user.BusinessId = request.BusinessId;
         
+        await _unitOfWork.SaveChanges();
+    }
+
+    public async Task RetireUser(RetireUserRequest request)
+    {
+        var existingUser = await _userRepository.Get(request.Id);
+        if (existingUser == null || existingUser.BusinessId != request.BusinessId || UserStatus.Left == existingUser.Status)
+        {
+            throw new KeyNotFoundException("User not found or unauthorised.");
+        }
+        
+        existingUser.Status = UserStatus.Left;
+        
+        await _userRepository.Update(existingUser);
         await _unitOfWork.SaveChanges();
     }
 }

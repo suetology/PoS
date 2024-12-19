@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoS.WebApi.Application.Services.Customer.Contracts;
 using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -160,6 +161,31 @@ public class UserController : ControllerBase
         request.UserId = userId;
 
         await _userService.SetBusiness(request);
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpPatch("{userId}/retire")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RetireCustomer(Guid userId, RetireUserRequest request)
+    {
+        var businessId = User.GetBusinessId();
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.Id = userId;
+        request.BusinessId = businessId.Value;
+        
+        await _userService.RetireUser(request);
+
+        // TODO: Figure out shifts, orders...
 
         return NoContent();
     }
