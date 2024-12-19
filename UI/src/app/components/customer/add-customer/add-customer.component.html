@@ -1,0 +1,39 @@
+<div class="px-4 m-4">
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <div class="grid gap-6 md:grid-cols-2">
+        <div>
+            <label for="name">Name</label>
+            <input 
+            type="text" 
+            id="name" 
+            placeholder="John"
+            name="name" 
+            formControlName="name"
+        >
+        </div>
+        <div>
+            <label for="phoneNumber">Phone number</label>
+            <input 
+                type="text" 
+                id="phoneNumber"
+                placeholder="+3706001256" 
+                name="phoneNumber" 
+                formControlName="phoneNumber"
+            >
+        </div>
+    <div class="mb-6">
+        <label for="email">Email</label>
+        <input 
+        type="text" 
+        id="email" 
+        placeholder="john.doe@company.com"
+        name="email" 
+        formControlName="email"
+    >
+    </div> 
+    </div>
+    <button type="submit" class="text-white bg-cyan-400 hover:bg-cyan-500 focus:ring-4 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+        + Add
+    </button>
+</form>
+</div>
