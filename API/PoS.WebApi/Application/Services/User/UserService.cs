@@ -42,7 +42,7 @@ public class UserService : IUserService
             Email = request.Email,
             PhoneNumber = request.PhoneNumber,
             Role = request.Role,
-            Status = request.Status,
+            Status = UserStatus.Active,
             DateOfEmployment = DateTime.UtcNow,
             BusinessId = request.BusinessId,
             LastUpdated = DateTime.UtcNow

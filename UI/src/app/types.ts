@@ -92,7 +92,6 @@ export interface CreateUserRequest {
     email: string,
     phoneNumber: string,
     role: Role,
-    status: UserStatus
 }
 
 export interface UpdateUserRequest {

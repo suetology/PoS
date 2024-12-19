@@ -34,7 +34,6 @@ export class AddUserComponent {
       email: this.userForm.value.email || '',
       phoneNumber: this.userForm.value.phoneNumber || '',
       role: (this.userForm.value.role as Role) || '',
-      status: +this.userForm.value.status!
     }
 
     this.userService.addUser(createUserRequest).subscribe({
