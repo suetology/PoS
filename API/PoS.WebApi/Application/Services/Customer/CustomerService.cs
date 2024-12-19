@@ -74,5 +74,21 @@ public class CustomerService : ICustomerService
             Customers = customersDtos
         };
     }
+
+    public async Task UpdateCustomer(UpdateCustomerRequest request)
+    {
+        var existingCustomer = await _customerRepository.Get(request.Id);
+        if (existingCustomer == null || existingCustomer.BusinessId != request.BusinessId)
+        {
+            throw new KeyNotFoundException("Customer not found or unauthorised.");
+        }
+
+        existingCustomer.Name = request.Name;
+        existingCustomer.Email = request.Email;
+        existingCustomer.PhoneNumber = request.PhoneNumber;
+
+        await _customerRepository.Update(existingCustomer);
+        await _unitOfWork.SaveChanges();
+    }
 }
 

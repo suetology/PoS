@@ -21,6 +21,4 @@ public class CreateUserRequest
     public string PhoneNumber { get; set; }
     
     public Role Role { get; set; }
-    
-    public EmployeeStatus Status { get; set; }    
 }

@@ -25,5 +25,5 @@ public class UpdateUserRequest
 
     public Role Role { get; set; }
 
-    public EmployeeStatus Status { get; set; }
+    public UserStatus Status { get; set; }
 }

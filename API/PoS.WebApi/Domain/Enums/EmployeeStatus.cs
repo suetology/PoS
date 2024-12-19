@@ -1,13 +1,7 @@
 ﻿namespace PoS.WebApi.Domain.Enums;
 
-public enum EmployeeStatus
+public enum UserStatus
 {
     Active = 1,
     Left,
-    Fired,
-    UnpaidLeave,
-    PaidLeave,
-    SickLeave,
-    ChildcareLeave,
-    NotEmployee
 }

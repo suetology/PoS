@@ -20,7 +20,6 @@ export class AddUserComponent {
     email: new FormControl<string>('', Validators.required),
     phoneNumber: new FormControl<string>('', Validators.required),
     role: new FormControl<string>('', Validators.required),
-    status: new FormControl<string>('', Validators.required),
   });
   
   constructor(private userService: UserService) { }
@@ -34,7 +33,6 @@ export class AddUserComponent {
       email: this.userForm.value.email || '',
       phoneNumber: this.userForm.value.phoneNumber || '',
       role: (this.userForm.value.role as Role) || '',
-      status: +this.userForm.value.status!
     }
 
     this.userService.addUser(createUserRequest).subscribe({

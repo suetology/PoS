@@ -28,6 +28,9 @@ import { BusinessesComponent } from './components/businesses/businesses/business
 import { UpdateTaxComponent } from './components/Tax/update-tax/update-tax.component';
 import { UpdateServiceChargeComponent } from './components/service-charge/update-service-charge/update-service-charge.component';
 import { ServiceChargeDetailsComponent } from './components/service-charge/service-charge-details/service-charge-details.component';
+import { CustomerPageComponent } from './components/customer/customer-page/customer-page.component';
+import { CustomerDetailsComponent } from './components/customer/customer-details/customer-details.component';
+import { UpdateCustomerComponent } from './components/customer/update-customer/update-customer.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -77,6 +80,12 @@ export const routes: Routes = [
         children: [
             { path: ':id', component: UserDetailsComponent, canActivate: [AuthGuard] },
             { path: ':id/edit', component: UpdateUserComponent, canActivate: [AuthGuard] } 
+        ]
+     },
+     { path: 'customer', component: CustomerPageComponent, canActivate: [AuthGuard],
+        children: [
+            { path: ':id', component: CustomerDetailsComponent, canActivate: [AuthGuard] },
+            { path: ':id/edit', component: UpdateCustomerComponent, canActivate: [AuthGuard] } 
         ]
      },
     { path: 'order', component: OrderPageComponent, canActivate: [AuthGuard],

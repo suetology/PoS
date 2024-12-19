@@ -90,5 +90,29 @@ namespace PoS.WebApi.Presentation.Controllers
             await _customerService.CreateCustomer(request);
             return CreatedAtAction(nameof(CreateCustomer), request);
         }
+
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+        [HttpPatch("{customerId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateCustomer([FromRoute] Guid customerId, [FromBody] UpdateCustomerRequest request)
+        {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            request.BusinessId = businessId.Value;
+            request.Id = customerId;
+
+            await _customerService.UpdateCustomer(request);
+
+            return NoContent();
+        }
     }
 }

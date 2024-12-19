@@ -4,36 +4,28 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-4">Name Surname</th>
-                        <th scope="col" class="px-6 py-4">Username</th>
-                        <th scope="col" class="px-6 py-4">Role</th>
-                        <th scope="col" class="px-6 py-4">Status</th>
+                        <th scope="col" class="px-6 py-4">Name</th>
+                        <th scope="col" class="px-6 py-4">Phone</th>
                         <th scope="col" class="px-6 py-4">Actions</th>
                     </tr>
                 </thead>
-                @if (users$ | async; as tax) {
-                    @for(user of users$ | async ; track user.id) 
+                @if (customers$ | async; as customer){
+                    @for(customer of customers$ | async ; track customer.id) 
                     {
                     <tbody>
                         <tr class="border-b cursor-pointer hover:bg-gray-100" 
-                        (click)="goToUserDetails(user.id)">
+                        (click)="goToCustomerDetails(customer.id)">
                             <th scope="row" class="flex items-center px-4 py-4 text-gray-900 whitespace-nowrap">
                                 <div class="ps-3">
-                                    <div class="text-base font-semibold">{{ user.name }} {{ user.surname }}</div>
-                                    <div class="font-normal text-gray-500">{{ user.email }}</div>
+                                    <div class="text-base font-semibold">{{ customer.name }}</div>
+                                    <div class="font-normal text-gray-500">{{ customer.email }}</div>
                                 </div>  
                             </th>
                             <td class="px-6 py-4">
-                                {{ user.username }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ user.role }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ user.status }}
+                                {{ customer.phoneNumber }}
                             </td>
                             <td class="font-medium text-cyan-500 hover:underline cursor-pointer">
-                                <button (click)="$event.stopPropagation(); editUser(user?.id || '')" class="mr-2">
+                                <button (click)="$event.stopPropagation(); editCustomer(customer?.id || '')" class="mr-2">
                                     Edit
                                 </button>
                             </td>
@@ -62,7 +54,7 @@
                     }
                 } @else {
                     <tr class="border-b">
-                        <td class="px-4 py-3">No users created yet.</td>
+                        <td class="px-4 py-3">No customers created yet.</td>
                     </tr>
                 }
             </table>
