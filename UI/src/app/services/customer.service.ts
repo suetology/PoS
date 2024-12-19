@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { CreateCustomerRequest, Customer, GetAllCustomersResponse } from '../types';
+import { CreateCustomerRequest, Customer, GetAllCustomersResponse, UpdateCustomerRequest } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class CustomerService {
   constructor(private http: HttpClient) { }
 
   getAllCustomers(): Observable<Customer[]> {
-    return this.http.get<GetAllCustomersResponse>(`${environment.API_URL}/customer`).pipe(
+    return this.http.get<GetAllCustomersResponse>(`${environment.API_URL}/customer/active`).pipe(
       map(response => response.customers)
     );
   }
@@ -34,6 +34,22 @@ export class CustomerService {
       map((customer) => {
         this.customersUpdated.next();
         return customer;
+      })
+    );
+  }
+
+  updateCustomer(id: string, request: UpdateCustomerRequest): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/customer/${id}`, request).pipe(
+      map(() => {
+        this.customersUpdated.next();
+      })
+    );
+  }
+
+  retireCustomer(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/customer/${id}/retire`, {}).pipe(
+      map(() => {
+        this.customersUpdated.next();
       })
     );
   }
