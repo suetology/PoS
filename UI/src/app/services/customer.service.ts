@@ -14,7 +14,7 @@ export class CustomerService {
   constructor(private http: HttpClient) { }
 
   getAllCustomers(): Observable<Customer[]> {
-    return this.http.get<GetAllCustomersResponse>(`${environment.API_URL}/customer`).pipe(
+    return this.http.get<GetAllCustomersResponse>(`${environment.API_URL}/customer/active`).pipe(
       map(response => response.customers)
     );
   }

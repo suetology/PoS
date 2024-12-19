@@ -71,6 +71,29 @@ namespace PoS.WebApi.Presentation.Controllers
             return Ok(response);
         }
 
+        [HttpGet("active")]
+        [ProducesResponseType(typeof(GetAllCustomersResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetAllActive()
+        {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new GetAllCustomersRequest
+            {
+                BusinessId = businessId.Value
+            };
+            
+            var response = await _customerService.GetAllActive(request);
+
+            return Ok(response);
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

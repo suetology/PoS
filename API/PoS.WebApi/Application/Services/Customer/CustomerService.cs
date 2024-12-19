@@ -78,6 +78,26 @@ public class CustomerService : ICustomerService
         };
     }
 
+    public async Task<GetAllCustomersResponse> GetAllActive(GetAllCustomersRequest request)
+    {
+        var customers =  await _customerRepository.GetAll();
+        var customersDtos = customers
+            .Where(c => c.BusinessId == request.BusinessId && false == c.Retired)
+            .Select(c => new CustomerDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Email = c.Email,
+                PhoneNumber = c.PhoneNumber,
+                Retired = c.Retired
+            });
+
+        return new GetAllCustomersResponse
+        {
+            Customers = customersDtos
+        };
+    }
+
     public async Task UpdateCustomer(UpdateCustomerRequest request)
     {
         var existingCustomer = await _customerRepository.Get(request.Id);
