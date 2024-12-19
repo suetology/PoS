@@ -2,7 +2,7 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div class="grid gap-6 md:grid-cols-2">
         <div>
-            <label for="name">First name</label>
+            <label for="name">Name</label>
             <input 
             type="text" 
             id="name" 
@@ -48,22 +48,8 @@
             </select>
         </div>
 
-        <div>
-            <label for="status">Status</label>
-            <select id="status" name="status" formControlName="status">
-                <option [value]="1">Active</option>
-                <option [value]="2">Left</option>
-                <option [value]="3">Fired</option>
-                <option [value]="4">Unpaid Leave</option>
-                <option [value]="5">Paid Leave</option>
-                <option [value]="6">Sick Leave</option>
-                <option [value]="7">Childcare Leave</option>
-                <option [value]="8">Not Employee</option>
-            </select>
-        </div>
-
     <div class="mb-6">
-        <label for="email">Email address</label>
+        <label for="email">Email</label>
         <input 
         type="text" 
         id="email" 

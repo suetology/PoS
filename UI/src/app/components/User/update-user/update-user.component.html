@@ -4,7 +4,7 @@
 
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="mt-4">
-        <label for="name">Employee Name </label>
+        <label for="name">Name </label>
         <input
           type="text"
           id="name"
@@ -71,12 +71,6 @@
       <select id="status" formControlName="status">
         <option value="Active">Active</option>
         <option value="Left">Left</option>
-        <option value="Fired">Fired</option>
-        <option value="UnpaidLeave">Unpaid Leave</option>
-        <option value="PaidLeave">Paid Leave</option>
-        <option value="SickLeave">Sick Leave</option>
-        <option value="ChildcareLeave">Childcare Leave</option>
-        <option value="NotEmployee">Not Employee</option>
       </select>
 
       <button
