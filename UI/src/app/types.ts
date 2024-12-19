@@ -462,6 +462,12 @@ export interface CreateCustomerRequest {
     phoneNumber: string
 }
 
+export interface UpdateCustomerRequest {
+    name: string,
+    email: string,
+    phoneNumber: string
+}
+
 export interface GetCustomerResponse {
     customer: Customer
 }

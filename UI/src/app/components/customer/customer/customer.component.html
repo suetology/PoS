@@ -9,7 +9,7 @@
                         <th scope="col" class="px-6 py-4">Actions</th>
                     </tr>
                 </thead>
-                @if (customers$ | async; as tax) {
+                @if (customers$ | async; as customer){
                     @for(customer of customers$ | async ; track customer.id) 
                     {
                     <tbody>
