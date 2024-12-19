@@ -6,6 +6,8 @@ public interface ITaxService
 {
     Task<GetAllTaxesResponse> GetAllTaxes(GetAllTaxesRequest request);
 
+    Task<GetAllTaxesResponse> GetAllValidTaxes(GetAllTaxesRequest request);
+
     Task<GetTaxResponse> GetTax(GetTaxRequest request);
     
     Task CreateTax(CreateTaxRequest request);

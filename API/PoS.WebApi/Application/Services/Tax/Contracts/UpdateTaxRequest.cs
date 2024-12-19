@@ -9,10 +9,8 @@ namespace PoS.WebApi.Application.Services.Tax.Contracts
         public Guid Id { get; set; }
         [JsonIgnore]
         public Guid BusinessId { get; set; }
-
+        
         public string Name { get; set; }
-
-        public TaxType? Type { get; set; }
 
         public decimal? Value { get; set; }
 

@@ -8,6 +8,8 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
     public interface IServiceChargeService
     {
         Task<GetAllServiceChargesResponse> GetServiceCharges(GetAllServiceChargesRequest request);
+        Task<GetAllServiceChargesResponse> GetValidServiceCharges(GetAllServiceChargesRequest request);
+        Task<GetServiceChargeResponse> GetServiceCharge(GetServiceChargeRequest request);
         Task CreateServiceCharge(CreateServiceChargeRequest request);
         Task UpdateServiceCharge(UpdateServiceChargeRequest request);
     }

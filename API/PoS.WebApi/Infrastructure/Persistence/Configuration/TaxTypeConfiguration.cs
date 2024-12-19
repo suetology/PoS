@@ -22,6 +22,9 @@ public class TaxTypeConfiguration : BaseEntityTypeConfiguration<Tax>
         
         builder.Property(t => t.IsPercentage)
             .IsRequired();
+
+        builder.Property(t => t.Retired)
+            .IsRequired();
         
         builder.Property(t => t.LastUpdated)
             .IsRequired();

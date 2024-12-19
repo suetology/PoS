@@ -42,6 +42,30 @@ public class TaxController : ControllerBase
 
         return Ok(taxes);
     }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpGet("valid")]
+    [ProducesResponseType(typeof(GetAllTaxesResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllValidTax()
+    {
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetAllTaxesRequest
+        {
+            BusinessId = businessId.Value
+        };
+        
+        var taxes = await _taxService.GetAllValidTaxes(request);
+
+        return Ok(taxes);
+    }
     
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
     [HttpGet("{taxId}", Name = nameof(GetTax))]

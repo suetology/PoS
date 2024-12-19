@@ -4,5 +4,6 @@ public enum PaymentState
 {
     Succeeded = 1,
     InProgress,
-    Failed
+    Failed,
+    Refunded
 }

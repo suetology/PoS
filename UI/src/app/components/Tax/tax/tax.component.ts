@@ -53,4 +53,8 @@ export class TaxComponent {
   goToTaxDetails(id: string) {
     this.router.navigate([id], { relativeTo: this.route });
   }
+
+  editTax(taxId: string) {
+    this.router.navigate([`/tax/${taxId}/edit`]);
+  }
 }

@@ -19,6 +19,10 @@ using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.Tax.Contracts;
 using PoS.WebApi.Application.Services.Discount.Contracts;
 using PoS.WebApi.Application.Services.Notification;
+using Amazon.SimpleNotificationService.Model;
+using PoS.WebApi.Application.Services.Payments;
+using PoS.WebApi.Application.Services.Payments.Contracts;
+using PoS.WebApi.Application.Services.Refund.Contracts;
 
 public class OrderService: IOrderService
 {
@@ -26,6 +30,7 @@ public class OrderService: IOrderService
     private readonly ICustomerService _customerService;
     private readonly INotificationService _notificationService;
     private readonly IItemService _itemService;
+    private readonly IPaymentService _paymentService;
     private readonly IOrderRepository _orderRepository;
     private readonly IItemRepository _itemRepository;
     private readonly IItemVariationRepository _itemVariationRepository;
@@ -36,6 +41,7 @@ public class OrderService: IOrderService
         ICustomerService customerService,
         INotificationService notificationService,
         IItemService itemService,
+        IPaymentService paymentService,
         IOrderRepository orderRepository,
         IItemRepository itemRepository,
         IItemVariationRepository itemVariationRepository, 
@@ -45,6 +51,7 @@ public class OrderService: IOrderService
         _customerService = customerService;
         _notificationService = notificationService;
         _itemService = itemService;
+        _paymentService = paymentService;
         _orderRepository = orderRepository;
         _itemRepository = itemRepository;
         _itemVariationRepository = itemVariationRepository;
@@ -227,9 +234,14 @@ public class OrderService: IOrderService
                     Name = o.Discount.Name,
                     Value = o.Discount.Value,
                     IsPercentage = o.Discount.IsPercentage
+                },
+                Refund = o.Refund == null ? null : new RefundDto
+                {
+                    Id = o.Refund.Id,
+                    Amount = o.Refund.Amount,
+                    Date = o.Refund.Date,
+                    Reason = o.Refund.Reason
                 }
-                // add paymentDtos
-                // add refundDto
             });
 
         return new GetAllOrdersResponse
@@ -342,9 +354,14 @@ public class OrderService: IOrderService
                     Name = order.Discount.Name,
                     Value = order.Discount.Value,
                     IsPercentage = order.Discount.IsPercentage
+                },
+                Refund = order.Refund == null ? null : new RefundDto
+                {
+                    Id = order.Refund.Id,
+                    Amount = order.Refund.Amount,
+                    Date = order.Refund.Date,
+                    Reason = order.Refund.Reason
                 }
-                // add paymentDtos
-                // add refundDto
             }
         };
     }

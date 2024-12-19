@@ -35,12 +35,19 @@ export interface TaxRequest {
     isPercentage: boolean;
 }
 
+export interface UpdateTaxRequest {
+    name?: string;
+    value?: number;
+    isPercentage?: boolean;
+}
+
 export interface Tax {
     id: string;
     name: string;
     type: TaxType;
     value: number;
     isPercentage: boolean;
+    retired: boolean;
     lastUpdated?: Date;
 }
 
@@ -234,6 +241,7 @@ export interface ServiceCharge {
     description: string;
     value: number;
     isPercentage: boolean;
+    retired: boolean;
 }
 
 export interface ServiceChargeResponse {
@@ -245,6 +253,13 @@ export interface ServiceChargeRequest {
     description: string;
     value: number;
     isPercentage: boolean;
+}
+
+export interface UpdateServiceChargeRequest {
+    name?: string;
+    description?: string;
+    value?: number;
+    isPercentage?: boolean;
 }
 
 export interface ItemGroup {
@@ -378,10 +393,15 @@ export interface Order {
     serviceCharge?: ServiceCharge,
     orderItems: OrderItem[],
     reservation?: Reservation,
-    discount?: Discount
+    discount?: Discount,
+    refund?: Refund
+}
 
-    // add payments
-    // add refund
+export interface Refund {
+    id: string,
+    amount: number,
+    reason: string,
+    date: string
 }
 
 export interface AddTipRequest {
@@ -498,4 +518,9 @@ export interface CreateCashOrGiftCardPaymentRequest {
     orderId: string,
     paymentAmount: number,
     paymentMethod: PaymentMethod
+}
+
+export interface CreateRefundRequest {
+    orderId: string,
+    reason: string
 }

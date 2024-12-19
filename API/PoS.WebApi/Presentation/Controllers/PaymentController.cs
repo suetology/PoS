@@ -46,7 +46,7 @@ public class PaymentController : ControllerBase
     }
     
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]   
-    [HttpPost("cash")]
+    [HttpPost("cash-giftcard")]
     public async Task<IActionResult> CreateCashOrGiftCardPayment(CreateCashOrGiftCardPaymentRequest request)
     {
         var businessId = User.GetBusinessId();

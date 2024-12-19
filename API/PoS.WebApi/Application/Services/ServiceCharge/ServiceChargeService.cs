@@ -27,12 +27,57 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
                     Name = s.Name,
                     Description = s.Description,
                     Value = s.Value,
-                    IsPercentage = s.IsPercentage
+                    IsPercentage = s.IsPercentage,
+                    Retired = s.Retired
                 });
 
             return new GetAllServiceChargesResponse
             {
                 ServiceCharges = serviceChargesDtos
+            };
+        }
+
+        public async Task<GetAllServiceChargesResponse> GetValidServiceCharges(GetAllServiceChargesRequest request)
+        {
+            var serviceCharges = await _serviceChargeRepository.GetAll();
+            var serviceChargesDtos = serviceCharges
+                .Where(s => s.BusinessId == request.BusinessId && false == s.Retired)
+                .Select(s => new ServiceChargeDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    Description = s.Description,
+                    Value = s.Value,
+                    IsPercentage = s.IsPercentage,
+                    Retired = s.Retired
+                });
+
+            return new GetAllServiceChargesResponse
+            {
+                ServiceCharges = serviceChargesDtos
+            };
+        }
+
+        public async Task<GetServiceChargeResponse> GetServiceCharge(GetServiceChargeRequest request)
+        {
+            var serviceCharge = await _serviceChargeRepository.Get(request.Id);
+
+            if (serviceCharge == null || serviceCharge.BusinessId != request.BusinessId)
+            {
+                return null;
+            }
+
+            return new GetServiceChargeResponse
+            {
+                ServiceCharge = new ServiceChargeDto
+                {
+                    Id = serviceCharge.Id,
+                    Name = serviceCharge.Name,
+                    Description = serviceCharge.Description,
+                    Value = serviceCharge.Value,
+                    IsPercentage = serviceCharge.IsPercentage,
+                    Retired = serviceCharge.Retired,
+                }
             };
         }
 
@@ -44,7 +89,8 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
                 Name = request.Name,
                 Description = request.Description,
                 Value = request.Value,
-                IsPercentage = request.IsPercentage
+                IsPercentage = request.IsPercentage,
+                Retired = false
             };
             
             await _serviceChargeRepository.Create(serviceCharge);
@@ -55,17 +101,25 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
         {
             var existingServiceCharge = await _serviceChargeRepository.Get(request.Id);
 
-            if (existingServiceCharge == null || existingServiceCharge.BusinessId != request.BusinessId)
+            if (existingServiceCharge == null || existingServiceCharge.BusinessId != request.BusinessId || true == existingServiceCharge.Retired)
             {
-                throw new KeyNotFoundException("Service charge not found.");
+                throw new KeyNotFoundException("Service charge not found or unauthorised.");
             }
 
-            existingServiceCharge.Name = request.Name ?? existingServiceCharge.Name;
-            existingServiceCharge.Description = request.Description ?? existingServiceCharge.Description;
-            existingServiceCharge.Value = request.Value ?? existingServiceCharge.Value;
-            existingServiceCharge.IsPercentage = request.IsPercentage ?? existingServiceCharge.IsPercentage;
+            var updatedServiceCharge = new Domain.Entities.ServiceCharge
+            {
+                BusinessId = existingServiceCharge.BusinessId,
+                Name = request.Name,
+                Description = request.Description,
+                Value = request.Value ?? existingServiceCharge.Value,
+                IsPercentage = request.IsPercentage ?? existingServiceCharge.IsPercentage,
+                Retired = false
+            };
+            await _serviceChargeRepository.Create(updatedServiceCharge);
 
+            existingServiceCharge.Retired = true;
             await _serviceChargeRepository.Update(existingServiceCharge);
+
             await _unitOfWork.SaveChanges();
         }
 

@@ -531,6 +531,9 @@ namespace PoS.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Retired")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("TEXT");
 
@@ -589,6 +592,9 @@ namespace PoS.WebApi.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("Retired")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");

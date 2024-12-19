@@ -14,5 +14,4 @@ public interface IOrderService
     Task<bool> UpdateItemQuantityInOrder(UpdateOrderRequest request);
     Task<bool> AddItemToOrder(AddItemToUpdateOrderRequest request);
     Task RemoveItemFromOrder(RemoveItemFromOrderRequest request);
-
 }
