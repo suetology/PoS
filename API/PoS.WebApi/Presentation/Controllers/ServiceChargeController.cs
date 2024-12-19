@@ -88,6 +88,34 @@ namespace PoS.WebApi.Presentation.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+        [HttpGet("{serviceChargeId}")]
+        [ProducesResponseType(typeof(GetServiceChargeResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetServiceCharge([FromRoute] Guid serviceChargeId)
+        {
+            var businessId = User.GetBusinessId();
+
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            var request = new GetServiceChargeRequest
+            {
+                Id = serviceChargeId,
+                BusinessId = businessId.Value
+            };
+            
+            var response = await _serviceChargeService.GetServiceCharge(request);
+            if (response == null) {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
         [HttpPatch("{serviceChargeId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
