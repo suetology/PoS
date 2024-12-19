@@ -32,7 +32,8 @@ public class CustomerService : ICustomerService
                 Id = customer.Id,
                 Name = customer.Name,
                 Email = customer.Email,
-                PhoneNumber = customer.PhoneNumber
+                PhoneNumber = customer.PhoneNumber,
+                Retired = customer.Retired
             }
         };
     }

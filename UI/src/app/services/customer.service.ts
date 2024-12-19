@@ -45,4 +45,12 @@ export class CustomerService {
       })
     );
   }
+
+  retireCustomer(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/customer/${id}/retire`, {}).pipe(
+      map(() => {
+        this.customersUpdated.next();
+      })
+    );
+  }
 }

@@ -19,14 +19,14 @@ export class CustomerComponent {
   private routeSub: Subscription;
   private updateSub: Subscription;
 
-  constructor(private userService : CustomerService, 
+  constructor(private customerService : CustomerService, 
     private router: Router,
     private route: ActivatedRoute){
 
-    this.customers$ = this.userService.getAllCustomers();
+    this.customers$ = this.customerService.getAllCustomers();
 
-    this.updateSub = this.userService.getCustomersUpdated().subscribe(() => {
-      this.customers$ = this.userService.getAllCustomers();
+    this.updateSub = this.customerService.getCustomersUpdated().subscribe(() => {
+      this.customers$ = this.customerService.getAllCustomers();
     });
 
     this.routeSub = this.router.events
@@ -55,5 +55,16 @@ export class CustomerComponent {
 
   editCustomer(customerId: string) {
     this.router.navigate([`/customer/${customerId}/edit`]);
+  }
+
+  retireCustomer(customerId: string) {
+    this.customerService.retireCustomer(customerId).subscribe({
+      next: () => {
+        this.router.navigate(['/customer']);
+      },
+      error: (error) => {
+        console.error('Error retiring customer:', error);
+      },
+    });
   }
 }
