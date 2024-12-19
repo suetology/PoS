@@ -134,7 +134,7 @@ namespace PoS.WebApi.Application.Services.Item
             }
             existingItem.ItemGroupId = request.ItemGroupId ?? existingItem.ItemGroupId;
 
-            if (request.TaxIds != null || !request.TaxIds.Any())
+            if (request.TaxIds != null && request.TaxIds.Count > 0)
             {
                 var taxes = await _taxRepository.GetTaxesByIds(request.TaxIds);
 
