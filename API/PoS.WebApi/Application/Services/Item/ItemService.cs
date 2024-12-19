@@ -1,5 +1,6 @@
 ﻿using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Item.Contracts;
+using PoS.WebApi.Application.Services.Tax.Contracts;
 using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Domain.Entities;
 
@@ -88,7 +89,15 @@ namespace PoS.WebApi.Application.Services.Item
             {
                 throw new KeyNotFoundException("Item is not found");
             }
-            
+
+            var taxDto = item.Taxes.Select(t => new TaxDto {
+                Id = t.Id,
+                Name = t.Name,
+                Value = t.Value,
+                Type = t.Type,
+                IsPercentage = t.IsPercentage
+            }).ToList();
+
             return new GetItemResponse
             {
                 Item = new ItemDto
@@ -101,6 +110,7 @@ namespace PoS.WebApi.Application.Services.Item
                     Image = item.Image,
                     ItemGroupId = item.ItemGroupId,
                     TaxIds = taxIds,
+                    Taxes = taxDto
                 }
             };
         }
@@ -124,7 +134,7 @@ namespace PoS.WebApi.Application.Services.Item
             }
             existingItem.ItemGroupId = request.ItemGroupId ?? existingItem.ItemGroupId;
 
-            if (request.TaxIds != null && request.TaxIds.Count > 0)
+            if (request.TaxIds != null || !request.TaxIds.Any())
             {
                 var taxes = await _taxRepository.GetTaxesByIds(request.TaxIds);
 

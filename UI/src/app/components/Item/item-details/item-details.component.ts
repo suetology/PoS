@@ -43,15 +43,13 @@ export class ItemDetailsComponent {
         (item) => {
           this.item = item;
 
-          if (!item.itemGroupId) {
-            return;
+          if (item.itemGroupId) {
+            this.itemGroupService.getItemGroup(item.itemGroupId).subscribe({
+              next: (itemGroup) => {
+                this.itemGroupName = itemGroup.name;
+              }
+            });
           }
-
-          this.itemGroupService.getItemGroup(item.itemGroupId).subscribe(
-            (itemGroup) => {
-              this.itemGroupName = itemGroup.name;
-            }
-          );
 
           if (item.taxIds.length !== 0) {       
           for (const taxId of item.taxIds) {
