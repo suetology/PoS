@@ -6,31 +6,50 @@ using PoS.WebApi.Domain.Common;
 using Domain.Entities;
 using PoS.WebApi.Domain.Enums;
 using PoS.WebApi.Application.Services.Service.Contracts;
+using PoS.WebApi.Application.Services.Service;
 
 public class ReservationService : IReservationService
 {
+    private readonly IServiceService _serviceService;
     private readonly IReservationRepository _reservationRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IOrderRepository _orderRepository;
 
     public ReservationService(
+        IServiceService serviceService,
         IReservationRepository reservationRepository, 
-        IUnitOfWork unitOfWork, 
-        IOrderRepository orderRepository)
+        IUnitOfWork unitOfWork)
     {
+        _serviceService = serviceService;
         _reservationRepository = reservationRepository;
         _unitOfWork = unitOfWork;
-        _orderRepository = orderRepository;
     }
 
     public async Task CreateReservation(CreateReservationRequest request)
     {
-        // Validate employee availability
-        /*var availableTimes = await GetAvailableTimesForEmployee(request.EmployeeId, request.AppointmentTime.Date);
-        if (!availableTimes.Any(t => t == request.AppointmentTime))
+        var availableTimesRequest = new GetAvailableTimesRequest
         {
-            throw new InvalidOperationException("Selected time slot is not available");
-        }*/
+            Id = request.ServiceId,
+            BusinessId = request.BusinessId,
+            Date = request.AppointmentTime
+        };
+
+        var requestedTime = TimeOnly.FromDateTime(request.AppointmentTime);
+        var availableTimesResponse = await _serviceService.GetAvailableTimes(availableTimesRequest);
+        var isAvailable = false;
+
+        foreach (var availableTime in availableTimesResponse.AvailableTimes)
+        {
+            if (availableTime.Start <= requestedTime && requestedTime <= availableTime.End)
+            {
+                isAvailable = true;
+                break;
+            }
+        }
+
+        if (!isAvailable) 
+        {
+            throw new Exception("Requested appointment time is not avaiable");
+        }
 
         var reservation = new Reservation
         {
