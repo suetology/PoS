@@ -44,7 +44,8 @@ public class CustomerService : ICustomerService
             BusinessId = request.BusinessId,
             Name = request.Name,
             Email = request.Email,
-            PhoneNumber = request.PhoneNumber
+            PhoneNumber = request.PhoneNumber,
+            Retired = false,
         };
 
         await _customerRepository.Create(customer);
@@ -66,7 +67,8 @@ public class CustomerService : ICustomerService
                 Id = c.Id,
                 Name = c.Name,
                 Email = c.Email,
-                PhoneNumber = c.PhoneNumber
+                PhoneNumber = c.PhoneNumber,
+                Retired = c.Retired
             });
 
         return new GetAllCustomersResponse
@@ -78,7 +80,7 @@ public class CustomerService : ICustomerService
     public async Task UpdateCustomer(UpdateCustomerRequest request)
     {
         var existingCustomer = await _customerRepository.Get(request.Id);
-        if (existingCustomer == null || existingCustomer.BusinessId != request.BusinessId)
+        if (existingCustomer == null || existingCustomer.BusinessId != request.BusinessId || true == existingCustomer.Retired)
         {
             throw new KeyNotFoundException("Customer not found or unauthorised.");
         }
@@ -86,6 +88,22 @@ public class CustomerService : ICustomerService
         existingCustomer.Name = request.Name;
         existingCustomer.Email = request.Email;
         existingCustomer.PhoneNumber = request.PhoneNumber;
+
+        await _customerRepository.Update(existingCustomer);
+        await _unitOfWork.SaveChanges();
+    }
+
+    public async Task RetireCustomer(RetireCustomerRequest request)
+    {
+        var existingCustomer = await _customerRepository.Get(request.Id);
+        if (existingCustomer == null || existingCustomer.BusinessId != request.BusinessId || true == existingCustomer.Retired)
+        {
+            throw new KeyNotFoundException("Customer not found or unauthorised.");
+        }
+
+        existingCustomer.Retired = true;
+
+        // TODO: Cancel all open orders.
 
         await _customerRepository.Update(existingCustomer);
         await _unitOfWork.SaveChanges();

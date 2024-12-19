@@ -9,5 +9,6 @@ public interface ICustomerService
     Task<CreateCustomerResponse> CreateCustomer(CreateCustomerRequest customer);
     Task UpdateCustomer(UpdateCustomerRequest request);
     Task<GetAllCustomersResponse> GetAll(GetAllCustomersRequest request);
+    Task RetireCustomer(RetireCustomerRequest request);
 }
 

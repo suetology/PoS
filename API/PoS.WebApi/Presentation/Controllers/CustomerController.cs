@@ -114,5 +114,28 @@ namespace PoS.WebApi.Presentation.Controllers
 
             return NoContent();
         }
+
+        [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+        [HttpPatch("{customerId}/retire")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RetireCustomer(Guid customerId, RetireCustomerRequest request)
+        {
+            var businessId = User.GetBusinessId();
+            if (businessId == null)
+            {
+                return Unauthorized("Failed to retrieve Business ID");
+            }
+
+            request.Id = customerId;
+            request.BusinessId = businessId.Value;
+
+            await _customerService.RetireCustomer(request);
+
+            return NoContent();
+        }
     }
 }
