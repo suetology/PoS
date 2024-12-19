@@ -5,25 +5,25 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th scope="col" class="px-4 py-3">Name</th>
-                        <th scope="col" class="px-4 py-3">Type</th>
+                        <th scope="col" class="px-4 py-3">Description</th>
                         <th scope="col" class="px-4 py-3">Value</th>
                         <th scope="col" class="px-4 py-3">% | € | $</th>
                         <th scope="col"> Actions </th>
                     </tr>
                 </thead>
-                @if (taxes$ | async; as tax) {
-                    @for(tax of taxes$ | async ; track tax.id) 
+                @if (serviceCharges$ | async; as serviceCharge) {
+                    @for(serviceCharge of serviceCharges$ | async ; track serviceCharge.id) 
                     {
                     <tbody>
                         <tr class="border-b cursor-pointer hover:bg-gray-100" 
-                        (click)="goToTaxDetails(tax.id)">
+                        (click)="goToServiceChargeDetails(serviceCharge.id)">
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                                {{ tax.name }}</th>
-                            <td class="px-4 py-3">{{ tax.type }}</td>
-                            <td class="px-4 py-3">{{ tax.value }}</td>
-                            <td class="px-4 py-3">{{ tax.isPercentage ? '%' : '€' }}</td>
+                                {{ serviceCharge.name }}</th>
+                            <td class="px-4 py-3">{{ serviceCharge.description }}</td>
+                            <td class="px-4 py-3">{{ serviceCharge.value }}</td>
+                            <td class="px-4 py-3">{{ serviceCharge.isPercentage ? '%' : '€' }}</td>
                             <td class="font-medium text-cyan-500 hover:underline cursor-pointer"
-                            (click)="$event.stopPropagation(); editTax(tax?.id || '')"
+                            (click)="$event.stopPropagation(); editServiceCharge(serviceCharge?.id || '')"
                             >Edit
                             </td>
                             <!-- <td class="px-4 py-3 flex items-center justify-end">
@@ -51,7 +51,7 @@
                     }
                 } @else {
                     <tr class="border-b">
-                        <td class="px-4 py-3">No taxes created yet.</td>
+                        <td class="px-4 py-3">No service charges created yet.</td>
                     </tr>
                 }
             </table>

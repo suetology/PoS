@@ -241,6 +241,7 @@ export interface ServiceCharge {
     description: string;
     value: number;
     isPercentage: boolean;
+    retired: boolean;
 }
 
 export interface ServiceChargeResponse {
@@ -252,6 +253,13 @@ export interface ServiceChargeRequest {
     description: string;
     value: number;
     isPercentage: boolean;
+}
+
+export interface UpdateServiceChargeRequest {
+    name?: string;
+    description?: string;
+    value?: number;
+    isPercentage?: boolean;
 }
 
 export interface ItemGroup {
