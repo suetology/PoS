@@ -210,9 +210,7 @@ public class ServiceService : IServiceService
         }
 
         existingService.IsActive = false;
-
-        // TODO: see how other entities could change.
-
+        
         await _serviceRepository.Update(existingService);
         await _unitOfWork.SaveChanges();
     }
