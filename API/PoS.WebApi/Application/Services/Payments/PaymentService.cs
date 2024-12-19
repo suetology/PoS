@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using PoS.WebApi.Application.Repositories;
+using PoS.WebApi.Application.Services.Order.Exceptions;
 using PoS.WebApi.Application.Services.Payments.Contracts;
 using PoS.WebApi.Domain.Common;
 using PoS.WebApi.Domain.Entities;
@@ -30,9 +31,14 @@ public class PaymentService : IPaymentService
     {
         var order = await _orderRepository.Get(request.OrderId);
 
-        if (order == null || (order.Status != OrderStatus.Open && order.Status != OrderStatus.PartiallyPaid))
+        if (order == null)
         {
-            return null;
+            throw new KeyNotFoundException("Order is not found");
+        }
+
+        if (order.Status != OrderStatus.Open && order.Status != OrderStatus.PartiallyPaid)
+        {
+            throw new InvalidOrderStateException("Only open and partially paid orders can be paid");
         }
 
         var options = new SessionCreateOptions
@@ -85,10 +91,15 @@ public class PaymentService : IPaymentService
     {
         var order = await _orderRepository.Get(request.OrderId);
 
-        if (order == null || (order.Status != OrderStatus.Open && order.Status != OrderStatus.PartiallyPaid))
+        if (order == null)
         {
-            return;
-        } 
+            throw new KeyNotFoundException("Order is not found");
+        }
+
+        if (order.Status != OrderStatus.Open && order.Status != OrderStatus.PartiallyPaid)
+        {
+            throw new InvalidOrderStateException("Only open and partially paid orders can be paid");
+        }
         
         var payment = new Payment
         {
@@ -132,7 +143,7 @@ public class PaymentService : IPaymentService
 
         if (payment == null)
         {
-            return;
+            throw new KeyNotFoundException("Payment is not found");
         }
 
         payment.State = request.Event.Type == EventTypes.CheckoutSessionCompleted ? PaymentState.Succeeded : PaymentState.Failed;

@@ -56,6 +56,11 @@ public class BusinessService : IBusinessService
     {
         var business = await _businessRepository.Get(request.Id);
 
+        if (business == null)
+        {
+            throw new KeyNotFoundException("Business is not found");
+        }
+
         return new GetBusinessResponse
         {
             Business = new BusinessDto
@@ -75,7 +80,7 @@ public class BusinessService : IBusinessService
 
         if (existingBusiness == null)
         {
-            return false;
+            throw new KeyNotFoundException("Business is not found");
         }
         
         existingBusiness.Name = request.Name ?? existingBusiness.Name;

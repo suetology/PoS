@@ -82,10 +82,6 @@ public class ReservationController : ControllerBase
         };
 
         var response = await _reservationService.GetReservationById(request);
-        if (response == null)
-        {
-            return NotFound(new { message = "Reservation not found" });
-        }
 
         return Ok(response);
     }

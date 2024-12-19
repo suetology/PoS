@@ -156,12 +156,7 @@ public class UserController : ControllerBase
         request.BusinessId = businessId.Value;
         request.Id = userId;
 
-        var sucess = await _userService.UpdateUser(request);
-
-        if (!sucess)
-        {
-            return NotFound();
-        }
+        await _userService.UpdateUser(request);
 
         return NoContent();
     }

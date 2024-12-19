@@ -68,11 +68,6 @@ public class ItemGroupController : ControllerBase
         
         var response = await _itemGroupService.GetItemGroupByIdAsync(request);
 
-        if (response == null)
-        {
-            return NotFound();
-        }
-
         return Ok(response);
     }
 
@@ -96,6 +91,7 @@ public class ItemGroupController : ControllerBase
         request.BusinessId = businessId.Value;
         
         await _itemGroupService.CreateItemGroup(request);
+        
         return NoContent();
     }
 

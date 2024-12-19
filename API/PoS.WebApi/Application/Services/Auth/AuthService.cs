@@ -25,7 +25,7 @@ public class AuthService : IAuthService
     {
         var user = await _userRepository.GetByUsername(request.Username);
         
-        if (user == null || user.PasswordHash != request.Password) //passwordo checka reiks pakeist veliau
+        if (user == null || user.PasswordHash != request.Password)
         {
             throw new InvalidCredentialException("Invalid credentials.");
         }

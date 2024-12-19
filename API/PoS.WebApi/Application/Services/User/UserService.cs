@@ -7,6 +7,7 @@ namespace PoS.WebApi.Application.Services.User;
 using Domain.Entities;
 using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Customer.Contracts;
+using PoS.WebApi.Application.Services.Order.Exceptions;
 using PoS.WebApi.Application.Services.User.Contracts;
 using PoS.WebApi.Domain.Common;
 
@@ -34,6 +35,17 @@ public class UserService : IUserService
 
     public async Task CreateUser(CreateUserRequest request)
     {
+        if (request.Role == Role.BusinessOwner)
+        {
+            var users = await _userRepository.GetAll();
+            var businessUsers = users.Where(u => u.BusinessId == request.BusinessId);
+
+            if (businessUsers.Any(u => u.Role == Role.BusinessOwner))
+            {
+                throw new InvalidUserRoleException("Business can have only one owner");
+            }
+        }
+
         var user = new User
         {
             Username = request.Username,
@@ -97,7 +109,7 @@ public class UserService : IUserService
 
         if (user == null || user.BusinessId != request.BusinessId)
         {
-            return null;
+            throw new KeyNotFoundException("User is not found");
         }
 
         return new GetUserResponse
@@ -131,7 +143,7 @@ public class UserService : IUserService
 
         if (existingUser == null)
         {
-            return false;
+            throw new KeyNotFoundException("User is not found");
         }
 
         existingUser.Username = request.Username ?? existingUser.Username;
@@ -141,6 +153,17 @@ public class UserService : IUserService
         existingUser.Email = request.Email ?? existingUser.Email;
         existingUser.PhoneNumber = request.PhoneNumber ?? existingUser.PhoneNumber;
         existingUser.Role = request.Role;
+
+        if (request.Role == Role.BusinessOwner)
+        {
+            var users = await _userRepository.GetAll();
+            var businessUsers = users.Where(u => u.BusinessId == request.BusinessId);
+
+            if (businessUsers.Any(u => u.Role == Role.BusinessOwner))
+            {
+                throw new InvalidUserRoleException("Business can have only one owner");
+            }
+        }
 
         await _userRepository.Update(existingUser);
         await _unitOfWork.SaveChanges();
@@ -162,7 +185,7 @@ public class UserService : IUserService
 
         if (user == null)
         {
-            return;
+            throw new KeyNotFoundException("User is not found");
         }
         
         user.BusinessId = request.BusinessId;
