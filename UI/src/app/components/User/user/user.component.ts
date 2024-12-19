@@ -56,4 +56,15 @@ export class UserComponent {
   editUser(userId: string) {
     this.router.navigate([`/user/${userId}/edit`]);
   }
+
+  retireUser(userId: string) {
+    this.userService.retireUser(userId).subscribe({
+      next: () => {
+        this.router.navigate(['/user']);
+      },
+      error: (error) => {
+        console.error('Error retiring user:', error);
+      },
+    });
+  }
 }

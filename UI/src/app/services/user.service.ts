@@ -50,4 +50,12 @@ export class UserService {
       map((response) => response)
     );
   }
+
+  retireUser(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/users/${id}/retire`, {}).pipe(
+      map(() => {
+        this.usersUpdated.next();
+      })
+    );
+  }
 }
