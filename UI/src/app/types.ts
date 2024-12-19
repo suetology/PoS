@@ -102,7 +102,6 @@ export interface UpdateUserRequest {
     email?: string,
     phoneNumber?: string,
     role?: Role,
-    status?: UserStatus
 }
 
 export interface GetAllUsersRequest {

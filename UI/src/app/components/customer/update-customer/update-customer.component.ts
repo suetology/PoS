@@ -7,7 +7,7 @@ import { CustomerService } from '../../../services/customer.service';
 @Component({
   selector: 'app-update-customer',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, AsyncPipe, NgIf],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './update-customer.component.html',
   styleUrl: './update-customer.component.css'
 })

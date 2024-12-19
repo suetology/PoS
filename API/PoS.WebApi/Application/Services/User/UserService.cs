@@ -141,7 +141,6 @@ public class UserService : IUserService
         existingUser.Email = request.Email ?? existingUser.Email;
         existingUser.PhoneNumber = request.PhoneNumber ?? existingUser.PhoneNumber;
         existingUser.Role = request.Role;
-        existingUser.Status = request.Status;
 
         await _userRepository.Update(existingUser);
         await _unitOfWork.SaveChanges();
@@ -169,6 +168,42 @@ public class UserService : IUserService
         user.BusinessId = request.BusinessId;
         
         await _unitOfWork.SaveChanges();
+    }
+
+    public async Task<GetAllUsersResponse> GetAllActiveUsers(GetAllUsersRequest request)
+    {
+        var shifts = await _shiftRepository.GetAll();
+
+        var users = await _userRepository.GetAllUsersByFiltering(request.QueryParameters);
+        var usersDtos = users
+            .Where(u => u.BusinessId == request.BusinessId && UserStatus.Active == u.Status)
+            .Select(u => new UserDto
+            {
+                Id = u.Id,
+                Username = u.Username,
+                PasswordHash = u.PasswordHash,
+                Name = u.Name,
+                Surname = u.Surname,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                Role = u.Role,
+                Status = u.Status,
+                DateOfEmployment = u.DateOfEmployment,
+                Shifts = shifts
+                    .Where(s => s.EmployeeId == u.Id)
+                    .Select(s => new ShiftDto
+                    {
+                        Id = s.Id,
+                        Date = s.Date.ToString("yyyy-MM-dd"),
+                        StartTime = s.StartTime.ToString("HH:mm"),
+                        EndTime = s.EndTime.ToString("HH:mm")
+                    })
+            });
+
+        return new GetAllUsersResponse
+        {
+            Users = usersDtos
+        };
     }
 
     public async Task RetireUser(RetireUserRequest request)

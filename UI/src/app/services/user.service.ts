@@ -17,6 +17,12 @@ export class UserService {
       map(response => response.users.filter(u => u.role != Role.SuperAdmin))
     );
   }
+
+  getActiveUsers(): Observable<User[]> {
+    return this.http.get<GetAllUsersResponse>(`${environment.API_URL}/users/active`).pipe(
+      map(response => response.users.filter(u => u.role != Role.SuperAdmin))
+    );
+  }
   
   getUser(id: string): Observable<User>{
     return this.http.get<{user: User}>(`${environment.API_URL}/users/${id}`).pipe(

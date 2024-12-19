@@ -24,6 +24,4 @@ public class UpdateUserRequest
     public string PhoneNumber { get; set; }
 
     public Role Role { get; set; }
-
-    public UserStatus Status { get; set; }
 }

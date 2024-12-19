@@ -8,7 +8,7 @@ import { ServiceService } from '../../../services/service.service';
 @Component({
   selector: 'app-add-service',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, AsyncPipe, NgFor],
+  imports: [FormsModule, ReactiveFormsModule, NgFor],
   templateUrl: './add-service.component.html',
   styleUrl: './add-service.component.css'
 })
@@ -33,7 +33,7 @@ export class AddServiceComponent implements OnInit {
   }
 
   getEmployees() {
-    this.userService.getUsers().subscribe(
+    this.userService.getActiveUsers().subscribe(
       (response) => {
         this.employees = response;  
       }
