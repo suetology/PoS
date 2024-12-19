@@ -57,5 +57,16 @@ export class ServiceChargeComponent {
   editServiceCharge(serviceChargeId: string) {
     this.router.navigate([`/service-charge/${serviceChargeId}/edit`]);
   }
+
+  retireServiceCharge(taxId: string) {
+    this.serviceChargeService.retireServiceCharge(taxId).subscribe({
+      next: () => {
+        this.router.navigate(['/service-charge']);
+      },
+      error: (error) => {
+        console.error('Error retiring service charge:', error);
+      },
+    });
+}
 }
 

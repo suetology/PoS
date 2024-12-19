@@ -45,4 +45,12 @@ export class TaxService {
       })
     );
   }
+
+  retireTax(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/tax/${id}/retire`, {}).pipe(
+      map(() => {
+        this.taxesUpdated.next();
+      })
+    );
+  }
 }

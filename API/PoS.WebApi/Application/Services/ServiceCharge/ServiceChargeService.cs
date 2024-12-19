@@ -123,5 +123,18 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
             await _unitOfWork.SaveChanges();
         }
 
+        public async Task RetireServiceCharge(RetireServiceChargeRequest request)
+        {
+            var existingServiceCharge = await _serviceChargeRepository.Get(request.Id);
+            if (existingServiceCharge == null || existingServiceCharge.BusinessId != request.BusinessId || true == existingServiceCharge.Retired)
+            {
+                throw new KeyNotFoundException("Tax not found or unauthorised.");
+            }
+
+            existingServiceCharge.Retired = true;
+
+            await _serviceChargeRepository.Update(existingServiceCharge);
+            await _unitOfWork.SaveChanges();
+        }
     }
 }

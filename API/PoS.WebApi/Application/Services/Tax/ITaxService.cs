@@ -12,4 +12,5 @@ public interface ITaxService
     
     Task CreateTax(CreateTaxRequest request);
     Task UpdateTax(UpdateTaxRequest request);
+    Task RetireTax(RetireTaxRequest request);
 }
