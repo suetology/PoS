@@ -92,7 +92,7 @@ export interface CreateUserRequest {
     email: string,
     phoneNumber: string,
     role: Role,
-    status: EmployeeStatus
+    status: UserStatus
 }
 
 export interface UpdateUserRequest {
@@ -103,7 +103,7 @@ export interface UpdateUserRequest {
     email?: string,
     phoneNumber?: string,
     role?: Role,
-    status?: EmployeeStatus
+    status?: UserStatus
 }
 
 export interface GetAllUsersRequest {
@@ -123,7 +123,7 @@ export interface User {
     email: string,
     phoneNumber: string,
     role: Role,
-    status: EmployeeStatus,
+    status: UserStatus,
     dateOfEmployment: string,
     shifts: Shift[]
 }
@@ -188,15 +188,9 @@ export enum Role {
     Employee = 'Employee'
 }
 
-export enum EmployeeStatus {
+export enum UserStatus {
     Active = 1,
     Left,
-    Fired,
-    UnpaidLeave,
-    PaidLeave,
-    SickLeave,
-    ChildcareLeave,
-    NotEmployee
 }
 
 export interface GroupDiscount {

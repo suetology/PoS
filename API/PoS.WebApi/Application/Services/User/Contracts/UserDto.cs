@@ -13,7 +13,7 @@ public class UserDto
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public Role Role { get; set; }
-    public EmployeeStatus Status { get; set; }
+    public UserStatus Status { get; set; }
     public DateTime DateOfEmployment { get; set; }
     public IEnumerable<ShiftDto> Shifts { get; set; }
 }

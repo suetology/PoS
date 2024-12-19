@@ -19,7 +19,7 @@ public class User : Entity
     
     public Role Role { get; set; }
     
-    public EmployeeStatus Status { get; set; }
+    public UserStatus Status { get; set; }
     
     public DateTime DateOfEmployment { get; set; }
     
