@@ -12,5 +12,6 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
         Task<GetServiceChargeResponse> GetServiceCharge(GetServiceChargeRequest request);
         Task CreateServiceCharge(CreateServiceChargeRequest request);
         Task UpdateServiceCharge(UpdateServiceChargeRequest request);
+        Task RetireServiceCharge(RetireServiceChargeRequest request);
     }
 }
