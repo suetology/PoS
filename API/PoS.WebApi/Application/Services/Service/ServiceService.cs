@@ -6,6 +6,7 @@ using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Domain.Entities;
 using PoS.WebApi.Domain.Common;
+using PoS.WebApi.Application.Services.User.Contracts;
 
 public class ServiceService : IServiceService
 {
@@ -213,5 +214,25 @@ public class ServiceService : IServiceService
         
         await _serviceRepository.Update(existingService);
         await _unitOfWork.SaveChanges();
+    }
+
+    public async Task RetireEmployeeServices(RetireEmployeeServiceRequest request)
+    {
+        var services = await _serviceRepository.GetAll();
+        var serviceIds = services
+            .Where(s => s.BusinessId == request.BusinessId && s.EmployeeId == request.EmployeeId && true == s.IsActive)
+            .Select(s => s.Id)
+            .ToArray();
+
+        foreach (var id in serviceIds)
+        {
+            var retireServiceRequest = new RetireServiceRequest
+            {
+                Id = id,
+                BusinessId = request.BusinessId
+            };
+
+            await RetireService(retireServiceRequest);
+        }
     }
 }

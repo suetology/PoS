@@ -1,7 +1,7 @@
 ﻿namespace PoS.WebApi.Application.Services.Service;
 
 using PoS.WebApi.Application.Services.Service.Contracts;
-
+using PoS.WebApi.Application.Services.User.Contracts;
 
 public interface IServiceService
     {
@@ -12,4 +12,5 @@ public interface IServiceService
         Task UpdateService(UpdateServiceRequest request);
         Task<GetAvailableTimesResponse> GetAvailableTimes(GetAvailableTimesRequest request);
         Task RetireService(RetireServiceRequest request);
+        Task RetireEmployeeServices(RetireEmployeeServiceRequest request);
     }
