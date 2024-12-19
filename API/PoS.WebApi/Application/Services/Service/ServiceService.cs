@@ -109,9 +109,9 @@ public class ServiceService : IServiceService
     {
         var existingService = await _serviceRepository.Get(request.Id);
 
-        if (existingService == null || existingService.BusinessId != request.BusinessId)
+        if (existingService == null || existingService.BusinessId != request.BusinessId || false == existingService.IsActive)
         {
-            throw new KeyNotFoundException("Service not found.");
+            throw new KeyNotFoundException("Service not found or unauthorised.");
         }
         
         existingService.Name = request.Name ?? existingService.Name;
@@ -199,5 +199,21 @@ public class ServiceService : IServiceService
         {
             AvailableTimes = availableTimes
         };
+    }
+
+    public async Task RetireService(RetireServiceRequest request)
+    {
+        var existingService = await _serviceRepository.Get(request.Id);
+        if (existingService == null || existingService.BusinessId != request.BusinessId || false == existingService.IsActive)
+        {
+            throw new KeyNotFoundException("Service not found or unauthorised.");
+        }
+
+        existingService.IsActive = false;
+
+        // TODO: see how other entities could change.
+
+        await _serviceRepository.Update(existingService);
+        await _unitOfWork.SaveChanges();
     }
 }

@@ -29,7 +29,7 @@ export class AddReservationToOrderComponent implements OnInit {
   ngOnInit() {
     this.serviceService.getServices().subscribe(
       (response) => {
-        this.services = response.filter(s => s.isActive);
+        this.services = response;
       }
     );
   }

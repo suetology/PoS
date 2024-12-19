@@ -13,7 +13,7 @@ export class ServiceService {
   constructor(private http: HttpClient) { }
   
   getServices(): Observable<Service[]> {
-    return this.http.get<GetAllServicesResponse>(`${environment.API_URL}/services`).pipe(
+    return this.http.get<GetAllServicesResponse>(`${environment.API_URL}/services/active`).pipe(
       map(response => response.services)
     );
   }
