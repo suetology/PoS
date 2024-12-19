@@ -36,7 +36,6 @@ export class UpdateUserComponent {
       phoneNumber: [''],
       email: [''],
       role: [''],
-      status: ['']
     });
 
     this.loadUser();

@@ -67,5 +67,5 @@ export class TaxComponent {
         console.error('Error retiring tax:', error);
       },
     });
-}
+  }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoS.WebApi.Application.Services.Customer.Contracts;
 using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -49,9 +50,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAllUsers([FromQuery] Application.Services.User.QueryParameters parameters)
+    public async Task<IActionResult> GetAllUsers([FromQuery] QueryParameters parameters)
     {
-        if (!Application.Services.User.QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
+        if (!QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
         {
             return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
         }
@@ -70,6 +71,37 @@ public class UserController : ControllerBase
         };
 
         var response = await _userService.GetAllUsers(request);
+
+        return Ok(response);
+    }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpGet("active")]
+    [Tags("User Management")]
+    [ProducesResponseType(typeof(GetAllCustomersResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllActiveUsers([FromQuery] QueryParameters parameters)
+    {
+        if (!QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
+        {
+            return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
+        }
+
+        var businessId = User.GetBusinessId();
+
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        var request = new GetAllUsersRequest
+        {
+            BusinessId = businessId.Value,
+            QueryParameters = parameters
+        };
+        
+        var response = await _userService.GetAllActiveUsers(request);
 
         return Ok(response);
     }
@@ -155,6 +187,32 @@ public class UserController : ControllerBase
         request.UserId = userId;
 
         await _userService.SetBusiness(request);
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
+    [HttpPatch("{userId}/retire")]
+    [Tags("User Management")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RetireCustomer(Guid userId, RetireUserRequest request)
+    {
+        var businessId = User.GetBusinessId();
+        if (businessId == null)
+        {
+            return Unauthorized("Failed to retrieve Business ID");
+        }
+
+        request.Id = userId;
+        request.BusinessId = businessId.Value;
+        
+        await _userService.RetireUser(request);
+
+        // TODO: Figure out shifts, orders...
 
         return NoContent();
     }

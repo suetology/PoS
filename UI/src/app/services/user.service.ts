@@ -17,6 +17,12 @@ export class UserService {
       map(response => response.users.filter(u => u.role != Role.SuperAdmin))
     );
   }
+
+  getActiveUsers(): Observable<User[]> {
+    return this.http.get<GetAllUsersResponse>(`${environment.API_URL}/users/active`).pipe(
+      map(response => response.users.filter(u => u.role != Role.SuperAdmin))
+    );
+  }
   
   getUser(id: string): Observable<User>{
     return this.http.get<{user: User}>(`${environment.API_URL}/users/${id}`).pipe(
@@ -48,6 +54,14 @@ export class UserService {
   setBusiness(userId: string, businessId: string): Observable<void> {
     return this.http.patch<void>(`${environment.API_URL}/users/${userId}/set-business`, { businessId: businessId }).pipe(
       map((response) => response)
+    );
+  }
+
+  retireUser(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/users/${id}/retire`, {}).pipe(
+      map(() => {
+        this.usersUpdated.next();
+      })
     );
   }
 }
