@@ -52,10 +52,10 @@ export class UpdateServiceChargeComponent {
     this.serviceChargeService.updateServiceCharge(this.serviceChargeId, request)
       .subscribe({
         next: () => {
-          this.router.navigate(['/serviceCharge']);
+          this.router.navigate(['/service-charge']);
         },
         error: (error) => {
-          console.error('Error updating tax:', error);
+          console.error('Error updating service charge:', error);
         },
       });
   }
@@ -65,6 +65,6 @@ export class UpdateServiceChargeComponent {
   }
 
   goBack() {
-    this.router.navigate(['/serviceCharge']);
+    this.router.navigate(['/service-charge']);
   }
 }

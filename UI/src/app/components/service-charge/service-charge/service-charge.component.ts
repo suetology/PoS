@@ -1,26 +1,28 @@
 import { Component } from '@angular/core';
+import { ServiceCharge, Tax } from '../../../types';
 import { filter, Observable, Subscription } from 'rxjs';
-import { ServiceCharge } from '../../../types';
-import { ServiceChargeService } from '../../../services/service-charge.service';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { ServiceChargeService } from '../../../services/service-charge.service';
 
 @Component({
   selector: 'app-service-charge',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [CommonModule, AsyncPipe, RouterOutlet],
   templateUrl: './service-charge.component.html',
   styleUrl: './service-charge.component.css'
 })
 export class ServiceChargeComponent {
-
+  
   serviceCharges$: Observable<ServiceCharge[]>;
   isModalOpen = false;
   private routeSub: Subscription;
   private updateSub: Subscription;
 
   constructor(private serviceChargeService : ServiceChargeService, 
-    private router: Router, private route: ActivatedRoute) {
+    private router: Router,
+    private route: ActivatedRoute){
 
     this.serviceCharges$ = this.serviceChargeService.getServiceCharges();
 
@@ -44,7 +46,7 @@ export class ServiceChargeComponent {
     }
   }
 
-  trackById(index: number, serviceCharge: ServiceCharge): string {
+  trackById(index: number, serviceCharge: Tax): string {
     return serviceCharge.id;
   }
 
@@ -53,6 +55,7 @@ export class ServiceChargeComponent {
   }
 
   editServiceCharge(serviceChargeId: string) {
-    this.router.navigate([`/serviceCharge/${serviceChargeId}/edit`]);
+    this.router.navigate([`/service-charge/${serviceChargeId}/edit`]);
   }
 }
+
