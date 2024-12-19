@@ -140,9 +140,9 @@ public class OrderService: IOrderService
                     await _reservationService.CreateReservation(request.Reservation);
                     
                     string message = $"Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
-                    if(message.Length < 100 && customer.Customer.PhoneNumber.Length < 16) { // Just in case we fuck something up
-                        Task.Run(() => _notificationService.SendSMS(message, customer.Customer.PhoneNumber));
-                    }
+                    // if(message.Length < 100 && customer.Customer.PhoneNumber.Length < 16) { // Just in case we fuck something up
+                    //     Task.Run(() => _notificationService.SendSMS(message, customer.Customer.PhoneNumber));
+                    // }
                 }
 
                 await transaction.CommitAsync();
@@ -592,6 +592,26 @@ public class OrderService: IOrderService
             var cancelOrderRequest = new CancelOrderRequest
             {
                 Id = Id,
+                BusinessId = request.BusinessId
+            };
+
+            await CancelOrder(cancelOrderRequest);
+        }
+    }
+
+    public async Task RetireOrdersWithReservation(RetireOrdersWithReservationRequest request)
+    {
+        var orders = await _orderRepository.GetAll();
+        var orderIds = orders
+            .Where(o => o.BusinessId == request.BusinessId && null != o.Reservation && o.Reservation.ServiceId == request.ServiceId && OrderStatus.Open == o.Status)
+            .Select(o => o.Id)
+            .ToArray();
+
+        foreach (var id in orderIds)
+        {
+            var cancelOrderRequest = new CancelOrderRequest
+            {
+                Id = id,
                 BusinessId = request.BusinessId
             };
 

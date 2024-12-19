@@ -10,6 +10,7 @@ public interface IOrderService
     Task<GetOrderResponse> GetOrder(GetOrderRequest request);
     Task CancelOrder(CancelOrderRequest request);
     Task RetireOpenOrders(RetireOpenOrdersRequest request);
+    Task RetireOrdersWithReservation(RetireOrdersWithReservationRequest request);
     Task AddTip(AddTipRequest request);
     Task<bool> UpdateReservation(UpdateOrderReservationRequest request);
     Task<bool> UpdateItemQuantityInOrder(UpdateOrderRequest request);

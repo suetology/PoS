@@ -1,6 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoS.WebApi.Application.Repositories;
 using PoS.WebApi.Application.Services.Customer.Contracts;
+using PoS.WebApi.Application.Services.Order;
+using PoS.WebApi.Application.Services.Order.Contracts;
+using PoS.WebApi.Application.Services.Service;
+using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Application.Services.User;
 using PoS.WebApi.Application.Services.User.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -13,10 +18,16 @@ namespace PoS.WebApi.Presentation.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IServiceService _serviceService;
+    private readonly IServiceRepository _serviceRepository;
+    private readonly IOrderService _orderService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IServiceService serviceService, IServiceRepository serviceRepository, IOrderService orderService)
     {
         _userService = userService;
+        _serviceService = serviceService;
+        _serviceRepository = serviceRepository;
+        _orderService = orderService;
     }
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
@@ -199,7 +210,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RetireCustomer(Guid userId, RetireUserRequest request)
+    public async Task<IActionResult> RetireUser(Guid userId, RetireUserRequest request)
     {
         var businessId = User.GetBusinessId();
         if (businessId == null)
@@ -212,7 +223,38 @@ public class UserController : ControllerBase
         
         await _userService.RetireUser(request);
 
-        // TODO: Figure out shifts, orders...
+        var services = await _serviceRepository.GetAll();
+        var serviceDtos = services
+            .Where(s => s.BusinessId == request.BusinessId && true == s.IsActive && s.EmployeeId == userId)
+            .Select(s => new ServiceDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Description = s.Description,
+                Price = s.Price,
+                Duration = s.Duration,
+                IsActive = s.IsActive,
+                EmployeeId = s.EmployeeId
+            });
+
+        foreach (var service in serviceDtos) {
+            if(service.EmployeeId == userId) {
+                var retireServiceRequest = new RetireServiceRequest {
+                    Id = service.Id,
+                    BusinessId = request.BusinessId
+                };
+
+                await _serviceService.RetireService(retireServiceRequest);
+
+                var retireOrdersWithReservationRequest = new RetireOrdersWithReservationRequest
+                {
+                    BusinessId = request.BusinessId,
+                    ServiceId = service.Id
+                };
+
+                await _orderService.RetireOrdersWithReservation(retireOrdersWithReservationRequest);                
+            }
+        }
 
         return NoContent();
     }

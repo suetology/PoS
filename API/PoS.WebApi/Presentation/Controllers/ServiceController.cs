@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoS.WebApi.Application.Services.Order;
+using PoS.WebApi.Application.Services.Order.Contracts;
 using PoS.WebApi.Application.Services.Service;
 using PoS.WebApi.Application.Services.Service.Contracts;
 using PoS.WebApi.Domain.Enums;
@@ -12,10 +14,12 @@ namespace PoS.WebApi.Presentation.Controllers
     public class ServiceController : ControllerBase
     {
         private readonly IServiceService _serviceService;
+        private readonly IOrderService _orderService;
 
-        public ServiceController(IServiceService serviceService)
+        public ServiceController(IServiceService serviceService, IOrderService orderService)
         {
             _serviceService = serviceService;
+            _orderService = orderService;
         }
         
         [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)},{nameof(Role.Employee)}")]
@@ -196,6 +200,14 @@ namespace PoS.WebApi.Presentation.Controllers
             request.BusinessId = businessId.Value;
             
             await _serviceService.RetireService(request);
+
+            var retireOrdersWithReservationRequest = new RetireOrdersWithReservationRequest
+            {
+                ServiceId = serviceId,
+                BusinessId = request.BusinessId
+            };
+
+            await _orderService.RetireOrdersWithReservation(retireOrdersWithReservationRequest);
 
             return NoContent();
         }
