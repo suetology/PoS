@@ -86,7 +86,7 @@ public class DiscountService : IDiscountService
 
         if (discount == null || discount.BusinessId != request.BusinessId)
         {
-            return;
+            throw new KeyNotFoundException("Discount is not found");
         }
         
         await _discountRepository.Delete(request.Id);
@@ -133,7 +133,7 @@ public class DiscountService : IDiscountService
 
         if (discount == null || discount.BusinessId != request.BusinessId)
         {
-            return null;
+            throw new KeyNotFoundException("Discount is not found");
         }
         
         return new GetDiscountResponse

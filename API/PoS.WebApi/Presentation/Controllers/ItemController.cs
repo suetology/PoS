@@ -50,12 +50,7 @@ public class ItemController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllItems([FromQuery] QueryParameters parameters)
-    {
-        //if (!QueryParameters.AllowedSortFields.Contains(parameters.OrderBy.ToLower()))
-        //{
-        //    return BadRequest("Invalid sorting field. Allowed fields are name, surname, username, email, dateOfEmployment, and role.");
-        //}
-        
+    {     
         var businessId = User.GetBusinessId();
 
         if (businessId == null)

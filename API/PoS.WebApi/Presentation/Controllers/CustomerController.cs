@@ -45,10 +45,7 @@ namespace PoS.WebApi.Presentation.Controllers
             };
             
             var response = await _customerService.GetCustomer(request);
-            if (response == null)
-            {
-                return NotFound();
-            }
+            
             return Ok(response);
         }
 

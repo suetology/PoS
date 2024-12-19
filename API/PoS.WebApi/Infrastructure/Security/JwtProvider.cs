@@ -141,7 +141,6 @@ public class JwtProvider : IJwtProvider
         await _unitOfWork.SaveChanges();
     }
 
-    // Siaip reiketu cia normalesni encryptinga padaryt, bet dabar sueis
     private static string EncryptToken(string token)
     {
         var bytes = Encoding.UTF8.GetBytes(token);

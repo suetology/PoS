@@ -87,10 +87,6 @@ public class DiscountController : ControllerBase
         };
         
         var response = await _discountService.GetDiscount(request);
-        if (response == null)
-        {
-            return NotFound();
-        }
 
         return Ok(response);
     }
@@ -118,43 +114,8 @@ public class DiscountController : ControllerBase
         };
         
         await _discountService.DeleteDiscountById(request);
+
         return NoContent();
     }
-    
-    /*
-    // GROUP DISCOUNTS
-    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
-    [HttpPost("{discountId}/assign-group/{groupId}")]
-    public async Task<IActionResult> AssignDiscountToGroup([FromRoute] Guid discountId, [FromRoute] Guid groupId)
-    {
-        await _groupDiscountService.AssignDiscountToGroupAsync(discountId, groupId);
-        return NoContent();
-    }
-
-    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
-    [HttpDelete("{discountId}/remove-group/{groupId}")]
-    public async Task<IActionResult> RemoveDiscountFromGroup([FromRoute] Guid discountId, [FromRoute] Guid groupId)
-    {
-        await _groupDiscountService.RemoveDiscountFromGroupAsync(discountId, groupId);
-        return NoContent();
-    }
-
-    [HttpGet("groupDiscount")]
-    public async Task<IActionResult> GetAllGroups()
-    {
-        var groupDiscounts = await _groupDiscountService.GetAllGroups();
-        return Ok(groupDiscounts);
-    }
-
-    // SINGLE ITEM DISCOUNT
-
-    [Authorize(Roles = "SuperAdmin,BusinessOwner")]
-    [HttpPost("{discountId}/assign-item/{itemId}")]
-    public async Task<IActionResult> AssignDiscountToItem([FromRoute] Guid discountId, [FromRoute] Guid itemId)
-    {
-        await _itemDiscountService.AssignDiscountToItemAsync(discountId, itemId);
-        return NoContent();
-    }
-    */
 }
 

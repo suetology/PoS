@@ -69,7 +69,7 @@ public class BusinessController : ControllerBase
 
     [Authorize(Roles = $"{nameof(Role.SuperAdmin)},{nameof(Role.BusinessOwner)}")]
     [HttpPatch("{businessId}", Name = nameof(UpdateBusiness))]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -85,12 +85,7 @@ public class BusinessController : ControllerBase
 
         request.Id = businessId;
         
-        var sucess = await _businessService.UpdateBusiness(request);
-
-        if (!sucess)
-        {
-            return NotFound();
-        }
+        await _businessService.UpdateBusiness(request);
 
         return NoContent();
     }

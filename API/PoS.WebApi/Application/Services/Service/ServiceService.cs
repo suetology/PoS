@@ -24,6 +24,11 @@ public class ServiceService : IServiceService
     { 
         var service = await _serviceRepository.Get(request.Id);
 
+        if (service == null || service.BusinessId != request.BusinessId)
+        {
+            throw new KeyNotFoundException("Service is not found");
+        }
+
         return new GetServiceResponse
         {
             Service = new ServiceDto

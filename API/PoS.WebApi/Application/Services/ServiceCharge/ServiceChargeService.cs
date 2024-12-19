@@ -64,7 +64,7 @@ namespace PoS.WebApi.Application.Services.ServiceCharge
 
             if (serviceCharge == null || serviceCharge.BusinessId != request.BusinessId)
             {
-                return null;
+                throw new KeyNotFoundException("Service Charge is not found");
             }
 
             return new GetServiceChargeResponse

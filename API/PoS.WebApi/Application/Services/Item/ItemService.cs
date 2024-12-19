@@ -86,7 +86,7 @@ namespace PoS.WebApi.Application.Services.Item
 
             if (item?.BusinessId != request.BusinessId)
             {
-                return null;
+                throw new KeyNotFoundException("Item is not found");
             }
             
             return new GetItemResponse
@@ -111,7 +111,7 @@ namespace PoS.WebApi.Application.Services.Item
 
             if (existingItem == null || existingItem.BusinessId != request.BusinessId)
             {
-                return false;
+                throw new KeyNotFoundException("Item is not found");
             }
 
             existingItem.Name = request.Name ?? existingItem.Name;
@@ -164,7 +164,7 @@ namespace PoS.WebApi.Application.Services.Item
 
             if (itemVariation?.BusinessId != request.BusinessId)
             {
-                return null;
+                throw new KeyNotFoundException("Item Variation is not found");
             }
 
             return new GetItemVariationResponse
@@ -203,7 +203,7 @@ namespace PoS.WebApi.Application.Services.Item
 
             if (item == null || item.BusinessId != request.BusinessId)
             {
-                return;
+                throw new KeyNotFoundException("Item is not found");
             }
 
             item.Stock += request.StockChange;
@@ -217,7 +217,7 @@ namespace PoS.WebApi.Application.Services.Item
 
             if (itemVariation == null || itemVariation.BusinessId != request.BusinessId)
             {
-                return;
+                throw new KeyNotFoundException("Item Variation is not found");
             }
 
             itemVariation.Stock += request.StockChange;

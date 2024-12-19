@@ -69,10 +69,7 @@ namespace PoS.WebApi.Presentation.Controllers
             };
             
             var response = await _shiftService.GetShift(request);
-            if (response == null)
-            {
-                return NotFound();
-            }
+
             return Ok(response);
         }
 
