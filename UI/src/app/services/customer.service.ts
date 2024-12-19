@@ -14,7 +14,7 @@ export class CustomerService {
   constructor(private http: HttpClient) { }
 
   getAllCustomers(): Observable<Customer[]> {
-    return this.http.get<GetAllCustomersResponse>(`${environment.API_URL}/customer`).pipe(
+    return this.http.get<GetAllCustomersResponse>(`${environment.API_URL}/customer/active`).pipe(
       map(response => response.customers)
     );
   }
@@ -40,6 +40,14 @@ export class CustomerService {
 
   updateCustomer(id: string, request: UpdateCustomerRequest): Observable<void> {
     return this.http.patch<void>(`${environment.API_URL}/customer/${id}`, request).pipe(
+      map(() => {
+        this.customersUpdated.next();
+      })
+    );
+  }
+
+  retireCustomer(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/customer/${id}/retire`, {}).pipe(
       map(() => {
         this.customersUpdated.next();
       })

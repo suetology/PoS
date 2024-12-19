@@ -12,5 +12,7 @@ public class Customer : Entity
     
     public string PhoneNumber { get; set; }
     
+    public bool Retired { get; set; } = false;
+    
     public ICollection<Order> Orders { get; set; }
 }
