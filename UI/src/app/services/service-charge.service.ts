@@ -45,4 +45,12 @@ export class ServiceChargeService {
       })
     );
   }
+
+  retireServiceCharge(id: string): Observable<void> {
+    return this.http.patch<void>(`${environment.API_URL}/serviceCharge/${id}/retire`, {}).pipe(
+      map(() => {
+        this.serviceChargesUpdated.next();
+      })
+    );
+  }
 }
