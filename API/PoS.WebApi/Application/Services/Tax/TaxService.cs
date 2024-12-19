@@ -125,4 +125,18 @@ public class TaxService : ITaxService
         
         await _unitOfWork.SaveChanges();
     }
+
+    public async Task RetireTax(RetireTaxRequest request)
+    {
+        var existingTax = await _taxRepository.Get(request.Id);
+        if (existingTax == null || existingTax.BusinessId != request.BusinessId || true == existingTax.Retired)
+        {
+            throw new KeyNotFoundException("Tax not found or unauthorised.");
+        }
+
+        existingTax.Retired = true;
+
+        await _taxRepository.Update(existingTax);
+        await _unitOfWork.SaveChanges();
+    }
 }

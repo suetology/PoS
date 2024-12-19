@@ -22,9 +22,13 @@
                             <td class="px-4 py-3">{{ tax.type }}</td>
                             <td class="px-4 py-3">{{ tax.value }}</td>
                             <td class="px-4 py-3">{{ tax.isPercentage ? '%' : '€' }}</td>
-                            <td class="font-medium text-cyan-500 hover:underline cursor-pointer"
-                            (click)="$event.stopPropagation(); editTax(tax?.id || '')"
-                            >Edit
+                            <td class="font-medium text-cyan-500 hover:underline cursor-pointer">
+                                <button (click)="$event.stopPropagation(); editTax(tax?.id || '')" class="mr-2">
+                                    Edit
+                                </button>
+                                <button (click)="$event.stopPropagation(); retireTax(tax?.id || '')" class="text-red-500 hover:text-red-700">
+                                    Retire
+                                </button>
                             </td>
                             <!-- <td class="px-4 py-3 flex items-center justify-end">
                                 <button id="benq-ex2710q-dropdown-button" data-dropdown-toggle="benq-ex2710q-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none" type="button">

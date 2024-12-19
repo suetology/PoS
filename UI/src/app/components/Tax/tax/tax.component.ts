@@ -57,4 +57,15 @@ export class TaxComponent {
   editTax(taxId: string) {
     this.router.navigate([`/tax/${taxId}/edit`]);
   }
+
+  retireTax(taxId: string) {
+    this.taxService.retireTax(taxId).subscribe({
+      next: () => {
+        this.router.navigate(['/tax']);
+      },
+      error: (error) => {
+        console.error('Error retiring tax:', error);
+      },
+    });
+}
 }
