@@ -94,6 +94,15 @@
 					<dt> Price </dt>
 					<dd> {{ order?.reservation?.service?.price ?? 'N/A' }} </dd>
 				</div>
+
+				<div class="space-y-6 mr-4">
+					<button class="bg-blue-500 text-white px-4 py-2 rounded" (click)="openUpdateReservationModal()">Edit Reservation</button>
+					@if(isUpdateReservationModalOpen){
+					<app-update-reservation
+						(orderItemsAdded)="closeUpdateReservationModal()">
+					</app-update-reservation>
+					}
+					</div>
 			</div>
 		}
 	</div>

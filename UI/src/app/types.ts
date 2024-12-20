@@ -440,6 +440,10 @@ export interface CreateReservationRequest {
     serviceId: string
 }
 
+export interface UpdateReservationRequest {
+    appointmentTime: string,
+}
+
 export interface CreateOrderItemRequest {
     itemId: string,
     itemVariationsIds: string[],

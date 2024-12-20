@@ -8,17 +8,19 @@ import { DiscountService } from '../../../services/discount.service';
 import { AddItemsToOrderComponent } from '../add-items-to-order/add-items-to-order.component';
 import { PaymentService } from '../../../services/payment.service';
 import { RefundService } from '../../../services/refund.service';
+import { UpdateReservationComponent } from "../update-reservation/update-reservation.component";
 
 @Component({
   selector: 'app-order-details',
   standalone: true,
-  imports: [AsyncPipe, NgIf, NgFor, FormsModule, ReactiveFormsModule, DatePipe, AddItemsToOrderComponent],
+  imports: [AsyncPipe, NgIf, NgFor, FormsModule, ReactiveFormsModule, DatePipe, AddItemsToOrderComponent, UpdateReservationComponent],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.css'
 })
 export class OrderDetailsComponent {
 
   isAddItemModalOpen = false;
+  isUpdateReservationModalOpen = false;
 
   openAddItemModal() {
     this.isAddItemModalOpen = true;
@@ -26,6 +28,14 @@ export class OrderDetailsComponent {
 
   closeAddItemModal() {
     this.isAddItemModalOpen = false;
+  }
+
+  openUpdateReservationModal() {
+    this.isUpdateReservationModalOpen = true;
+  }
+
+  closeUpdateReservationModal() {
+    this.isUpdateReservationModalOpen = false;
   }
 
   order: Order | undefined;
