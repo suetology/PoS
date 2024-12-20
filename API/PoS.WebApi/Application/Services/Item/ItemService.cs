@@ -219,6 +219,11 @@ namespace PoS.WebApi.Application.Services.Item
 
             item.Stock += request.StockChange;
 
+            if (item.Stock < 0)
+            {
+                throw new InvalidOperationException("Insufficient item stock");
+            }
+
             await _unitOfWork.SaveChanges();
         }
 
@@ -232,6 +237,11 @@ namespace PoS.WebApi.Application.Services.Item
             }
 
             itemVariation.Stock += request.StockChange;
+
+            if (itemVariation.Stock < 0)
+            {
+                throw new InvalidOperationException("Insufficient item variation stock");
+            }
 
             await _unitOfWork.SaveChanges();
         }

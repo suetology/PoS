@@ -99,7 +99,7 @@ public class OrderService: IOrderService
                 foreach (var itemVariationId in o.ItemVariationsIds)
                 {
                     var itemVariation = await _itemVariationRepository.Get(itemVariationId);
-                    
+
                     orderItem.ItemVariations.Add(itemVariation);
 
                     await _itemService.ChangeItemVariationStock(new ChangeItemVariationStockRequest
