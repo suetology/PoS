@@ -18,7 +18,7 @@
     <strong>Description:</strong> {{ item?.description }}
   </p>
   <p>
-    <strong>Price:</strong> {{ item?.price }}
+    <strong>Price:</strong> {{ item?.price }}€
   </p>
   <p>
     <strong>Stock:</strong> {{ item?.stock }}
@@ -50,7 +50,7 @@
       <tr *ngFor="let itemVariation of itemVariations">
         <td>{{ itemVariation.name }}</td>
         <td>{{ itemVariation.description }}</td>
-        <td>{{ itemVariation.addedPrice }}</td>
+        <td>{{ itemVariation.addedPrice }}€</td>
         <td>{{ itemVariation.stock }}</td>
       </tr>
     </tbody>

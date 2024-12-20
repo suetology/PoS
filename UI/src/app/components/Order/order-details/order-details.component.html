@@ -50,7 +50,7 @@
 			<form [formGroup]="tipForm" (ngSubmit)="addTip()">
 				<button type="submit" class="mr-2 px-3 py-1 bg-blue-500 text-white rounded">Change</button>
 				<input type="number" id="tipAmount" name="tipAmount" formControlName="tipAmount" placeholder="tip" class="p-1 border rounded w-12 mr-2" />
-				<span class="font-medium"> {{ order?.tipAmount ?? 'N/A' }}</span>
+				<span class="font-medium"> {{ order?.tipAmount ?? 'N/A' }}€</span>
 			</form>
           </div>
 
@@ -58,7 +58,7 @@
             <span class="text-gray-500">Service Charge</span>
             <span class="font-medium">{{ order?.serviceCharge?.name ?? 'N/A' }} 
 				@if(order?.serviceCharge) {
-					{{ order?.serviceCharge?.value }}{{ order?.serviceCharge?.isPercentage ? '%' : '' }}
+					{{ order?.serviceCharge?.value }}{{ order?.serviceCharge?.isPercentage ? '%' : '€' }}
 				} </span>
           </div>
 
@@ -66,17 +66,17 @@
             <span class="text-gray-500">Discount</span>
             <span class="font-medium">{{ order?.discount?.name ?? 'N/A' }} 
 				@if(order?.discount){
-					{{ order?.discount?.value }}{{ order?.discount?.isPercentage ? '%' : '' }}
+					{{ order?.discount?.value }}{{ order?.discount?.isPercentage ? '%' : '€' }}
 				}</span>
           </div>
 
           <div class="flex justify-between text-xl font-bold">
             <span>Total</span>
-            <span class="text-indigo-600">{{ order?.finalAmount ?? 'N/A' }}</span>
+            <span class="text-indigo-600">{{ order?.finalAmount ?? 'N/A' }}€</span>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-500">Paid Amount</span>
-            <span class="font-medium">{{ order?.paidAmount ?? 'N/A' }}</span>
+            <span class="font-medium">{{ order?.paidAmount ?? 'N/A' }}€</span>
           </div>
       </div>
 
@@ -122,14 +122,14 @@
               			<h3 class="font-medium">{{ orderItem?.item?.name }}</h3>
 			  			<ul *ngIf="orderItem && orderItem.item.taxes && orderItem.item.taxes.length > 0">
 							<li *ngFor="let tax of orderItem?.item?.taxes">
-								<span class="text-sm text-gray-500">Taxes</span> {{ tax.name }} (+{{ tax.value }}{{ tax.isPercentage ? '%' : '' }})
+								<span class="text-sm text-gray-500">Taxes</span> {{ tax.name }} (+{{ tax.value }}{{ tax.isPercentage ? '%' : '€' }})
 							</li>
 			  			</ul>
 			  			<p *ngIf="!orderItem.item || orderItem.item.taxes.length === 0"><span class="text-sm text-gray-500">Taxes</span> - </p>
 
 						<ul *ngIf="orderItem && orderItem.item && orderItem.item.itemGroup && orderItem.item.itemGroup.discounts.length > 0">
 							<li *ngFor="let discount of orderItem?.item?.itemGroup?.discounts">
-								<span class="text-sm text-gray-500">Discount</span> {{ discount.name }} (-{{ discount.value }}{{ discount.isPercentage ? '%' : '' }})
+								<span class="text-sm text-gray-500">Discount</span> {{ discount.name }} (-{{ discount.value }}{{ discount.isPercentage ? '%' : '€' }})
 							</li>
 						</ul>
 
