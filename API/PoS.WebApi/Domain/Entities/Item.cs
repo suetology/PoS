@@ -29,10 +29,10 @@ public class Item : Entity
     public decimal CalculateTotalAmount()
     {
         var totalAmount = Price + Taxes.Sum(t => t.IsPercentage ? Price * (t.Value / 100) : t.Value);
-        var percentageDiscountAmount = Discounts.Sum(d => d.IsPercentage ? d.Value : 0) + ItemGroup.Discounts.Sum(d => d.IsPercentage ? d.Value : 0);
-        var nonPercentageDiscountsAmount = Discounts.Sum(d => d.IsPercentage ? 0 : d.Value) + ItemGroup.Discounts.Sum(d => d.IsPercentage ? 0 : d.Value);
+        var percentageDiscountAmount = Discounts.Sum(d => d.IsPercentage ? d.Value : 0) + ItemGroup?.Discounts?.Sum(d => d.IsPercentage ? d.Value : 0);
+        var nonPercentageDiscountsAmount = Discounts.Sum(d => d.IsPercentage ? 0 : d.Value) + ItemGroup?.Discounts?.Sum(d => d.IsPercentage ? 0 : d.Value);
 
-        totalAmount = totalAmount * (1 - percentageDiscountAmount / 100) - nonPercentageDiscountsAmount;
+        totalAmount = totalAmount * (1 - (percentageDiscountAmount ?? 0)/ 100) - (nonPercentageDiscountsAmount ?? 0);
 
         return Math.Max(0, totalAmount);
     }

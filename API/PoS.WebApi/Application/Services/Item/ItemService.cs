@@ -132,7 +132,8 @@ namespace PoS.WebApi.Application.Services.Item
             {
                 existingItem.Image = Convert.FromBase64String(request.Image);
             }
-            existingItem.ItemGroupId = request.ItemGroupId ?? existingItem.ItemGroupId;
+
+            existingItem.ItemGroupId = request.ItemGroupId;
 
             if (request.TaxIds != null && request.TaxIds.Count > 0)
             {

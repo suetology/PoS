@@ -77,7 +77,7 @@ export class UpdateItemComponent {
         price: item.price,
         stock: item.stock,
         image: this.itemForm.value.image!,
-        itemGroupId: item.itemGroupId || '',
+        itemGroupId: item.itemGroupId || null,
         taxIds: item.taxIds || []
       });
     });

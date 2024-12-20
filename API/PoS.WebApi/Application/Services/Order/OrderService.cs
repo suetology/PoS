@@ -207,7 +207,7 @@ public class OrderService: IOrderService
                             Type = t.Type,
                             IsPercentage = t.IsPercentage
                         }).ToList(),
-                        ItemGroup = new ItemGroupDto
+                        ItemGroup = i.Item.ItemGroup == null ? null : new ItemGroupDto
                         {
                             Id = i.Item.ItemGroup.Id,
                             Name = i.Item.ItemGroup.Name,
@@ -327,7 +327,7 @@ public class OrderService: IOrderService
                             Type = t.Type,
                             IsPercentage = t.IsPercentage
                         }).ToList(),
-                        ItemGroup = new ItemGroupDto
+                        ItemGroup = i.Item.ItemGroup == null ? null : new ItemGroupDto
                         {
                             Id = i.Item.ItemGroup.Id,
                             Name = i.Item.ItemGroup.Name,
