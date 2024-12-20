@@ -165,6 +165,7 @@ app.UseExceptionHandling(
         { typeof(InvalidRefreshTokenException), HttpStatusCode.Forbidden },
         { typeof(ExpiredRefreshTokenException), HttpStatusCode.Forbidden },
         { typeof(KeyNotFoundException), HttpStatusCode.NotFound },
+        { typeof(InvalidOperationException), HttpStatusCode.BadRequest },
         { typeof(TimeNotAvailableException), HttpStatusCode.BadRequest },
         { typeof(InvalidOrderStateException), HttpStatusCode.BadRequest },
         { typeof(InvalidUserRoleException), HttpStatusCode.BadRequest }
