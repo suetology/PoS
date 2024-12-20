@@ -8,8 +8,8 @@ using Amazon.SimpleNotificationService.Model;
 public class NotificationService : INotificationService
 {
     private readonly AmazonSimpleNotificationServiceClient _snsClient = new(
-        "AKIAU5LH57GNX3DATJIK",
-        "Cys+jr1fEs2pEyTxAePhZJVmDgW5hFyU8eKv/jAQ",
+        "AKIAU5LH57GNTIOC5ALU",
+        "doEeIxG0m6Vi2tmQNf1qmE1URP+7UM665MWuapvY",
         RegionEndpoint.EUNorth1
     );
     
