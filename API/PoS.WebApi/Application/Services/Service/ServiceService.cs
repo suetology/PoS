@@ -11,13 +11,16 @@ using PoS.WebApi.Application.Services.User.Contracts;
 public class ServiceService : IServiceService
 {
     private readonly IServiceRepository _serviceRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public ServiceService(
         IServiceRepository serviceRepository,
+        IUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {
         _serviceRepository = serviceRepository;
+        _userRepository = userRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -129,7 +132,9 @@ public class ServiceService : IServiceService
     {
         var service = await _serviceRepository.Get(request.Id);
 
-        var shift = service.Employee.Shifts
+        var employee = await _userRepository.Get(service.Employee.Id);
+
+        var shift = employee.Shifts
             .FirstOrDefault(s => s.Date.Date == request.Date.Date);
 
         if (shift == null)
@@ -137,10 +142,15 @@ public class ServiceService : IServiceService
             return new GetAvailableTimesResponse();
         }
 
-        var reservations = service.Reservations
+        var reservations = employee.Services
+            .SelectMany(s => s.Reservations)
             .Where(r => r.AppointmentTime.Date == request.Date.Date && r.Status == AppointmentStatus.Booked)
             .OrderBy(r => r.AppointmentTime.TimeOfDay)
             .ToList();
+
+
+        Console.WriteLine("Employee services: " + employee.Services.Count);
+        Console.WriteLine("Employee reservations: " + reservations.Count);
 
         var availableTimes = new List<AvailableTimeDto>();
 

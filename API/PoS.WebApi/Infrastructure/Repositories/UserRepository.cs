@@ -37,6 +37,8 @@ public class UserRepository : IUserRepository
     {
         return await _dbContext.Users
             .Include(x => x.Shifts)
+            .Include(x => x.Services)
+                .ThenInclude(s => s.Reservations)
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
