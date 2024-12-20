@@ -140,9 +140,9 @@ public class OrderService: IOrderService
                     await _reservationService.CreateReservation(request.Reservation);
                     
                     string message = $"Your reservation has been scheduled for {request.Reservation.AppointmentTime}.";
-                    // if(message.Length < 100 && customer.Customer.PhoneNumber.Length < 16) { // Just in case we fuck something up
-                    //     Task.Run(() => _notificationService.SendSMS(message, customer.Customer.PhoneNumber));
-                    // }
+                    if(message.Length < 100) { // Just in case we fuck something up
+                        await _notificationService.SendSMS(message, "+37062532236");
+                    }
                 }
 
                 await transaction.CommitAsync();
