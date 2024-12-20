@@ -662,7 +662,7 @@ public class OrderService: IOrderService
 
         await _itemService.ChangeItemStock(new ChangeItemStockRequest
         {
-            ItemId = request.ItemId,
+            ItemId = orderItem.ItemId,
             BusinessId = request.BusinessId,
             StockChange = orderItem.Quantity
         });
